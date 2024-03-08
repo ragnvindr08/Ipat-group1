@@ -1,0 +1,130 @@
+{% load static %}
+
+<style>
+.brand {
+  color: white !important;
+  font-family: 'Poppins';font-size: 30px !important;
+
+ 
+}
+.logo-earist{
+    margin-left: -15px !important;
+    margin-right: -15px !important;
+}
+
+.profile-name{
+    color: white !important;
+    font-family: 'Poppins';font-size: 25px !important;
+    margin-left: -5px !important;
+}
+</style>
+
+
+  <aside id="sidebar">
+            <div class="d-flex ">
+                <button class="toggle-btn" type="button">
+                    <img class="logo-earist" src="{% static './images/earist-logo.png' %}" alt="" width="60" height="60" >
+                </button>
+                <div class="sidebar-logo">
+                    <a class="brand" href="#">EARIST HRIS</a>
+                </div>
+            </div>
+            <div class="sidebar-footer" text-center>
+                <a href="#" class="sidebar-link" aria-disabled="true">
+                    <!-- <i class="lni lni-exit"></i> -->
+                    <span><img class="profile-pic center-block" center src="{{request.user.employee.profile_pic.url}}" alt="" width="100" height="100" > </span>
+                </a>
+            </div>
+
+                <div class="sidebar-footer">
+                    <a href="#" class="sidebar-link">
+                        <!-- <i class="lni lni-exit"></i> -->
+                        <span class="profile-name center-block" center >Hello, {{request.user.employee.first_name}}</span>
+                    </a>
+                </div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-graph"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-network"></i>
+                        <span>Employee Records</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-credit-cards"></i>
+                        <span>Payroll</span>
+                    </a>
+                </li>
+            
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        </i>
+                        <span>Employee Profile</span>
+                    </a>
+                    <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="{% url 'register' %}" class="sidebar-link">Register User</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link">Update User</a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#multi" aria-expanded="false" aria-controls="multi">
+                        <i class="lni lni-layout"></i>
+                        <span>Multi Level</span>
+                    </a>
+                    <ul id="multi" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="#" class="sidebar-link collapsed" data-bs-toggle="collapse"
+                                data-bs-target="#multi-two" aria-expanded="false" aria-controls="multi-two">
+                                Two Links
+                            </a>
+                            <ul id="multi-two" class="sidebar-dropdown list-unstyled collapse">
+                                <li class="sidebar-item">
+                                    <a href="#" class="sidebar-link">Link 1</a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a href="#" class="sidebar-link">Link 2</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li> -->
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="lni lni-calendar"></i>
+                        <span>Calendar of Activities</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{% url 'account' %}" class="sidebar-link">
+                        <i class="lni lni-user"></i>
+                        <span>Update Profile</span>
+                    </a>
+                </li>
+            </ul>
+         
+           
+
+            <div class="sidebar-footer">
+
+                <li class="sidebar-item">
+                    <a href="{% url 'logout' %}" class="sidebar-link">
+                        <i class="lni lni-exit"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+              
+            </div>
+        </aside>

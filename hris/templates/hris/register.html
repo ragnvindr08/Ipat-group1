@@ -1,0 +1,118 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Registration Page</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static '/plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{% static './plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static './dist/css/adminlte.min.css' %}">
+</head>
+<body class="hold-transition register-page">
+<div class="register-box">
+  <div class="register-logo">
+    <a href=""><b>EARIST</b>HRIS</a>
+  </div>
+
+  <div class="card">
+    <div class="card-body register-card-body">
+      <p class="login-box-msg">Register a new membership</p>
+
+      <form action="" method="POST">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            {{form.username}}
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+            {{form.email}}
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+            {{form.password1}}
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+            {{form.password2}}
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-append">
+                <span class="input-group-text"><i class="fas fa-users"></i></span>
+            </div>
+            <select class="form-control" name="group">
+                {% for group in groups %}
+                    <option value="{{ group.name }}">{{ group.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="row">
+          
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block float-left">Register</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+    </div>
+    {% for message in messages %}
+    <p id="messages">{{message}}</p>
+    {% endfor %}
+    {{form.errors}}
+    <!-- /.form-box -->
+  </div><!-- /.card -->
+</div>
+<!-- /.register-box -->
+
+<!-- jQuery -->
+<script src="{% static './plugins/chart.js/Chart.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static './plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static './dist/js/adminlte.js' %}"></script>    
+<!-- <script src="{% static 'js/script.js' %}"></script> -->
+<script>
+    /* Because i didnt set placeholder values in forms.py they will be set here using vanilla Javascript
+//We start indexing at one because CSRF_token is considered and input field 
+*/
+
+//Query All input fields
+var form_fields = document.getElementsByTagName('input')
+form_fields[1].placeholder='Username..';
+form_fields[2].placeholder='Email..';
+form_fields[3].placeholder='Enter password...';
+form_fields[4].placeholder='Re-enter Password...';
+
+
+for (var field in form_fields){	
+form_fields[field].className += ' form-control'
+}
+</script>
+</body>
+</html>
