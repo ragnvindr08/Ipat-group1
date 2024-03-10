@@ -11,13 +11,10 @@ urlpatterns = [
         path('logout/', views.logoutUser, name='logout'),
         path("", views.home, name="home"),
         path('account/', views.accountSettings, name="account"),
-
+        path('user/', views.userPage, name='user-page'),
 ]
 # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
   
-        # path('user/', views.userPage, name='user-page'),
-
-        # path('account/', views.accountSettings, name="account"),
 
         # # path("products/", views.products, name='products'),
         # path("profile/<str:pk_test>/", views.customer, name='customer'),

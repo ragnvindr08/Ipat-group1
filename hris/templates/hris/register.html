@@ -30,36 +30,36 @@
       <form action="" method="POST">
         {% csrf_token %}
         <div class="input-group mb-3">
-            {{form.username}}
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-user"></span>
+            {{ form.username }}
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-user"></span>
+                </div>
             </div>
-          </div>
         </div>
         <div class="input-group mb-3">
-            {{form.email}}
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+            {{ form.email }}
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-envelope"></span>
+                </div>
             </div>
-          </div>
         </div>
         <div class="input-group mb-3">
-            {{form.password1}}
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+            {{ form.password1 }}
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                </div>
             </div>
-          </div>
         </div>
         <div class="input-group mb-3">
-            {{form.password2}}
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+            {{ form.password2 }}
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                </div>
             </div>
-          </div>
         </div>
         <div class="input-group mb-3">
             <div class="input-group-append">
@@ -67,26 +67,37 @@
             </div>
             <select class="form-control" name="group">
                 {% for group in groups %}
-                    <option value="{{ group.name }}">{{ group.name }}</option>
+                <option value="{{ group.name }}">{{ group.name }}</option>
                 {% endfor %}
             </select>
         </div>
-        <div class="row">
-          
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block float-left">Register</button>
-          </div>
-          <!-- /.col -->
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Employee Number" name="employee_number" required>
+            <div class="input-group-append">
+                <div class="input-group-text">
+                    <span class="fas fa-id-card"></span>
+                </div>
+            </div>
         </div>
-      </form>
+        <div class="row">
+            <!-- /.col -->
+            <div class="col-4">
+                <button type="submit" class="btn btn-primary btn-block float-left">Register</button>
+            </div>
+            <!-- /.col -->
+        </div>
+    </form>
+    
     </div>
-    {% for message in messages %}
-    <p id="messages">{{message}}</p>
-    {% endfor %}
-    {{form.errors}}
+    
     <!-- /.form-box -->
   </div><!-- /.card -->
+</div>
+<div class="alert alert-success" role="alert">
+  {% for message in messages %}
+  <p id="messages">{{message}}</p>
+  {% endfor %}
+  {{form.errors}}
 </div>
 <!-- /.register-box -->
 

@@ -6,8 +6,9 @@ from django.contrib.auth.models import User
 from .models import *
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
-from .decorators import unauthenticated_user, allowed_users, admin_only
+from .decorators import *
 from .signals import *
+import datetime
 
 from django.conf import settings
 import os
@@ -53,11 +54,7 @@ import os
 #     else:
 #         return redirect('login')
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth.models import Group
-from django.contrib.auth.models import User
-from .forms import CreateUserForm
+
 
 # def registerPage(request):
 #     if request.user.is_authenticated:
@@ -81,40 +78,95 @@ from .forms import CreateUserForm
 #     else:
 #         return redirect('login')
 
+#WORKING
 
+# def registerPage(request):
+#     if request.user.is_authenticated:
+#         form = CreateUserForm()
+#         groups = Group.objects.all()
+
+#         if request.method == 'POST':
+#             form = CreateUserForm(request.POST)
+#             if form.is_valid():
+#                 user = form.save()
+#                 username = form.cleaned_data.get('username')
+#                 group_name = request.POST.get('group')  # Retrieve the selected group name from the form
+#                 if group_name:
+#                     group = Group.objects.get(name=group_name)  # Retrieve the group object
+#                     user.groups.add(group)  # Add the user to the group
+                
+#                 # Check if an Employee profile already exists for the user
+#                 employee_profile, created = Employee.objects.get_or_create(user=user)
+
+#                 # If an Employee profile is created, fill in additional fields if needed
+#                 if created:
+#                     # Fill in additional fields if needed
+#                     pass
+                
+#                 messages.success(request, 'Account was created for ' + username)
+#                 return redirect('register')
+
+#         context = {'form': form, 'groups': groups}
+#         return render(request, 'hris/register.html', context)
+#     else:
+#         return redirect('login')
+
+#__________________________________________________________________
+
+
+
+@admin_only
 def registerPage(request):
     if request.user.is_authenticated:
+
         form = CreateUserForm()
         groups = Group.objects.all()
 
         if request.method == 'POST':
             form = CreateUserForm(request.POST)
             if form.is_valid():
-                user = form.save()
+                user = form.save(commit=False)
                 username = form.cleaned_data.get('username')
-                group_name = request.POST.get('group')  # Retrieve the selected group name from the form
-                if group_name:
-                    group = Group.objects.get(name=group_name)  # Retrieve the group object
-                    user.groups.add(group)  # Add the user to the group
-                
-                # Check if an Employee profile already exists for the user
-                employee_profile, created = Employee.objects.get_or_create(user=user)
 
-                # If an Employee profile is created, fill in additional fields if needed
-                if created:
-                    # Fill in additional fields if needed
-                    pass
-                
+                group_name = request.POST.get('group')
+                if group_name:
+                    group = Group.objects.get(name=group_name)
+                    user.save()
+                    user.groups.add(group)
+
+                employee_number = request.POST.get('employee_number')
+                 # Create OfficialTime records for each day of the week
+                days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                for day in days_of_week:
+                    OfficialTime.objects.create(
+                            employee_id=employee_number,
+                            day=day
+                        )
+                try:
+                    # Try to retrieve existing employee profile for the user
+                    employee_profile = Employee.objects.get(user=user)
+                    # Update existing employee profile with new employee number
+                    employee_profile.employee_id = employee_number
+                    employee_profile.save()
+                except Employee.DoesNotExist:
+                    # Create new employee profile if it doesn't exist
+                    employee_profile = Employee.objects.create(
+                        user=user,
+                        employee_id=employee_number,
+                        first_name=user.first_name,
+                        surname=user.last_name
+                    )
+
+                   
+
                 messages.success(request, 'Account was created for ' + username)
                 return redirect('register')
 
         context = {'form': form, 'groups': groups}
         return render(request, 'hris/register.html', context)
-    else:
-        return redirect('login')
-
-
-
+       
+    else:   
+         return redirect('home')
     
 @unauthenticated_user
 def loginPage(request):
@@ -138,7 +190,7 @@ def logoutUser(request):
 
 
 # @login_required(login_url='login')
-# @admin_only
+@admin_only
 def home(request):
     # # orders = Order.objects.all()
     # customers = Employee.objects.all()
@@ -190,3 +242,8 @@ def accountSettings(request):
 
     context = {'form': form}
     return render(request, 'hris/account_settings.html', context)
+
+
+# @login_required(login_url='login')
+def userPage(request):
+    pass

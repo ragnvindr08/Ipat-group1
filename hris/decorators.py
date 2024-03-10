@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect
-
+from django.http import HttpResponseForbidden
 
 def unauthenticated_user(view_func):
     def wrapper_func(request, *args, **kwargs):
@@ -25,14 +25,30 @@ def allowed_users(allowed_roles = []):
     return decorator
 
 
+# def admin_only(view_func):
+#     def wrapper_func(request, *args, **kwargs):
+#             group = None
+#             if request.user.groups.exists():
+#                 group = request.user.groups.all()[0].name
+
+#             if group == 'customer':
+#                 return redirect('user-page')
+#             if group == 'admin':
+#                 return view_func(request, *args, **kwargs)
+#     return wrapper_func
+
+
+
 def admin_only(view_func):
     def wrapper_func(request, *args, **kwargs):
-            group = None
-            if request.user.groups.exists():
-                group = request.user.groups.all()[0].name
+        group = None
+        if request.user.groups.exists():
+            group = request.user.groups.all()[0].name
 
-            if group == 'customer':
-                return redirect('user-page')
-            if group == 'admin':
-                return view_func(request, *args, **kwargs)
+        if group in ['JO','employee','faculty']:
+            return redirect('user-page')
+        elif  group in ['admin','hrstaff']:
+            return view_func(request, *args, **kwargs)
+        else:
+            return HttpResponseForbidden("You don't have permission to access this page.")
     return wrapper_func
