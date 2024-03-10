@@ -114,7 +114,7 @@ import os
 #__________________________________________________________________
 
 
-
+@login_required(login_url='login')
 @admin_only
 def registerPage(request):
     if request.user.is_authenticated:
