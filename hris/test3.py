@@ -11,7 +11,8 @@ def compute_time_difference(time_in, time_out, break_in, break_out, official_off
     time_out = datetime.strptime(time_out, "%Y-%m-%d %H:%M:%S").time()
     break_in = datetime.strptime(break_in, "%Y-%m-%d %H:%M:%S").time()
     break_out = datetime.strptime(break_out, "%Y-%m-%d %H:%M:%S").time()
-
+    # surplusHour_time_in= datetime.surplusHour_time_in(break_out, "%Y-%m-%d %H:%M:%S").time()
+    # surplusHour_time_out= datetime.surplusHour_time_out(break_out, "%Y-%m-%d %H:%M:%S").time()
     # Ensure official office times are in datetime format
     official_office_in = datetime.strptime(official_office_in, "%H:%M").time()
     official_office_out = datetime.strptime(official_office_out, "%H:%M").time()
@@ -64,12 +65,20 @@ def compute_time_difference(time_in, time_out, break_in, break_out, official_off
 
 # Input times
 time_in = "2024-03-01 08:15:00"
-time_out = "2024-03-01 17:00:00"
 break_in = "2024-03-01 12:20:00"
 break_out = "2024-03-01 13:20:00"
+time_out = "2024-03-01 17:00:00"
+surplusHour_time_in = "2024-03-01 17:30:00"
+surplusHour_time_out = "2024-03-01 21:00:00"
 official_office_in = "8:00"
 official_office_out = "17:00"
-
+official_honorarium_time_in = "18:00"
+official_honorarium_time_out = "21:00"
+official_servicecredit_time_in = "18:00"
+official_servicecredit_time_out = "21:00"
+official_overtimet_time_in = "18:00"
+official_overtime_time_out = "21:00"
+employment_status = "JO"
 # Compute the time difference
 difference_hours_morning, difference_hours_afternoon, difference_minutes_morning, difference_minutes_afternoon, total_hours, total_minutes = compute_time_difference(time_in, time_out, break_in, break_out, official_office_in, official_office_out)
 

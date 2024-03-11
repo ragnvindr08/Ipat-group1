@@ -1,39 +1,27 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
-# Function to compute the time difference
-def compute_time_difference(time1_str, time2_str):
-    
-    
-    # Convert time1_str to datetime object
-    
+# Function to rearrange times in ascending order
+def rearrange_times(time_in, break_in, break_out, time_out):
+    # Create a list of times
+    times = [time_in, break_in, break_out, time_out]
+    # Sort the times
+    times.sort()
+    # Assign the sorted times back to the respective variables
+    time_in, break_in, break_out, time_out = times
+    return time_in, break_in, break_out, time_out
 
+# Original times
+time_in =  "17:00:00"
+break_in = "13:20:00" 
+break_out = "12:20:00"
+time_out = "08:15:00"
 
-    time1 = datetime.strptime(time1_str, "%H:%M")
-    time2 = datetime.strptime(time2_str, "%H:%M")
-    # Check if time1 is before 1:00 PM
-    if time1.time() < datetime.strptime("13:00", "%H:%M").time():
-        time1 = datetime.strptime("13:00", "%H:%M")
+# Rearrange times
+time_in, break_in, break_out, time_out = rearrange_times(time_in, break_in, break_out, time_out)
 
-    if time2.time() >= datetime.strptime("17:00", "%H:%M").time():
-        time2 = datetime.strptime("17:00", "%H:%M")
-
-    # Calculate the difference
-    difference = time2 - time1
-
-    # Extract hours and minutes from the timedelta
-    difference_hours = difference // timedelta(hours=1)
-
-    difference_minutes = (difference % timedelta(hours=1)).seconds // 60
-
-    # Return the difference in hours and minutes
-    return difference_hours, difference_minutes
-
-# Input times
-time1_str = "2024-03-01 08:15:00"
-time2_str = "2024-03-01 17:00:00"
-
-# Compute the time difference
-difference_hours, difference_minutes = compute_time_difference(time1_str, time2_str)
-
-# Print the difference
-print("Difference:", difference_hours, "hours and", difference_minutes, "minutes")
+# Print the rearranged times
+print("Rearranged times:")
+print("Time in:", time_in)
+print("Break in:", break_in)
+print("Break out:", break_out)
+print("Time out:", time_out)
