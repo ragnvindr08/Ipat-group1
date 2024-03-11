@@ -1,19 +1,8 @@
 from datetime import datetime, timedelta
 
 # Function to compute the time difference
-def compute_time_difference(time_in, time_out,
-                            break_in, break_out,
-                            official_office_in,
-                            official_office_out,
-                            official_honorarium_time_in,
-                            official_honorarium_time_out,
-                            official_servicecredit_time_in,
-                            official_servicecredit_time_out,
-                            official_overtimet_time_in,
-                            official_overtime_time_out,
-                            employment_status,
-                            ):
- 
+def compute_time_difference(time_in, time_out, break_in, break_out, official_office_in, official_office_out):
+    
 
 
 

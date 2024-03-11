@@ -124,6 +124,5 @@ difference_minutes_regular, difference_hours_regular, difference_hours_morning, 
                             employment_status,)
 
 # Print the difference
-print("Morning Difference:", difference_hours_morning, "hours and", difference_minutes_morning, "minutes while the Afternoon Difference: ", difference_hours_afternoon,  "and", difference_minutes_afternoon, "minutes")
-print("Total time worked: {} hours and {} minutes".format(total_hours, total_minutes))
+
 print("Total time worked: {} hours and {} minutes".format(difference_hours_regular, difference_minutes_regular))
