@@ -113,7 +113,7 @@ class OfficialTime(models.Model):
     overtime_time_end = models.TimeField(null= True, blank = True)
 
 
-# class DTR(models.Model):
-#     employee_id = models.CharField(max_length=20)
-#     date = models.DateTimeField(auto_now_add=True)
-#     ipAddress = models.IPAddressField()    
+class DTR(models.Model):
+    employee_id = models.CharField(max_length=20)
+    date = models.DateTimeField(auto_now_add=True)
+    ipAddress = models.IPAddressField()    

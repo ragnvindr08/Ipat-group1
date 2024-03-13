@@ -16,3 +16,7 @@ class EmployeeForm(ModelForm):
         model = Employee
         fields = '__all__'
         exclude = ['user','employee_id']
+        
+        
+class UploadFileForm(forms.Form):
+    file = forms.FileField()

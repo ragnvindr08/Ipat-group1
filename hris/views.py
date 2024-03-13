@@ -10,6 +10,16 @@ from .decorators import *
 from .signals import *
 import datetime
 
+
+#upload imports
+import csv
+import xlrd
+from django.shortcuts import render
+
+
+
+
+
 from django.conf import settings
 import os
 # Create your views here.
@@ -247,3 +257,27 @@ def accountSettings(request):
 # @login_required(login_url='login')
 def userPage(request):
     pass
+
+
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            file = request.FILES['file']
+            if file.name.endswith('.csv'):
+                data = csv.reader(file)
+            elif file.name.endswith('.xlsx'):
+                data = xlrd.open_workbook(file_contents=file.read())
+            else:
+                messages.error(request, 'Unsupported file format')
+                return redirect('upload_file')
+
+            for row in data:
+                employee_id, ip_address = row[0], row[1]
+                DTR.objects.create(employee_id=employee_id, ip_address=ip_address)
+            
+            messages.success(request, 'Data has been successfully uploaded.')
+            return redirect('upload_file')
+    else:
+        form = UploadFileForm()
+    return render(request, 'upload.html', {'form': form})
