@@ -1,0 +1,66 @@
+{% extends 'hris/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .small-font {
+        font-size: 10pt;
+    }
+</style>
+<div class="col-md-10 mx-auto">
+
+    <h2>Attendance Records</h2>
+    <table id="attendance-table" class="table table-bordered table-sm" style="font-size: 10pt;">
+        <thead>
+            <tr>
+                <th>Employee ID | Name</th>
+                <th>Date</th>
+                <th>Time In</th>
+                <th>Break In</th>
+                <th>Break Out</th>
+                <th>Time Out</th>
+                <th>Total Office</th>
+                <th>HN Time In</th>
+                <th>HN Time Out</th>
+                <th>Total Honorarium</th>
+                <th>SC Time In</th>
+                <th>SC Time Out</th>
+                <th>Total Service Credit</th>
+                <th>OT Time In</th>
+                <th>OT Time Out</th>
+                <th>Total Overtime</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in records %}
+            <tr>
+                <td>{{ record.employee_id }} - {{ employee.surname }}, {{ employee.first_name }}</td>
+                <td>{{ record.date }}</td>
+                <td>{{ record.time_in|time:"g:i:s A" }}</td>
+                <td>{{ record.break_in|time:"g:i:s A" }}</td>
+                <td>{{ record.break_out|time:"g:i:s A" }}</td>
+                <td>{{ record.time_out|time:"g:i:s A" }}</td>
+                <td>{{ record.surplusHour_time_in|time:"g:i:s A" }}</td>
+                <td>{{ record.surplusHour_time_out|time:"g:i:s A" }}</td>
+                <td>{{ record.surplusHour_time_in|time:"g:i:s A" }}</td>
+                <td>{{ record.surplusHour_time_out|time:"g:i:s A" }}</td>
+                <td>{{ record.surplusHour_time_in|time:"g:i:s A" }}</td>
+                <td>{{ record.surplusHour_time_out|time:"g:i:s A" }}</td>
+                <td>{{ record.surplusHour_time_out|time:"g:i:s A" }}</td>
+                <td>{{ record.surplusHour_time_in|time:"g:i:s A" }}</td>
+                <td>{{ record.surplusHour_time_out|time:"g:i:s A" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button id="export-btn" class="btn btn-primary">Export to Excel</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+<script>
+    document.getElementById('export-btn').addEventListener('click', function () {
+        var wb = XLSX.utils.table_to_book(document.getElementById('attendance-table'), {sheet:"Attendance"});
+        XLSX.writeFile(wb, 'attendance_records.xlsx');
+    });
+</script>
+{% endblock content %}

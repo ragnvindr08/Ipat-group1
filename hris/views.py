@@ -15,7 +15,7 @@ import datetime
 import csv
 import xlrd
 from django.shortcuts import render
-
+from django.shortcuts import get_object_or_404
 
 
 
@@ -24,104 +24,80 @@ from django.conf import settings
 import os
 # Create your views here.
 
+#UPLOAD DTR .DAT FILE
+def upload_file(request):
+    if request.method == 'POST':
+        form = FileUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_file = request.FILES['file']
 
-# def registerPage(request):
-#     if request.user.is_authenticated:
-#         form = CreateUserForm()
-#         groups = Group.objects.all()
-#         if request.method == 'POST':
-#             form = CreateUserForm(request.POST)
-#             if form.is_valid():
-#                 user = form.save()
-#                 username = form.cleaned_data.get('username')
-              
-            
-#                 messages.success(request,'Account was created for ' + username)
+            # Read and process each line in the uploaded file
+            for line in uploaded_file:
+                line = line.decode('utf-8').strip()  # Decode bytes to string and remove leading/trailing whitespace
+                if line:  # Check if line is not empty
+                    columns = line.split('\t')  # Split each line into columns based on tab delimiter
 
-#                 return redirect('register')
+                    # Ensure that columns list has at least 2 elements before processing
+                    if len(columns) >= 2:
+                        employee_number = int(columns[0]) if columns[0].strip() else None
 
-#         context = {'form':form}
-#         return render(request, 'hris/register.html', context)
+                        # Extract only the date part from columns[1]
+                        date_time_parts = columns[1].split()
+                        date_only = None
+                        if len(date_time_parts) > 0:
+                            date_only = date_time_parts[0]  # Extract only the date part
 
-# def registerPage(request):
-#     if request.user.is_authenticated:
-#         form = CreateUserForm()
-#         groups = Group.objects.all()  # Retrieve all groups from the database
+                        # Extracting other columns
+                        if len(columns) >= 6:
+                            column1 = int(columns[2])
+                            column2 = int(columns[3])
+                            column3 = int(columns[4])
+                            column4 = int(columns[5])
 
-#         if request.method == 'POST':
-#             form = CreateUserForm(request.POST)
-#             if form.is_valid():
-#                 user = form.save()
-#                 username = form.cleaned_data.get('username')
-#                 selected_group_name = request.POST.get('group')  # Get the selected group name from the form data
-#                 group = Group.objects.get(name=selected_group_name)  # Get the group object based on the selected group name
-#                 user.groups.add(group)  # Add the user to the selected group
-#                 messages.success(request, 'Account was created for ' + username)
-#                 return redirect('register')
+                        # Check if an AttendanceRecord already exists for the employee and date
+                        existing_records = AttendanceRecord.objects.filter(employee_id=employee_number, date=date_only)
 
-#         context = {'form': form, 'groups': groups}  # Pass the groups to the template context
-#         return render(request, 'hris/register.html', context)
-#     else:
-#         return redirect('login')
+                        # Create a new AttendanceRecord instance if it doesn't exist
+                        if existing_records.exists():
+                            record = existing_records.first()
+                        else:
+                            record = AttendanceRecord(employee_id=employee_number, date=date_only)
+
+                        # Assigning time components to the appropriate fields based on column values
+                        # Note: I assume you want to save the full date_time string for time-related fields
+                        if columns[1]:  # Check if date_time is not empty
+                            if column1 == 1 and column2 == 0 and column3 == 1 and column4 == 0:
+                                
+                                    record.time_in = columns[1]
+                            elif column1 == 1 and column2 == 1 and column3 == 1 and column4 == 0:
+                                record.break_in = columns[1]
+                            elif column1 == 1 and column2 == 4 and column3 == 1 and column4 == 0:
+                                record.break_out = columns[1]
+                            elif column1 == 1 and column2 == 5 and column3 == 1 and column4 == 0:
+                                record.time_out = columns[1]
+                            elif column1 == 1 and column2 == 4 and column3 == 0 and column4 == 0:
+                                if not record.time_in:
+                                    record.time_in = columns[1]
+                                else:
+                                    record.surplusHour_time_in = columns[1]
+                                   
+                            elif column1 == 1 and column2 == 5 and column3 == 0 and column4 == 0:
+                                if not record.time_out:
+                                    record.time_out = columns[1]
+                                else:
+                                    record.surplusHour_time_out = columns[1]
+
+                        record.save()  # Save the record to the database
+
+            return render(request, 'hris/upload_success.html')
+    else:
+        form = FileUploadForm()
+    return render(request, 'hris/upload2.html', {'form': form})
 
 
-
-# def registerPage(request):
-#     if request.user.is_authenticated:
-#         form = CreateUserForm()
-#         groups = Group.objects.all()
-
-#         if request.method == 'POST':
-#             form = CreateUserForm(request.POST)
-#             if form.is_valid():
-#                 user = form.save()
-#                 username = form.cleaned_data.get('username')
-#                 group_name = request.POST.get('group')  # Retrieve the selected group name from the form
-#                 if group_name:
-#                     group = Group.objects.get(name=group_name)  # Retrieve the group object
-#                     user.groups.add(group)  # Add the user to the group
-#                 messages.success(request, 'Account was created for ' + username)
-#                 return redirect('register')
-
-#         context = {'form': form, 'groups': groups}
-#         return render(request, 'hris/register.html', context)
-#     else:
-#         return redirect('login')
-
-#WORKING
-
-# def registerPage(request):
-#     if request.user.is_authenticated:
-#         form = CreateUserForm()
-#         groups = Group.objects.all()
-
-#         if request.method == 'POST':
-#             form = CreateUserForm(request.POST)
-#             if form.is_valid():
-#                 user = form.save()
-#                 username = form.cleaned_data.get('username')
-#                 group_name = request.POST.get('group')  # Retrieve the selected group name from the form
-#                 if group_name:
-#                     group = Group.objects.get(name=group_name)  # Retrieve the group object
-#                     user.groups.add(group)  # Add the user to the group
-                
-#                 # Check if an Employee profile already exists for the user
-#                 employee_profile, created = Employee.objects.get_or_create(user=user)
-
-#                 # If an Employee profile is created, fill in additional fields if needed
-#                 if created:
-#                     # Fill in additional fields if needed
-#                     pass
-                
-#                 messages.success(request, 'Account was created for ' + username)
-#                 return redirect('register')
-
-#         context = {'form': form, 'groups': groups}
-#         return render(request, 'hris/register.html', context)
-#     else:
-#         return redirect('login')
-
-#__________________________________________________________________
+def upload_success(request):
+    return render(request, 'hris/upload_success.html')
+#UPLOAD DTR END
 
 
 @login_required(login_url='login')
@@ -281,3 +257,36 @@ def upload_file(request):
     else:
         form = UploadFileForm()
     return render(request, 'upload.html', {'form': form})
+
+
+# def search_records(request):
+#     if request.method == 'POST':
+#         form = SearchForm(request.POST)
+#         if form.is_valid():
+#             employee_id = form.cleaned_data['employee_id']
+#             start_date = form.cleaned_data['start_date']
+#             end_date = form.cleaned_data['end_date']
+#             records = AttendanceRecord.objects.filter(employee_id=employee_id, date__range=(start_date, end_date))
+#             return render(request, 'hris/records.html', {'records': records})
+#     else:
+#         form = SearchForm()
+#     return render(request, 'hris/search.html', {'form': form})
+def search_records(request):
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            employee_id = form.cleaned_data['employee_id']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            
+            # Query the Employee model to get additional information about the employee
+            employee = get_object_or_404(Employee, employee_id=employee_id)
+
+            # Query the AttendanceRecord model to fetch records for the employee within the date range
+            records = AttendanceRecord.objects.filter(employee_id=employee_id, date__range=(start_date, end_date))
+
+            return render(request, 'hris/records.html', {'records': records, 'employee': employee})
+    else:
+        form = SearchForm()
+
+    return render(request, 'hris/search.html', {'form': form})

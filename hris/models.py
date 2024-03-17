@@ -65,55 +65,31 @@ class Employee(models.Model):
     
     def __str__(self):
         return f"{self.employee_id} - {self.first_name} {self.surname}"
-    
-    # class OfficialTIme(models.Model):
-    #     CATEGORY = (
-    #             ('Regular', 'Regul2ar'),
-    #             ('Job Order','Job Order'),
-    #             ('Job Order','Job Order'),
-    #             )
-    #     name = models.CharField(max_length = 200, null= True)
-    #     price = models.FloatField(null=True)
-    #     category = models.CharField(max_length = 200, null= True, choices = CATEGORY)
-    #     description = models.CharField(max_length = 200, null= True, blank = True)
-    #     date_created = models.DateTimeField(auto_now_add=True, null= True)
-    
-    # def __str__(self):
-    #     return self.name
-    
-    
-    # class Order(models.Model):
-    #     STATUS = (
-    #             ('Pending', 'Pending'),
-    #             ('Out for Delivery','Out for Delivery'),
-    #             ('Delivered', 'Delivered'),
-    #             )
-
-    #     customer = models.ForeignKey(Employee, null=True, on_delete= models.SET_NULL)
-    #     product = models.ForeignKey(Product, null=True, on_delete= models.SET_NULL)
-    #     date_created = models.DateTimeField(auto_now_add=True, null= True)
-    #     status = models.CharField(max_length = 200, null=True, choices=STATUS)
-    #     note = models.CharField(max_length = 1000, null=True)
-        
-    #     def __str__(self):
-    #         return self.product.name
-
+   
     
 class OfficialTime(models.Model):
     employee_id = models.CharField(max_length=20)
     day = models.CharField(max_length = 10)
     semester_id = models.CharField(max_length = 10, null= True, blank = True)
-    office_time_start = models.TimeField(null= True, blank = True)
-    office_time_end = models.TimeField(null= True, blank = True)
-    honorarium_time_start = models.TimeField(null= True, blank = True)
-    honorarium_time_end = models.TimeField(null= True, blank = True)
-    servicecredit_time_start = models.TimeField(null= True, blank = True)
-    servicecredit_time_end = models.TimeField(null= True, blank = True)
-    overtime_time_start = models.TimeField(null= True, blank = True)
-    overtime_time_end = models.TimeField(null= True, blank = True)
+    official_office_in = models.TimeField(null= True, blank = True)
+    official_office_out = models.TimeField(null= True, blank = True)
+    official_honorarium_time_in = models.TimeField(null= True, blank = True)
+    official_honorarium_time_out = models.TimeField(null= True, blank = True)
+    official_servicecredit_time_in = models.TimeField(null= True, blank = True)
+    official_servicecredit_time_out = models.TimeField(null= True, blank = True)
+    official_overtime_time_in = models.TimeField(null= True, blank = True)
+    official_overtime_time_out = models.TimeField(null= True, blank = True)
 
 
-class DTR(models.Model):
-    employee_id = models.CharField(max_length=20)
-    date = models.DateTimeField(auto_now_add=True)
-    ipAddress = models.IPAddressField()    
+class AttendanceRecord(models.Model):
+    employee_id = models.CharField(max_length= 100, null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
+    time_in = models.DateTimeField(null=True, blank=True)
+    break_in = models.DateTimeField(null=True, blank=True)
+    break_out = models.DateTimeField(null=True, blank=True)
+    time_out = models.DateTimeField(null=True, blank=True)
+    surplusHour_time_in = models.DateTimeField(null=True, blank=True)
+    surplusHour_time_out = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.employee_id} - {self.date}" if self.date else self.employee_id

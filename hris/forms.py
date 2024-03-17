@@ -4,6 +4,11 @@ from django.contrib.auth.models import User
 from django import forms
 
 from .models import *
+class SearchForm(forms.Form):
+    employee_id = forms.CharField(label='Employee ID', max_length=100)
+    start_date = forms.DateField(label='Start Date')
+    end_date = forms.DateField(label='End Date')
+
 
 class CreateUserForm(UserCreationForm):
     class Meta:
@@ -20,3 +25,12 @@ class EmployeeForm(ModelForm):
         
 class UploadFileForm(forms.Form):
     file = forms.FileField()
+
+class FileUploadForm(forms.Form):
+    file = forms.FileField()
+
+
+class SearchForm(forms.Form):
+    employee_id = forms.CharField(label='Employee ID', max_length=100)
+    start_date = forms.DateField(label='Start Date', widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+    end_date = forms.DateField(label='End Date', widget=forms.TextInput(attrs={'autocomplete': 'off'}))
