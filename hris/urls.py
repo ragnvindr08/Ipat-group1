@@ -12,8 +12,8 @@ urlpatterns = [
         path("", views.home, name="home"),
         path('account/', views.accountSettings, name="account"),
         path('user/', views.userPage, name='user-page'),
-        path('upload/', upload_file, name='upload_file'),
-        path('upload/success/', upload_success, name='upload_success'),  # Add this line
+        path('upload/', views.upload_file, name='upload_file'),
+        path('upload/success/', views.upload_success, name='upload_success'),  # Add this line
         path('search/', views.search_records, name='search_records'),
 ]
 # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

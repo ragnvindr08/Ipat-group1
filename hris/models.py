@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from datetime import time
 # Create your models here.
 
 
@@ -61,12 +61,13 @@ class Employee(models.Model):
     mother_surname = models.CharField(max_length=100, blank=True, null=True)
     mother_first_name = models.CharField(max_length=100, blank=True, null=True)
     mother_middle_name = models.CharField(max_length=100, blank=True, null=True)
+    employment_status = models.CharField(max_length=100, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True, null= True)
-    
+    employment_status = models.DateTimeField(auto_now_add=True, null= True)
     def __str__(self):
         return f"{self.employee_id} - {self.first_name} {self.surname}"
-   
-    
+
+
 class OfficialTime(models.Model):
     employee_id = models.CharField(max_length=20)
     day = models.CharField(max_length = 10)
@@ -82,14 +83,14 @@ class OfficialTime(models.Model):
 
 
 class AttendanceRecord(models.Model):
-    employee_id = models.CharField(max_length= 100, null=True, blank=True)
+    employee_id = models.CharField(max_length=100, null=True, blank=True)
     date = models.DateField(null=True, blank=True)
-    time_in = models.DateTimeField(null=True, blank=True)
-    break_in = models.DateTimeField(null=True, blank=True)
-    break_out = models.DateTimeField(null=True, blank=True)
-    time_out = models.DateTimeField(null=True, blank=True)
-    surplusHour_time_in = models.DateTimeField(null=True, blank=True)
-    surplusHour_time_out = models.DateTimeField(null=True, blank=True)
+    time_in = models.TimeField(default='00:00:00', null=True, blank=True)
+    break_in = models.TimeField(default='00:00:00', null=True, blank=True)
+    break_out = models.TimeField(default='00:00:00', null=True, blank=True)
+    time_out = models.TimeField(default='00:00:00', null=True, blank=True)
+    surplusHour_time_in = models.TimeField(default='00:00:00', null=True, blank=True)
+    surplusHour_time_out = models.TimeField(default='00:00:00', null=True, blank=True)
 
     def __str__(self):
         return f"{self.employee_id} - {self.date}" if self.date else self.employee_id

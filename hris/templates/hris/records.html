@@ -13,42 +13,49 @@
     <table id="attendance-table" class="table table-bordered table-sm" style="font-size: 10pt;">
         <thead>
             <tr>
-                <th>Employee ID | Name</th>
-                <th>Date</th>
-                <th>Time In</th>
-                <th>Break In</th>
-                <th>Break Out</th>
-                <th>Time Out</th>
-                <th>Total Office</th>
-                <th>HN Time In</th>
-                <th>HN Time Out</th>
-                <th>Total Honorarium</th>
-                <th>SC Time In</th>
-                <th>SC Time Out</th>
-                <th>Total Service Credit</th>
-                <th>OT Time In</th>
-                <th>OT Time Out</th>
-                <th>Total Overtime</th>
+                <th>Employee ID</th> <!-- HEADER 1 -->
+                <th>Name</th> <!-- HEADER 2 -->
+                <th>E.Stat</th> <!-- HEADER 3 -->
+                <th>Date</th> <!-- HEADER 4 -->
+                <th>Time In</th> <!-- HEADER 5 -->
+                <th>Break In</th> <!-- HEADER 6 -->
+                <th>Break Out</th> <!-- HEADER 7 -->
+                <th>Time Out</th> <!-- HEADER 8 -->
+                <th>Total Office</th> <!-- HEADER 9 -->
+                <th>HN Time In</th> <!-- HEADER 10 -->
+                <th>HN Time Out</th> <!-- HEADER 11 -->
+                <th>Total Honorarium</th> <!-- HEADER 12 -->
+                <th>SC Time In</th> <!-- HEADER 13 -->
+                <th>SC Time Out</th> <!-- HEADER 14 -->
+                <th>Total Service Credit</th> <!-- HEADER 15 -->
+                <th>OT Time In</th> <!-- HEADER 16 -->
+                <th>OT Time Out</th> <!-- HEADER 17 -->
+                <th>Total Overtime</th> <!-- HEADER 18 -->
             </tr>
         </thead>
         <tbody>
             {% for record in records %}
             <tr>
-                <td>{{ record.employee_id }} - {{ employee.surname }}, {{ employee.first_name }}</td>
-                <td>{{ record.date }}</td>
-                <td>{{ record.time_in|time:"g:i:s A" }}</td>
-                <td>{{ record.break_in|time:"g:i:s A" }}</td>
-                <td>{{ record.break_out|time:"g:i:s A" }}</td>
-                <td>{{ record.time_out|time:"g:i:s A" }}</td>
-                <td>{{ record.surplusHour_time_in|time:"g:i:s A" }}</td>
-                <td>{{ record.surplusHour_time_out|time:"g:i:s A" }}</td>
-                <td>{{ record.surplusHour_time_in|time:"g:i:s A" }}</td>
-                <td>{{ record.surplusHour_time_out|time:"g:i:s A" }}</td>
-                <td>{{ record.surplusHour_time_in|time:"g:i:s A" }}</td>
-                <td>{{ record.surplusHour_time_out|time:"g:i:s A" }}</td>
-                <td>{{ record.surplusHour_time_out|time:"g:i:s A" }}</td>
-                <td>{{ record.surplusHour_time_in|time:"g:i:s A" }}</td>
-                <td>{{ record.surplusHour_time_out|time:"g:i:s A" }}</td>
+                <td>{{ record.employee_id }}</td> <!-- table data 1 -->
+
+                <td>{{ employee.surname }}, {{ employee.first_name }}</td> <!-- table data 2 -->
+
+                <td>{{ employee.employment_status }}</td> <!-- table data 3 -->
+                <td>{{ record.date }}</td> <!-- table data 4 -->
+                <td>{{ record.time_in|time:"g:i:s A" }}</td> <!-- table data 5 -->
+                <td>{{ record.break_in|time:"g:i:s A" }}</td> <!-- table data 6 -->
+                <td>{{ record.break_out|time:"g:i:s A" }}</td> <!-- table data 7 -->
+                <td>{{ record.time_out|time:"g:i:s A" }}</td> <!-- table data 8 -->
+                <td>{{ record.total_time }}</td> <!-- table data 9 -->
+                <td></td> <!-- table data 10 -->
+                <td></td> <!-- table data 11 -->
+                <td></td> <!-- table data 12 -->
+                <td></td> <!-- table data 13 -->
+                <td></td> <!-- table data 14 -->
+                <td></td> <!-- table data 15 -->
+                <td></td> <!-- table data 16 -->
+                <td></td> <!-- table data 17 -->
+                <td></td> <!-- table data 18 -->
             </tr>
             {% endfor %}
         </tbody>

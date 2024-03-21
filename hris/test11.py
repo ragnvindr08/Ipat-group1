@@ -19,27 +19,27 @@ def compute_time_difference(time_in, time_out,
     if time_in:
         time_in = datetime.strptime(time_in, "%Y-%m-%d %H:%M:%S").time()
     else:
-        time_in = timeref
+        time_in = datetime.strptime("00:00", "%H:%M").time()
 
     if time_out:
         time_out_office = datetime.strptime(time_out, "%Y-%m-%d %H:%M:%S").time()
         time_out = datetime.strptime(time_out, "%Y-%m-%d %H:%M:%S").time()
     else:
-        time_out_office = timeref
-        time_out = timeref
+        time_out_office = datetime.strptime("00:00", "%H:%M").time()   
+        time_out = datetime.strptime("00:00", "%H:%M").time()
         
         #----------------HONO----SC-------OT----------------------------------------------------------------
    
     if time_in > timeref:
         time_in_hn = time_in
     else:
-        time_in_hn = timeref
+        time_in_hn = datetime.strptime("00:00", "%H:%M").time()
        
         
     if time_out > timeref:
         time_out_hn = time_out
     else:
-        time_out_hn = timeref
+        time_out_hn = datetime.strptime("00:00", "%H:%M").time()   
         
         
         #----------------HONO----SC-------OT-----------------END--------------------------------------------
@@ -48,13 +48,13 @@ def compute_time_difference(time_in, time_out,
     if time_in  > timeref:
         time_in_sc = time_in
     else:
-        time_in_sc = timeref
+        time_in_sc = datetime.strptime("00:00", "%H:%M").time()
        
         
     if time_out:
         time_out_sc = time_out
     else:
-        time_out_sc = timeref   
+        time_out_sc = datetime.strptime("00:00", "%H:%M").time()   
         
         
         #----------------HONO----SC-------OT-----------------END--------------------------------------------
@@ -63,12 +63,13 @@ def compute_time_difference(time_in, time_out,
     if time_in  > timeref:
         time_in_ot = time_in
     else:
-        time_in_ot = timeref
+        time_in_ot = datetime.strptime("00:00", "%H:%M").time()
            
     if time_out:
         time_out_ot = time_out
     else:
-        time_out_ot = timeref
+        time_out_ot = datetime.strptime("00:00", "%H:%M").time()   
+        
         
         #----------------HONO----SC-------OT-----------------END--------------------------------------------     
         
@@ -76,12 +77,12 @@ def compute_time_difference(time_in, time_out,
     if break_in:
         break_in = datetime.strptime(break_in, "%Y-%m-%d %H:%M:%S").time()
     else:
-        break_in = timeref
+        break_in = datetime.strptime("00:00", "%H:%M").time()
         
     if break_out:
         break_out = datetime.strptime(break_out, "%Y-%m-%d %H:%M:%S").time()
     else:
-        break_out = timeref
+        break_out = datetime.strptime("00:00", "%H:%M").time()
 
 
     # Ensure official office times are in datetime format
@@ -93,6 +94,7 @@ def compute_time_difference(time_in, time_out,
     official_servicecredit_time_out = datetime.strptime(official_servicecredit_time_out, "%H:%M").time()
     official_overtime_time_in = datetime.strptime(official_overtime_time_in, "%H:%M").time()
     official_overtime_time_out = datetime.strptime(official_overtime_time_out, "%H:%M").time()
+    timeref = datetime.strptime("00:00", "%H:%M").time()
     
     
     if group == "JO":

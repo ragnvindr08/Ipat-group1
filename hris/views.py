@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from .models import *
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
@@ -16,7 +15,7 @@ import csv
 import xlrd
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
-
+from datetime import datetime, timedelta
 
 
 
@@ -46,7 +45,7 @@ def upload_file(request):
                         date_only = None
                         if len(date_time_parts) > 0:
                             date_only = date_time_parts[0]  # Extract only the date part
-
+                            time_only = date_time_parts[1]
                         # Extracting other columns
                         if len(columns) >= 6:
                             column1 = int(columns[2])
@@ -62,30 +61,28 @@ def upload_file(request):
                             record = existing_records.first()
                         else:
                             record = AttendanceRecord(employee_id=employee_number, date=date_only)
-
+                        default_time = time(hour=0, minute=0, second=0)
                         # Assigning time components to the appropriate fields based on column values
                         # Note: I assume you want to save the full date_time string for time-related fields
-                        if columns[1]:  # Check if date_time is not empty
-                            if column1 == 1 and column2 == 0 and column3 == 1 and column4 == 0:
-                                
-                                    record.time_in = columns[1]
+                        if time_only:  # Check if date_time is not empty
+                            if column1 == 1 and column2 == 0 and column3 == 1 and column4 == 0:      
+                                    record.time_in = time_only
                             elif column1 == 1 and column2 == 1 and column3 == 1 and column4 == 0:
-                                record.break_in = columns[1]
+                                record.break_in = time_only
                             elif column1 == 1 and column2 == 4 and column3 == 1 and column4 == 0:
-                                record.break_out = columns[1]
+                                record.break_out = time_only
                             elif column1 == 1 and column2 == 5 and column3 == 1 and column4 == 0:
-                                record.time_out = columns[1]
+                                record.time_out = time_only
                             elif column1 == 1 and column2 == 4 and column3 == 0 and column4 == 0:
-                                if not record.time_in:
-                                    record.time_in = columns[1]
+                                if  record.time_in != default_time:
+                                    record.time_in = time_only
                                 else:
-                                    record.surplusHour_time_in = columns[1]
-                                   
+                                    record.surplusHour_time_in = time_only    
                             elif column1 == 1 and column2 == 5 and column3 == 0 and column4 == 0:
-                                if not record.time_out:
-                                    record.time_out = columns[1]
+                                if record.time_out != default_time:
+                                    record.time_out = time_only
                                 else:
-                                    record.surplusHour_time_out = columns[1]
+                                    record.surplusHour_time_out = time_only
 
                         record.save()  # Save the record to the database
 
@@ -235,28 +232,28 @@ def userPage(request):
     pass
 
 
-def upload_file(request):
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            file = request.FILES['file']
-            if file.name.endswith('.csv'):
-                data = csv.reader(file)
-            elif file.name.endswith('.xlsx'):
-                data = xlrd.open_workbook(file_contents=file.read())
-            else:
-                messages.error(request, 'Unsupported file format')
-                return redirect('upload_file')
+# def upload_file(request):
+#     if request.method == 'POST':
+#         form = UploadFileForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             file = request.FILES['file']
+#             if file.name.endswith('.csv'):
+#                 data = csv.reader(file)
+#             elif file.name.endswith('.xlsx'):
+#                 data = xlrd.open_workbook(file_contents=file.read())
+#             else:
+#                 messages.error(request, 'Unsupported file format')
+#                 return redirect('upload_file')
 
-            for row in data:
-                employee_id, ip_address = row[0], row[1]
-                DTR.objects.create(employee_id=employee_id, ip_address=ip_address)
+#             for row in data:
+#                 employee_id, ip_address = row[0], row[1]
+#                 DTR.objects.create(employee_id=employee_id, ip_address=ip_address)
             
-            messages.success(request, 'Data has been successfully uploaded.')
-            return redirect('upload_file')
-    else:
-        form = UploadFileForm()
-    return render(request, 'upload.html', {'form': form})
+#             messages.success(request, 'Data has been successfully uploaded.')
+#             return redirect('upload_file')
+#     else:
+#         form = UploadFileForm()
+#     return render(request, 'upload.html', {'form': form})
 
 
 # def search_records(request):
@@ -271,6 +268,158 @@ def upload_file(request):
 #     else:
 #         form = SearchForm()
 #     return render(request, 'hris/search.html', {'form': form})
+# def search_records(request):
+#     if request.method == 'POST':
+#         form = SearchForm(request.POST)
+#         if form.is_valid():
+#             employee_id = form.cleaned_data['employee_id']
+#             start_date = form.cleaned_data['start_date']
+#             end_date = form.cleaned_data['end_date']
+            
+#             # Query the Employee model to get additional information about the employee
+#             employee = get_object_or_404(Employee, employee_id=employee_id)
+
+#             # Query the AttendanceRecord model to fetch records for the employee within the date range
+#             records = AttendanceRecord.objects.filter(employee_id=employee_id, date__range=(start_date, end_date))
+            
+#             # Fetch the groups the current user belongs to
+#             user_groups = request.user.groups.all()
+#             if user_groups == "admin":
+#                 userg = True
+#                 print(userg)
+#             else:
+#                 userg = False
+#                 print(userg)
+#             return render(request, 'hris/records.html', {'records': records, 'employee': employee, 'user_groups': user_groups})
+#     else:
+#         form = SearchForm()
+
+#     return render(request, 'hris/search.html', {'form': form})
+
+
+def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out_str, 
+                              day_str,
+                              official_office_in_str,
+                              official_office_out_str,
+                              official_honorarium_time_in_str,
+                              official_honorarium_time_out_str,
+                              official_servicecredit_time_in_str,
+                              official_servicecredit_time_out_str,
+                              official_overtime_time_in_str,
+                              official_overtime_time_out_str
+                              ):
+    
+    timeref = datetime.strptime("00:00:00", "%H:%M:%S")
+    time_in = datetime.strptime(time_in_str, "%H:%M:%S")
+    break_in = datetime.strptime(break_in_str, "%H:%M:%S")
+    break_out = datetime.strptime(break_out_str, "%H:%M:%S")
+    time_out = datetime.strptime(time_out_str, "%H:%M:%S")
+    day = day_str
+    
+    if official_office_in_str:
+        official_office_in = official_office_in_str
+    else:
+        official_office_in = timeref
+    if  official_office_out_str:
+        official_office_out = official_office_out_str
+    else:
+        official_office_out = timeref
+    if official_honorarium_time_in_str:
+        official_honorarium_time_in = official_honorarium_time_in_str
+    else:
+        official_office_out = timeref
+    
+    if official_honorarium_time_out_str:
+        official_honorarium_time_out = official_honorarium_time_out_str
+    else:
+        official_honorarium_time_out = timeref
+        
+    if official_servicecredit_time_in_str:
+        official_servicecredit_time_in = official_servicecredit_time_in_str
+    else:
+        official_servicecredit_time_in = timeref
+    if  official_servicecredit_time_out_str:
+        official_servicecredit_time_out = official_servicecredit_time_out_str 
+    else:
+        official_servicecredit_time_out = timeref
+        
+    if official_overtime_time_in_str:
+        official_overtime_time_in = official_overtime_time_in_str    
+    else:
+        official_overtime_time_in = timeref
+        
+    if official_overtime_time_out_str:
+        official_overtime_time_out = official_overtime_time_out_str
+    else:
+        official_overtime_time_out = timeref
+    
+    
+         #----------------HONO----SC-------OT----------------------------------------------------------------
+   
+    if time_in > timeref:
+        time_in_hn = time_in
+    else:
+        time_in_hn = timeref
+       
+        
+    if time_out > timeref:
+        time_out_hn = time_out
+    else:
+        time_out_hn = timeref
+        
+        
+        #----------------HONO----SC-------OT-----------------END--------------------------------------------
+        #----------------HONO----SC-------OT----------------------------------------------------------------
+   
+    if time_in  > timeref:
+        time_in_sc = time_in
+    else:
+        time_in_sc = timeref
+       
+        
+    if time_out:
+        time_out_sc = time_out
+    else:
+        time_out_sc = timeref   
+        
+        
+        #----------------HONO----SC-------OT-----------------END--------------------------------------------
+        #----------------HONO----SC-------OT----------------------------------------------------------------
+   
+    if time_in  > timeref:
+        time_in_ot = time_in
+    else:
+        time_in_ot = timeref
+           
+    if time_out:
+        time_out_ot = time_out
+    else:
+        time_out_ot = timeref
+        
+        #----------------HONO----SC-------OT-----------------END--------------------------------------------     
+        
+    
+    
+        
+        
+    
+    time_diff = time_out - time_in
+    hours = time_diff.seconds // 3600
+    minutes = (time_diff.seconds % 3600) // 60
+    return f"{hours} hours {minutes} minutes"
+
+def calculate_surplus_time(surplus_time_in_str, surplus_time_out_str):
+    if surplus_time_in_str and surplus_time_out_str:
+        surplus_time_in = datetime.strptime(surplus_time_in_str, "%H:%M:%S")
+        surplus_time_out = datetime.strptime(surplus_time_out_str, "%H:%M:%S")
+        surplus_time_diff = surplus_time_out - surplus_time_in
+        if surplus_time_diff > timedelta(0):
+            hours = surplus_time_diff.seconds // 3600
+            minutes = (surplus_time_diff.seconds % 3600) // 60
+            return f"{hours} hours {minutes} minutes"
+    return None
+
+
 def search_records(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
@@ -279,13 +428,62 @@ def search_records(request):
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
             
+            start_date_tostr = str(start_date)
+            date_convert = datetime.strptime(start_date_tostr, "%Y-%m-%d")
+            
+            # Get the day of the week
+            day_of_week = date_convert.strftime("%A")
+            
+            
             # Query the Employee model to get additional information about the employee
             employee = get_object_or_404(Employee, employee_id=employee_id)
-
+            offtimes = OfficialTime.objects.filter(employee_id=employee_id, day=day_of_week)
             # Query the AttendanceRecord model to fetch records for the employee within the date range
             records = AttendanceRecord.objects.filter(employee_id=employee_id, date__range=(start_date, end_date))
+            
+            # Fetch the groups the current user belongs to
+            user_groups = request.user.groups.all()
+            
+            for record in records:
+                
+                for offtime in offtimes:
+                    officialday = offtime.day
+                    officialTimeIn = offtime.official_office_in
+                    offtimeout = offtime.official_office_out
+                    offhnin = offtime.official_honorarium_time_in
+                    offhnout = offtime.official_honorarium_time_out
+                    offscin = offtime.official_servicecredit_time_in
+                    offscout = offtime.official_servicecredit_time_out
+                    offotin = offtime.official_overtime_time_in
+                    offotout = offtime.official_overtime_time_out
+                    
+                    if record.time_in and record.time_out:
+                        record.total_time = calculate_time_difference(record.time_in.strftime("%H:%M:%S"),
+                                                                    record.time_out.strftime("%H:%M:%S"),
+                                                                    record.break_in.strftime("%H:%M:%S"),
+                                                                    record.break_out.strftime("%H:%M:%S"),
+                                                                    officialday,
+                                                                    officialTimeIn,
+                                                                    offtimeout,
+                                                                    offhnin,
+                                                                    offhnout,
+                                                                    offscin,
+                                                                    offscout,
+                                                                    offotin,
+                                                                    offotout                                                                    
+                                                                    )
+                    else:
+                        record.total_time = None
+                    
+                    
+                    
 
-            return render(request, 'hris/records.html', {'records': records, 'employee': employee})
+                if record.surplusHour_time_in and record.surplusHour_time_out:
+                    record.surplus_time = calculate_surplus_time(record.surplusHour_time_in.strftime("%H:%M:%S"), record.surplusHour_time_out.strftime("%H:%M:%S"))
+                else:
+                    record.surplus_time = None
+      
+            return render(request, 'hris/records.html', {'records': records, 'employee': employee, 'user_groups': user_groups})
     else:
         form = SearchForm()
 
