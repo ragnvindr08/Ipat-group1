@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'hris.apps.HrisConfig',
     'django_filters',
     'crispy_forms',
+    'django.contrib.humanize',
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 

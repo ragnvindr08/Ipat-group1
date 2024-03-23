@@ -13,6 +13,7 @@ class Employee(models.Model):
     first_name = models.CharField(max_length=100)
     middle_name = models.CharField(max_length=100, null=True, blank=True)
     email = models.EmailField(blank=True, null=True)
+    employment_status = models.CharField(max_length=100, null=True, blank=True)
     name_ext = models.CharField(max_length=10, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     place_of_birth = models.CharField(max_length=100, blank=True, null=True)
@@ -63,7 +64,7 @@ class Employee(models.Model):
     mother_middle_name = models.CharField(max_length=100, blank=True, null=True)
     employment_status = models.CharField(max_length=100, blank=True, null=True)
     date_created = models.DateTimeField(auto_now_add=True, null= True)
-    employment_status = models.DateTimeField(auto_now_add=True, null= True)
+    
     def __str__(self):
         return f"{self.employee_id} - {self.first_name} {self.surname}"
 
@@ -72,14 +73,14 @@ class OfficialTime(models.Model):
     employee_id = models.CharField(max_length=20)
     day = models.CharField(max_length = 10)
     semester_id = models.CharField(max_length = 10, null= True, blank = True)
-    official_office_in = models.TimeField(null= True, blank = True)
-    official_office_out = models.TimeField(null= True, blank = True)
-    official_honorarium_time_in = models.TimeField(null= True, blank = True)
-    official_honorarium_time_out = models.TimeField(null= True, blank = True)
-    official_servicecredit_time_in = models.TimeField(null= True, blank = True)
-    official_servicecredit_time_out = models.TimeField(null= True, blank = True)
-    official_overtime_time_in = models.TimeField(null= True, blank = True)
-    official_overtime_time_out = models.TimeField(null= True, blank = True)
+    official_office_in = models.TimeField(default='00:00:00', null=True, blank=True)
+    official_office_out = models.TimeField(default='00:00:00', null=True, blank=True)
+    official_honorarium_time_in = models.TimeField(default='00:00:00', null=True, blank=True)
+    official_honorarium_time_out = models.TimeField(default='00:00:00', null=True, blank=True)
+    official_servicecredit_time_in = models.TimeField(default='00:00:00', null=True, blank=True)
+    official_servicecredit_time_out = models.TimeField(default='00:00:00', null=True, blank=True)
+    official_overtime_time_in = models.TimeField(default='00:00:00', null=True, blank=True)
+    official_overtime_time_out = models.TimeField(default='00:00:00', null=True, blank=True)
 
 
 class AttendanceRecord(models.Model):

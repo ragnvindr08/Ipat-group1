@@ -7,17 +7,14 @@ from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from .decorators import *
 from .signals import *
-import datetime
-
 
 #upload imports
 import csv
 import xlrd
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+import datetime
 from datetime import datetime, timedelta
-
-
 
 from django.conf import settings
 import os
@@ -232,73 +229,10 @@ def userPage(request):
     pass
 
 
-# def upload_file(request):
-#     if request.method == 'POST':
-#         form = UploadFileForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             file = request.FILES['file']
-#             if file.name.endswith('.csv'):
-#                 data = csv.reader(file)
-#             elif file.name.endswith('.xlsx'):
-#                 data = xlrd.open_workbook(file_contents=file.read())
-#             else:
-#                 messages.error(request, 'Unsupported file format')
-#                 return redirect('upload_file')
-
-#             for row in data:
-#                 employee_id, ip_address = row[0], row[1]
-#                 DTR.objects.create(employee_id=employee_id, ip_address=ip_address)
-            
-#             messages.success(request, 'Data has been successfully uploaded.')
-#             return redirect('upload_file')
-#     else:
-#         form = UploadFileForm()
-#     return render(request, 'upload.html', {'form': form})
-
-
-# def search_records(request):
-#     if request.method == 'POST':
-#         form = SearchForm(request.POST)
-#         if form.is_valid():
-#             employee_id = form.cleaned_data['employee_id']
-#             start_date = form.cleaned_data['start_date']
-#             end_date = form.cleaned_data['end_date']
-#             records = AttendanceRecord.objects.filter(employee_id=employee_id, date__range=(start_date, end_date))
-#             return render(request, 'hris/records.html', {'records': records})
-#     else:
-#         form = SearchForm()
-#     return render(request, 'hris/search.html', {'form': form})
-# def search_records(request):
-#     if request.method == 'POST':
-#         form = SearchForm(request.POST)
-#         if form.is_valid():
-#             employee_id = form.cleaned_data['employee_id']
-#             start_date = form.cleaned_data['start_date']
-#             end_date = form.cleaned_data['end_date']
-            
-#             # Query the Employee model to get additional information about the employee
-#             employee = get_object_or_404(Employee, employee_id=employee_id)
-
-#             # Query the AttendanceRecord model to fetch records for the employee within the date range
-#             records = AttendanceRecord.objects.filter(employee_id=employee_id, date__range=(start_date, end_date))
-            
-#             # Fetch the groups the current user belongs to
-#             user_groups = request.user.groups.all()
-#             if user_groups == "admin":
-#                 userg = True
-#                 print(userg)
-#             else:
-#                 userg = False
-#                 print(userg)
-#             return render(request, 'hris/records.html', {'records': records, 'employee': employee, 'user_groups': user_groups})
-#     else:
-#         form = SearchForm()
-
-#     return render(request, 'hris/search.html', {'form': form})
-
 
 def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out_str, 
                               day_str,
+                              employent_status_str,
                               official_office_in_str,
                               official_office_out_str,
                               official_honorarium_time_in_str,
@@ -309,49 +243,85 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
                               official_overtime_time_out_str
                               ):
     
+    today = datetime.now().date()
+
+    # Convert time strings to datetime objects
     timeref = datetime.strptime("00:00:00", "%H:%M:%S")
     time_in = datetime.strptime(time_in_str, "%H:%M:%S")
     break_in = datetime.strptime(break_in_str, "%H:%M:%S")
     break_out = datetime.strptime(break_out_str, "%H:%M:%S")
     time_out = datetime.strptime(time_out_str, "%H:%M:%S")
+
+    # Convert time objects to datetime objects with today's date
+    time_in = datetime.combine(today, time_in.time())
+    break_in = datetime.combine(today, break_in.time())
+    break_out = datetime.combine(today, break_out.time())
+    time_out = datetime.combine(today, time_out.time())
     day = day_str
+    employment_status = employent_status_str
     
     if official_office_in_str:
         official_office_in = official_office_in_str
+        official_office_in =datetime.combine(today, official_office_in)
     else:
-        official_office_in = timeref
+        official_office_in = None
+
     if  official_office_out_str:
         official_office_out = official_office_out_str
+        official_office_out =datetime.combine(today, official_office_out)
     else:
-        official_office_out = timeref
+        official_office_out = None
+
     if official_honorarium_time_in_str:
         official_honorarium_time_in = official_honorarium_time_in_str
+        official_honorarium_time_in =datetime.combine(today, official_honorarium_time_in)
     else:
-        official_office_out = timeref
+        official_honorarium_time_in = None
     
     if official_honorarium_time_out_str:
         official_honorarium_time_out = official_honorarium_time_out_str
+        official_honorarium_time_out =datetime.combine(today, official_honorarium_time_out)
     else:
-        official_honorarium_time_out = timeref
+        official_honorarium_time_out = None
         
     if official_servicecredit_time_in_str:
         official_servicecredit_time_in = official_servicecredit_time_in_str
+        official_servicecredit_time_in =datetime.combine(today, official_servicecredit_time_in)
     else:
-        official_servicecredit_time_in = timeref
+        official_servicecredit_time_in = None
+
     if  official_servicecredit_time_out_str:
         official_servicecredit_time_out = official_servicecredit_time_out_str 
+        official_servicecredit_time_out =datetime.combine(today, official_servicecredit_time_out)
     else:
-        official_servicecredit_time_out = timeref
+        official_servicecredit_time_out = None
         
     if official_overtime_time_in_str:
-        official_overtime_time_in = official_overtime_time_in_str    
+        official_overtime_time_in = official_overtime_time_in_str   
+        official_overtime_time_in =datetime.combine(today, official_overtime_time_in) 
     else:
-        official_overtime_time_in = timeref
+        official_overtime_time_in = None
         
     if official_overtime_time_out_str:
         official_overtime_time_out = official_overtime_time_out_str
+        official_overtime_time_out =datetime.combine(today, official_overtime_time_out) 
     else:
-        official_overtime_time_out = timeref
+        official_overtime_time_out = None
+
+
+        # Convert strings to datetime objects if they are not empty
+    if time_in:
+        office_in = time_in
+        time_in = time_in
+    else:
+        time_in = timeref
+        office_in = timeref
+    if time_out:
+        office_out = time_out
+        time_out = time_out
+    else:
+        office_out = timeref
+        time_out = timeref
     
     
          #----------------HONO----SC-------OT----------------------------------------------------------------
@@ -397,16 +367,171 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
         time_out_ot = timeref
         
         #----------------HONO----SC-------OT-----------------END--------------------------------------------     
+    if employment_status == "JO":
+        official_office_in_datetime = official_office_in
+        official_office_out_datetime = official_office_out
+                                        
+        # Calculate the end of break time
+        break_starts = official_office_in_datetime + timedelta(hours=4)
+        break_end = break_starts + timedelta(hours=1)
+
+        # Check if time_in is before official_office_in
+        if time_in < official_office_in and time_in != timeref:
+            office_in = official_office_in
+
+        # Check if break_in is after break_starts
+        if break_in  >= break_starts:
+            break_in = break_starts
+
+        # Check if break_out is before break_end
+        if break_out  < break_end:
+            break_out = break_end
+
+        # Check if time_out is after official_office_out
+        if time_out  > official_office_out_datetime and time_out != timeref:
+            office_out = official_office_out
+        else:
+            office_out = time_out
+
+        print(official_office_out,"hello")
+ 
+
+        # Calculate the difference
+        # Assuming break_in, office_in, break_out, and office_out are datetime objects
+
+        # Extract time components
+        break_in_time = break_in.time() if break_in else None
+        time_in_time = office_in.time() if office_in else None
+        break_out_time = break_out.time() if break_out else None
+        time_out_time = office_out.time() if office_out else None
+
+        # # Define current day
+        # today_date = datetime.today().date()
+        # break_in = break_in.strftime("%H:%M:%S") if break_in else None
+        # break_out = break_out.strftime("%H:%M:%S") if break_out else None
+        # office_in = office_in.strftime("%H:%M:%S") if office_in else None
+        # office_out = office_out.strftime("%H:%M:%S") if office_out else None
+
+        # # Convert to datetime objects
+        # break_in = datetime.strptime(break_in, "%H:%M:%S") if break_in else None
+        # break_out = datetime.strptime(break_out, "%H:%M:%S") if break_out else None
+        # office_in = datetime.strptime(office_in, "%H:%M:%S") if office_in else None
+        # office_out = datetime.strptime(office_out, "%H:%M:%S") if office_out else None
+        # Initialize time differences as None
+        difference_morning = None
+        difference_afternoon = None
+
+        # Check if break_in and time_in are not None
+        if break_in and office_in is not None:
+    # # Calculate difference for morning
+    #         difference_morning = datetime.combine(today_date, break_in_time) - datetime.combine(today_date, time_in_time)
+
+    #     if break_out and office_out is not None:
+    #         # Calculate difference for afternoon
+    #         difference_afternoon = datetime.combine(today_date, break_out_time) - datetime.combine(today_date, time_out_time)
+
+    #     # Extract hours and minutes from the morning session
+                    # Calculate the difference
+            if break_in_time and time_in_time != timeref:
+                difference_morning = datetime.combine(datetime.today(), break_in_time) - datetime.combine(datetime.today(), time_in_time)
+                # print(difference_morning)
+            else:
+                difference_morning = timeref
+                
+            if break_out_time and time_out_time != timeref:
+                difference_afternoon = datetime.combine(datetime.today(), time_out_time) - datetime.combine(datetime.today(), break_out_time)
+            else:
+                difference_afternoon = timeref
+
+
+
+      # Extract hours, minutes, and seconds from the morning session
+        if difference_morning == timeref:
+            difference_hours_morning = 0
+            difference_minutes_morning = 0
+            difference_seconds_morning = 0
+        else:
+            difference_hours_morning = difference_morning.total_seconds() // 3600
+            difference_minutes_morning = (difference_morning.total_seconds() % 3600) // 60
+            difference_seconds_morning = difference_morning.total_seconds() % 60
+
+        # Extract hours, minutes, and seconds from the afternoon session   
+        if difference_afternoon == timeref: 
+            difference_hours_afternoon = 0
+            difference_minutes_afternoon = 0
+            difference_seconds_afternoon = 0
+        else:
+            difference_hours_afternoon = difference_afternoon.total_seconds() // 3600
+            difference_minutes_afternoon = (difference_afternoon.total_seconds() % 3600) // 60
+            difference_seconds_afternoon = difference_afternoon.total_seconds() % 60
+
+        # Reset minutes if hours are greater than or equal to 4
+        if difference_hours_morning >= 4:
+            difference_minutes_morning = 0
+        if difference_hours_afternoon >= 4:
+            difference_minutes_afternoon = 0
+
+        # Calculate total hours, minutes, and seconds
+        total_hours = difference_hours_morning + difference_hours_afternoon + (difference_minutes_morning + difference_minutes_afternoon) // 60
+        total_minutes = (difference_minutes_morning + difference_minutes_afternoon) % 60
+        total_seconds = difference_seconds_morning + difference_seconds_afternoon
+
+
+
+        print(day)
+        print(time_in_time, "time in")
+        print(break_in_time, "break in")
+        print(break_out_time, "break out")
+        print(time_out_time, "time out")
+        print(total_hours, " hours ", total_minutes, " minutes ", total_seconds," seconds")
+        office_time_only_in = official_office_in.strftime("%H:%M:%S")
+        # Extract time only from official_office_out
+        office_time_only_out = official_office_out.strftime("%H:%M:%S")
+        print(office_time_only_in)
+        print(office_time_only_out)
+
+        if official_honorarium_time_in and official_honorarium_time_out:
+            official_honorarium_time_in = official_honorarium_time_in
+            official_honorarium_time_out = official_honorarium_time_out
+        else: 
+            official_honorarium_time_in = "None"
+            official_honorarium_time_out = "None"
+
+        if official_servicecredit_time_in and official_servicecredit_time_out:
+            official_servicecredit_time_in = official_servicecredit_time_in
+            official_servicecredit_time_out = official_servicecredit_time_out
+        else: 
+            official_servicecredit_time_in = "None"
+            official_servicecredit_time_out = "None"
         
-    
-    
-        
-        
-    
-    time_diff = time_out - time_in
-    hours = time_diff.seconds // 3600
-    minutes = (time_diff.seconds % 3600) // 60
-    return f"{hours} hours {minutes} minutes"
+        if official_overtime_time_in and official_overtime_time_out:
+            official_overtime_time_in = official_overtime_time_in
+            official_overtime_time_out = official_overtime_time_out
+        else: 
+            official_overtime_time_in = "None"
+            official_overtime_time_out = "None"
+
+
+
+    context = {
+        official_office_in: official_office_in if official_office_in else "",
+        official_office_out: official_office_out if official_office_out else "",
+
+        # official_honorarium_time_in: official_honorarium_time_in if official_honorarium_time_in else "",
+        # official_honorarium_time_out: official_honorarium_time_out if official_honorarium_time_out else "",
+
+        official_servicecredit_time_in: official_servicecredit_time_in if official_servicecredit_time_in else "",
+        # official_servicecredit_time_out: official_servicecredit_time_out if official_servicecredit_time_out else "",
+
+        # official_overtime_time_in: official_overtime_time_in if official_overtime_time_in else "",
+        # official_overtime_time_out: official_overtime_time_out if official_overtime_time_out else "",
+
+        total_hours: total_hours if total_hours else "",
+        total_minutes: total_minutes if total_minutes else "",
+        total_seconds: total_seconds if total_seconds else "",
+        day: day if day else "",
+    }
+    return  context
 
 def calculate_surplus_time(surplus_time_in_str, surplus_time_out_str):
     if surplus_time_in_str and surplus_time_out_str:
@@ -428,26 +553,43 @@ def search_records(request):
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
             
-            start_date_tostr = str(start_date)
-            date_convert = datetime.strptime(start_date_tostr, "%Y-%m-%d")
-            
-            # Get the day of the week
-            day_of_week = date_convert.strftime("%A")
+
             
             
             # Query the Employee model to get additional information about the employee
             employee = get_object_or_404(Employee, employee_id=employee_id)
-            offtimes = OfficialTime.objects.filter(employee_id=employee_id, day=day_of_week)
+            
+            
             # Query the AttendanceRecord model to fetch records for the employee within the date range
             records = AttendanceRecord.objects.filter(employee_id=employee_id, date__range=(start_date, end_date))
             
             # Fetch the groups the current user belongs to
             user_groups = request.user.groups.all()
             
+
+
             for record in records:
+                # Convert start_date to string and then to datetime object
+                start_date_tostr = str(start_date)
+                date_convert = datetime.strptime(start_date_tostr, "%Y-%m-%d")
                 
-                for offtime in offtimes:
+                # Get the day of the week
+                day_of_week = date_convert.strftime("%A")
+                
+                # Fetch official times based on employee ID and day of the week
+                all_offtimes = OfficialTime.objects.filter(employee_id=employee_id)
+               
+                # Now you can iterate over fetched official times and perform operations
+                day_of_week = record.date.strftime("%A")
+
+                # Filter OfficialTime objects for the specific day
+                offtimes = all_offtimes.filter(day=day_of_week)
+
+                if offtimes.exists():
+                    offtime = offtimes.first()  # Assuming there's only one OfficialTime object for each day
+                    # Access attributes of the OfficialTime object
                     officialday = offtime.day
+                    emptstats = employee.employment_status
                     officialTimeIn = offtime.official_office_in
                     offtimeout = offtime.official_office_out
                     offhnin = offtime.official_honorarium_time_in
@@ -458,11 +600,40 @@ def search_records(request):
                     offotout = offtime.official_overtime_time_out
                     
                     if record.time_in and record.time_out:
-                        record.total_time = calculate_time_difference(record.time_in.strftime("%H:%M:%S"),
+  
+                        
+                                  
+          
+          
+          
+
+          
+          
+
+          
+          
+                        
+                        
+                        
+                        
+                                        
+                        (record.official_office_in, 
+                         record.official_office_out, 
+                        #  record.official_honorarium_time_in, 
+                        #  record.official_honorarium_time_out, 
+                         record.official_servicecredit_time_in, 
+                        #  record.official_servicecredit_time_out, 
+                        #  record.official_overtime_time_in, 
+                        #  record.official_overtime_time_out, 
+                         record.total_hours, 
+                         record.total_minutes, 
+                         record.total_seconds, 
+                         record.day) = calculate_time_difference(record.time_in.strftime("%H:%M:%S"),
                                                                     record.time_out.strftime("%H:%M:%S"),
                                                                     record.break_in.strftime("%H:%M:%S"),
                                                                     record.break_out.strftime("%H:%M:%S"),
                                                                     officialday,
+                                                                    emptstats,
                                                                     officialTimeIn,
                                                                     offtimeout,
                                                                     offhnin,
@@ -472,10 +643,14 @@ def search_records(request):
                                                                     offotin,
                                                                     offotout                                                                    
                                                                     )
+                        
+                        
+
+                                    # Update record's total time components
+
                     else:
                         record.total_time = None
-                    
-                    
+                
                     
 
                 if record.surplusHour_time_in and record.surplusHour_time_out:
@@ -483,7 +658,13 @@ def search_records(request):
                 else:
                     record.surplus_time = None
       
-            return render(request, 'hris/records.html', {'records': records, 'employee': employee, 'user_groups': user_groups})
+            return render(request, 'hris/records.html', {
+    'records': records, 
+    'employee': employee, 
+    'user_groups': user_groups, 
+    'offtimes': offtimes,
+
+})
     else:
         form = SearchForm()
 

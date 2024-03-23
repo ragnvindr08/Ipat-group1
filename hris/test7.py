@@ -159,7 +159,7 @@ def compute_time_difference(time_in, time_out,
         else:
             difference_morning = timeref
             
-        if break_in and time_out_office != timeref:
+        if break_out and time_out_office != timeref:
             difference_afternoon = datetime.combine(datetime.today(), time_out_office) - datetime.combine(datetime.today(), break_out)
         else:
             difference_afternoon = timeref
