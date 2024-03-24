@@ -259,54 +259,56 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
     time_out = datetime.combine(today, time_out.time())
     day = day_str
     employment_status = employent_status_str
-    
+    midnight = time(0, 0)  # Represents 00:00:00
+    datetime_with_midnight = datetime.combine(today, midnight) 
+
     if official_office_in_str:
         official_office_in = official_office_in_str
         official_office_in =datetime.combine(today, official_office_in)
     else:
-        official_office_in = None
+        official_office_in = datetime_with_midnight
 
     if  official_office_out_str:
         official_office_out = official_office_out_str
         official_office_out =datetime.combine(today, official_office_out)
     else:
-        official_office_out = None
+        official_office_out = datetime_with_midnight
 
     if official_honorarium_time_in_str:
         official_honorarium_time_in = official_honorarium_time_in_str
         official_honorarium_time_in =datetime.combine(today, official_honorarium_time_in)
     else:
-        official_honorarium_time_in = None
+        official_honorarium_time_in = datetime_with_midnight
     
     if official_honorarium_time_out_str:
         official_honorarium_time_out = official_honorarium_time_out_str
         official_honorarium_time_out =datetime.combine(today, official_honorarium_time_out)
     else:
-        official_honorarium_time_out = None
+        official_honorarium_time_out = datetime_with_midnight
         
     if official_servicecredit_time_in_str:
         official_servicecredit_time_in = official_servicecredit_time_in_str
         official_servicecredit_time_in =datetime.combine(today, official_servicecredit_time_in)
     else:
-        official_servicecredit_time_in = None
+        official_servicecredit_time_in = datetime_with_midnight
 
     if  official_servicecredit_time_out_str:
         official_servicecredit_time_out = official_servicecredit_time_out_str 
         official_servicecredit_time_out =datetime.combine(today, official_servicecredit_time_out)
     else:
-        official_servicecredit_time_out = None
+        official_servicecredit_time_out = datetime_with_midnight
         
     if official_overtime_time_in_str:
         official_overtime_time_in = official_overtime_time_in_str   
         official_overtime_time_in =datetime.combine(today, official_overtime_time_in) 
     else:
-        official_overtime_time_in = None
+        official_overtime_time_in = datetime_with_midnight
         
     if official_overtime_time_out_str:
         official_overtime_time_out = official_overtime_time_out_str
         official_overtime_time_out =datetime.combine(today, official_overtime_time_out) 
     else:
-        official_overtime_time_out = None
+        official_overtime_time_out = datetime_with_midnight
 
 
         # Convert strings to datetime objects if they are not empty
@@ -314,139 +316,209 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
         office_in = time_in
         time_in = time_in
     else:
-        time_in = timeref
-        office_in = timeref
+        time_in = datetime_with_midnight
+        office_in = datetime_with_midnight
     if time_out:
         office_out = time_out
         time_out = time_out
     else:
-        office_out = timeref
-        time_out = timeref
+        office_out = datetime_with_midnight
+        time_out = datetime_with_midnight
     
     
-         #----------------HONO----SC-------OT----------------------------------------------------------------
+         #----------------HONO-----------------------------------------------------------------
    
-    if time_in > timeref:
+    if time_in > datetime_with_midnight and time_in <= official_honorarium_time_in:
+        time_in_hn = official_honorarium_time_in
+    else:
         time_in_hn = time_in
-    else:
-        time_in_hn = timeref
        
         
-    if time_out > timeref:
+    if time_out > official_honorarium_time_out:
+        time_out_hn = official_honorarium_time_out
+    else:
         time_out_hn = time_out
-    else:
-        time_out_hn = timeref
         
         
-        #----------------HONO----SC-------OT-----------------END--------------------------------------------
-        #----------------HONO----SC-------OT----------------------------------------------------------------
+        #----------------HONO-------------------END--------------------------------------------
+        #-----------------SC---------------------------------------------------------------------
    
-    if time_in  > timeref:
-        time_in_sc = time_in
+    if time_in  > datetime_with_midnight and time_in <= official_servicecredit_time_in:
+        time_in_sc = official_servicecredit_time_in
     else:
-        time_in_sc = timeref
+        time_in_sc = time_in
        
         
-    if time_out:
-        time_out_sc = time_out
+    if time_out > official_servicecredit_time_out:
+        time_out_sc = official_servicecredit_time_out
     else:
-        time_out_sc = timeref   
+        time_out_sc = time_out   
         
         
-        #----------------HONO----SC-------OT-----------------END--------------------------------------------
-        #----------------HONO----SC-------OT----------------------------------------------------------------
+        #-----------------SC-------------------END--------------------------------------------
+        #-------------------OT----------------------------------------------------------------
    
-    if time_in  > timeref:
+    if time_in  > datetime_with_midnight and time_in <= official_overtime_time_in:
+        time_in_ot = official_overtime_time_in
+    else:
         time_in_ot = time_in
-    else:
-        time_in_ot = timeref
            
-    if time_out:
-        time_out_ot = time_out
+    if time_out > official_overtime_time_out:
+        time_out_ot = official_overtime_time_out
     else:
-        time_out_ot = timeref
-        
-        #----------------HONO----SC-------OT-----------------END--------------------------------------------     
-    if employment_status == "JO":
+        time_out_ot = time_out
+    
+        #--------------------OT-----------------END--------------------------------------------     
+    if employment_status == "FACULTY":
+        midnight = time(0, 0)  # Represents 00:00:00
+        datetime_with_midnight = datetime.combine(today, midnight)   
         official_office_in_datetime = official_office_in
         official_office_out_datetime = official_office_out
-                                        
-        # Calculate the end of break time
-        break_starts = official_office_in_datetime + timedelta(hours=4)
-        break_end = break_starts + timedelta(hours=1)
+        time_object = time(0, 0, 0)
+        time_object2 = datetime.combine(datetime.today(), time_object)
+        print(time_object2, "timeobject2")
+        time_object_replace = time(12, 0, 0)
+        time_object_replace2 = datetime.combine(datetime.today(), time_object_replace)
 
-        # Check if time_in is before official_office_in
+        faculty_official_office_in = official_office_in_datetime.time() if official_office_in_datetime else None
+        office_in = official_office_in_datetime.time() if official_office_in_datetime else None
+        office_out = official_office_out_datetime.time() if official_office_out_datetime else None
+        faculty_official_office_out = official_office_out_datetime.time() if official_office_out_datetime else None
+        
         if time_in < official_office_in and time_in != timeref:
-            office_in = official_office_in
-
-        # Check if break_in is after break_starts
-        if break_in  >= break_starts:
-            break_in = break_starts
-
-        # Check if break_out is before break_end
-        if break_out  < break_end:
-            break_out = break_end
+            office_in = official_office_in_datetime
 
         # Check if time_out is after official_office_out
-        if time_out  > official_office_out_datetime and time_out != timeref:
-            office_out = official_office_out
+        if time_out  > official_office_out_datetime and time_out != time_object2:
+            office_out = official_office_out_datetime
         else:
             office_out = time_out
 
-        print(official_office_out,"hello")
+
+
+
+        difference_faculty = datetime.combine(datetime.today(), faculty_official_office_out) - datetime.combine(datetime.today(), faculty_official_office_in)
+        difference_hours_faculty = difference_faculty.total_seconds() // 3600
+        difference_minutes_faculty = (difference_faculty.total_seconds() % 3600) // 60
+        difference_seconds_faculty = difference_faculty.total_seconds() % 60
+
+        total_hours = difference_hours_faculty
+        total_minutes = difference_minutes_faculty % 60
+        total_seconds = difference_seconds_faculty
+
+
+        if official_office_in_datetime == datetime_with_midnight:
+            official_office_in = "N/A"
+            total_hours = 0
+            total_minutes = 0
+            total_seconds = 0
+        else:
+            official_office_in = official_office_in_datetime.time()
+
+
+        if official_office_out_datetime == datetime_with_midnight:
+            official_office_out = "N/A"
+            total_hours = 0
+            total_minutes = 0
+            total_seconds = 0
+        else:
+            official_office_out = official_office_out_datetime.time()
+        
+
+        
+        # context = {
+
+        #     total_hours: "total_hours",
+        #     total_minutes: "total_minutes",
+        #     total_seconds: "total_seconds",
+        #     day: "day"
+        #         }
+        if break_in == datetime_with_midnight:
+            break_in1 = "N/A"
+        else:
+            break_in1 = break_in.time()
+
+
+        if break_out == datetime_with_midnight:
+            break_out1 = "N/A"
+        else:
+            break_out1 = break_out.time()
+
+
+        return  break_in1, break_out1,official_office_in_datetime, official_office_out_datetime, official_office_in ,official_office_out, total_hours, total_minutes, total_seconds, day
+        
+    else:
+        official_office_in_datetime = official_office_in
+        official_office_out_datetime = official_office_out
+        deduction_time = 0
+        time_object = time(0, 0, 0)
+        time_object2 = datetime.combine(datetime.today(), time_object)
+        print(time_object2, "timeobject2")
+        time_object_replace = time(12, 0, 0)
+        time_object_replace2 = datetime.combine(datetime.today(), time_object_replace)
+
+
+        if official_office_in_datetime > time_object2:             
+        # Calculate the end of break time
+            break_starts = official_office_in_datetime + timedelta(hours=4)
+            break_end = break_starts + timedelta(hours=1)
+        else:
+            break_starts =time_object2
+            break_end = time_object2
+
+        # Check if time_in is before official_office_in
+        if time_in < official_office_in and time_in > time_object2:
+            office_in = official_office_in
+
+        # Check if break_in is after break_starts
+        if break_in  >= break_starts and break_in <=break_end:
+            break_in_time = break_starts
+
+        # Check if break_out is before break_end
+        if break_out  < break_end and break_end != time_object2:
+            break_out_time = break_end
+
+        # Check if time_out is after official_office_out
+        if time_out  > official_office_out_datetime :
+            office_out = official_office_out
+        else:
+            office_out = time_out
  
 
-        # Calculate the difference
-        # Assuming break_in, office_in, break_out, and office_out are datetime objects
 
-        # Extract time components
-        break_in_time = break_in.time() if break_in else None
-        time_in_time = office_in.time() if office_in else None
-        break_out_time = break_out.time() if break_out else None
-        time_out_time = office_out.time() if office_out else None
 
-        # # Define current day
-        # today_date = datetime.today().date()
-        # break_in = break_in.strftime("%H:%M:%S") if break_in else None
-        # break_out = break_out.strftime("%H:%M:%S") if break_out else None
-        # office_in = office_in.strftime("%H:%M:%S") if office_in else None
-        # office_out = office_out.strftime("%H:%M:%S") if office_out else None
-
-        # # Convert to datetime objects
-        # break_in = datetime.strptime(break_in, "%H:%M:%S") if break_in else None
-        # break_out = datetime.strptime(break_out, "%H:%M:%S") if break_out else None
-        # office_in = datetime.strptime(office_in, "%H:%M:%S") if office_in else None
-        # office_out = datetime.strptime(office_out, "%H:%M:%S") if office_out else None
         # Initialize time differences as None
         difference_morning = None
         difference_afternoon = None
-
+        
         # Check if break_in and time_in are not None
-        if break_in and office_in is not None:
-    # # Calculate difference for morning
-    #         difference_morning = datetime.combine(today_date, break_in_time) - datetime.combine(today_date, time_in_time)
+        # if break_in and office_in is not None:
+        break_in_time = break_starts.time() if break_starts else time_object
+        time_in_time = office_in.time() if office_in else time_object
+        break_out_time = break_end.time() if break_end else time_object
+        time_out_time = office_out.time() if office_out else time_object   
 
-    #     if break_out and office_out is not None:
-    #         # Calculate difference for afternoon
-    #         difference_afternoon = datetime.combine(today_date, break_out_time) - datetime.combine(today_date, time_out_time)
+        if break_in == time_object2 or break_out == time_object2:
+            break_in = break_starts
+            break_out = break_end
+            deduction_time = 1
 
-    #     # Extract hours and minutes from the morning session
-                    # Calculate the difference
-            if break_in_time and time_in_time != timeref:
-                difference_morning = datetime.combine(datetime.today(), break_in_time) - datetime.combine(datetime.today(), time_in_time)
-                # print(difference_morning)
-            else:
-                difference_morning = timeref
-                
-            if break_out_time and time_out_time != timeref:
-                difference_afternoon = datetime.combine(datetime.today(), time_out_time) - datetime.combine(datetime.today(), break_out_time)
-            else:
-                difference_afternoon = timeref
 
+        if break_in_time and time_in_time != time_object2:
+            difference_morning = datetime.combine(datetime.today(), break_in_time) - datetime.combine(datetime.today(), time_in_time)
+
+
+        else:
+            difference_morning = time_object
+            
+        if break_out_time and time_out_time != time_object:
+            difference_afternoon = datetime.combine(datetime.today(), time_out_time) - datetime.combine(datetime.today(), break_out_time)
+        else:
+            difference_afternoon = time_object
 
 
       # Extract hours, minutes, and seconds from the morning session
-        if difference_morning == timeref:
+        if difference_morning == time_object:
             difference_hours_morning = 0
             difference_minutes_morning = 0
             difference_seconds_morning = 0
@@ -456,7 +528,7 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
             difference_seconds_morning = difference_morning.total_seconds() % 60
 
         # Extract hours, minutes, and seconds from the afternoon session   
-        if difference_afternoon == timeref: 
+        if difference_afternoon == time_object: 
             difference_hours_afternoon = 0
             difference_minutes_afternoon = 0
             difference_seconds_afternoon = 0
@@ -471,80 +543,168 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
         if difference_hours_afternoon >= 4:
             difference_minutes_afternoon = 0
 
+        midnight = time(0, 0)  # Represents 00:00:00
+# Combine the current date with the midnight time
+        datetime_with_midnight = datetime.combine(today, midnight)
+        if official_office_in_datetime == datetime_with_midnight or official_office_out_datetime == datetime_with_midnight:
+            difference_hours_afternoon = 0
+            difference_minutes_afternoon = 0
+            difference_seconds_afternoon = 0
+            difference_hours_morning = 0
+            difference_minutes_morning = 0
+            difference_seconds_morning = 0
         # Calculate total hours, minutes, and seconds
-        total_hours = difference_hours_morning + difference_hours_afternoon + (difference_minutes_morning + difference_minutes_afternoon) // 60
+        total_hours = (difference_hours_morning + difference_hours_afternoon + (difference_minutes_morning + difference_minutes_afternoon) // 60) - deduction_time
         total_minutes = (difference_minutes_morning + difference_minutes_afternoon) % 60
         total_seconds = difference_seconds_morning + difference_seconds_afternoon
-
-
-
-        print(day)
-        print(time_in_time, "time in")
-        print(break_in_time, "break in")
-        print(break_out_time, "break out")
-        print(time_out_time, "time out")
-        print(total_hours, " hours ", total_minutes, " minutes ", total_seconds," seconds")
-        office_time_only_in = official_office_in.strftime("%H:%M:%S")
-        # Extract time only from official_office_out
-        office_time_only_out = official_office_out.strftime("%H:%M:%S")
-        print(office_time_only_in)
-        print(office_time_only_out)
-
-        if official_honorarium_time_in and official_honorarium_time_out:
+        
+   
+        if official_honorarium_time_in > time_object2 and official_honorarium_time_out > time_object2:
             official_honorarium_time_in = official_honorarium_time_in
             official_honorarium_time_out = official_honorarium_time_out
         else: 
-            official_honorarium_time_in = "None"
-            official_honorarium_time_out = "None"
+            official_honorarium_time_in = time_object2
+            official_honorarium_time_out = time_object2
 
-        if official_servicecredit_time_in and official_servicecredit_time_out:
+        if official_servicecredit_time_in> time_object2 and official_servicecredit_time_out > time_object2:
             official_servicecredit_time_in = official_servicecredit_time_in
             official_servicecredit_time_out = official_servicecredit_time_out
         else: 
-            official_servicecredit_time_in = "None"
-            official_servicecredit_time_out = "None"
+            official_servicecredit_time_in = time_object2
+            official_servicecredit_time_out = time_object2
         
-        if official_overtime_time_in and official_overtime_time_out:
+        if official_overtime_time_in > time_object2 and official_overtime_time_out > time_object2:
             official_overtime_time_in = official_overtime_time_in
             official_overtime_time_out = official_overtime_time_out
         else: 
-            official_overtime_time_in = "None"
-            official_overtime_time_out = "None"
+            official_overtime_time_in = time_object2
+            official_overtime_time_out = time_object2
+        print(timeref, "timeref")
+        print(official_honorarium_time_in, "official_honorarium_time_in")
+        print(official_honorarium_time_out, "official_honorarium_time_out")
+        print(official_overtime_time_in, "official_overtime_time_in")
+        print(official_overtime_time_out, "official_overtime_time_out")
+        print(official_servicecredit_time_in, "official_servicecredit_time_in")
+        print(official_servicecredit_time_out, "official_servicecredit_time_out")
+        print("---------------------------------------------------------------------")
+
+        
+   #----------------------------------------COMPUTE HONORARIUM----------------------------
+       
+        if (time_out_hn > datetime_with_midnight and time_in_hn == datetime_with_midnight) or (time_out_hn == datetime_with_midnight and time_in_hn > datetime_with_midnight) or (time_out_hn == datetime_with_midnight and time_in_hn == datetime_with_midnight):
+            
+            difference_hn = 0
+            difference_hours_hn = 0
+            difference_minutes_hn = 0
+            difference_seconds_hn = 0
+    
+        else:
+            difference_hn = time_out_hn - time_in_hn
+            difference_hours_hn = difference_hn.total_seconds() // 3600
+            difference_minutes_hn = (difference_hn.total_seconds() % 3600) // 60
+            difference_seconds_hn = difference_hn.total_seconds() % 60
+
+        #----------------------------------------COMPUTE HONORARIUM----------------------------
+        
+        #----------------------------------------COMPUTE SERVICE CREDIT----------------------------
+         
+        if (time_out_sc > timeref and time_in_sc == datetime_with_midnight) or (time_out_sc== datetime_with_midnight and time_in_sc > datetime_with_midnight) or (time_out_sc == datetime_with_midnight and time_in_sc == datetime_with_midnight):
+
+            difference_sc = 0
+            difference_hours_sc = 0
+            difference_minutes_sc = 0
+            difference_seconds_sc = 0
+    
+        else:
+
+            difference_sc = time_out_sc - time_in_sc
+            difference_hours_sc = difference_sc.total_seconds() // 3600
+            difference_minutes_sc = (difference_sc.total_seconds() % 3600) // 60
+            difference_seconds_sc = difference_sc.total_seconds() % 60
+
+            #----------------------------------------COMPUTE SERVICE CREDIT----------------------------    
+
+            #----------------------------------------COMPUTE OVERTIME----------------------------
+            
+        if (time_out_ot > timeref and time_in_ot == datetime_with_midnight) or (time_out_ot== datetime_with_midnight and time_in_ot > datetime_with_midnight) or (time_out_ot == datetime_with_midnight and time_in_ot == datetime_with_midnight):
+            difference_ot = 0
+            difference_hours_ot = 0
+            difference_minutes_ot = 0
+            difference_seconds_ot = 0
+        else:
+            # Inside the COMPUTE OVERTIME block
+            difference_ot = time_out_ot - time_in_ot
+            difference_hours_ot = difference_ot.total_seconds() // 3600
+            difference_minutes_ot = (difference_ot.total_seconds() % 3600) // 60
+            difference_seconds_ot = difference_ot.total_seconds() % 60
+            
+        #----------------------------------------COMPUTE OVERTIME----------------------------
+        if official_office_in_datetime == datetime_with_midnight:
+            official_office_in_datetime = "N/A"
+            total_hours = 0
+            total_minutes = 0
+            total_seconds = 0
+        else:
+            official_office_in_datetime = official_office_in_datetime.time()
 
 
+        if official_office_out_datetime == datetime_with_midnight:
+            official_office_out_datetime = "N/A"
+            total_hours = 0
+            total_minutes = 0
+            total_seconds = 0
+        else:
+            official_office_out_datetime = official_office_out_datetime.time()
 
-    context = {
-        official_office_in: official_office_in if official_office_in else "",
-        official_office_out: official_office_out if official_office_out else "",
-
-        # official_honorarium_time_in: official_honorarium_time_in if official_honorarium_time_in else "",
-        # official_honorarium_time_out: official_honorarium_time_out if official_honorarium_time_out else "",
-
-        official_servicecredit_time_in: official_servicecredit_time_in if official_servicecredit_time_in else "",
-        # official_servicecredit_time_out: official_servicecredit_time_out if official_servicecredit_time_out else "",
-
-        # official_overtime_time_in: official_overtime_time_in if official_overtime_time_in else "",
-        # official_overtime_time_out: official_overtime_time_out if official_overtime_time_out else "",
-
-        total_hours: total_hours if total_hours else "",
-        total_minutes: total_minutes if total_minutes else "",
-        total_seconds: total_seconds if total_seconds else "",
-        day: day if day else "",
-    }
-    return  context
-
-def calculate_surplus_time(surplus_time_in_str, surplus_time_out_str):
-    if surplus_time_in_str and surplus_time_out_str:
-        surplus_time_in = datetime.strptime(surplus_time_in_str, "%H:%M:%S")
-        surplus_time_out = datetime.strptime(surplus_time_out_str, "%H:%M:%S")
-        surplus_time_diff = surplus_time_out - surplus_time_in
-        if surplus_time_diff > timedelta(0):
-            hours = surplus_time_diff.seconds // 3600
-            minutes = (surplus_time_diff.seconds % 3600) // 60
-            return f"{hours} hours {minutes} minutes"
-    return None
+        if break_in == datetime_with_midnight:
+            break_in1 = "N/A"
+        else:
+            break_in1 = break_in.time()
 
 
+        if break_out == datetime_with_midnight:
+            break_out1 = "N/A"
+        else:
+            break_out1 = break_out.time()
+            
+            #NA IF HONORARIUM IS EMPTY
+        if official_honorarium_time_in == datetime_with_midnight:
+            official_honorarium_time_in = "N/A"
+        else:
+            official_honorarium_time_in = official_honorarium_time_in.time()
+
+        if official_honorarium_time_out == datetime_with_midnight:
+            official_honorarium_time_out = "N/A"
+        else:
+            official_honorarium_time_out = official_honorarium_time_out.time()
+
+            #NA IF SC IS EMPTY
+        if official_servicecredit_time_in == datetime_with_midnight:
+            official_servicecredit_time_in = "N/A"
+        else:
+            official_servicecredit_time_in = official_servicecredit_time_in.time()
+
+        if official_servicecredit_time_out == datetime_with_midnight:
+            official_servicecredit_time_out = "N/A"
+        else:
+            official_servicecredit_time_out = official_servicecredit_time_out.time()      
+
+                    #NA IF OT IS EMPTY
+        if official_overtime_time_in == datetime_with_midnight:
+            official_overtime_time_in = "N/A"
+        else:
+            official_overtime_time_in = official_overtime_time_in.time()
+
+        if official_overtime_time_out == datetime_with_midnight:
+            official_overtime_time_out = "N/A"
+        else:
+            official_overtime_time_out = official_overtime_time_out.time()   
+
+            
+            
+            
+        return  difference_hours_hn, difference_minutes_hn, difference_seconds_hn, difference_hours_sc, difference_minutes_sc, difference_seconds_sc,difference_hours_ot, difference_minutes_ot, difference_seconds_ot,official_honorarium_time_in, official_honorarium_time_out, official_servicecredit_time_in, official_servicecredit_time_out, official_overtime_time_in, official_overtime_time_out, break_in1, break_out1, official_office_in_datetime,official_office_out_datetime, total_hours,total_minutes,total_seconds, day
+    
 def search_records(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
@@ -599,36 +759,29 @@ def search_records(request):
                     offotin = offtime.official_overtime_time_in
                     offotout = offtime.official_overtime_time_out
                     
-                    if record.time_in and record.time_out:
-  
-                        
-                                  
-          
-          
-          
+                    if emptstats != "FACULTY":
 
-          
-          
+                        record.difference_hours_hn, record.difference_minutes_hn, record.difference_seconds_hn, record.difference_hours_sc, record.difference_minutes_sc, record.difference_seconds_sc, record.difference_hours_ot, record.difference_minutes_ot, record.difference_seconds_ot, record.official_honorarium_time_in, record.official_honorarium_time_out, record.official_servicecredit_time_in, record.official_servicecredit_time_out, record.official_overtime_time_in, record.official_overtime_time_out, record.break_in1, record.break_out1, record.official_office_in_datetime,  record.official_office_out_datetime, record.total_hours, record.total_minutes, record.total_seconds, record.day = calculate_time_difference(record.time_in.strftime("%H:%M:%S"),
+                                                                    record.time_out.strftime("%H:%M:%S"),
+                                                                    record.break_in.strftime("%H:%M:%S"),
+                                                                    record.break_out.strftime("%H:%M:%S"),
+                                                                    officialday,
+                                                                    emptstats,
+                                                                    officialTimeIn,
+                                                                    offtimeout,
+                                                                    offhnin,
+                                                                    offhnout,
+                                                                    offscin,
+                                                                    offscout,
+                                                                    offotin,
+                                                                    offotout                                                                    
+                                                                    )
 
-          
-          
+
+
+                    else:
                         
-                        
-                        
-                        
-                                        
-                        (record.official_office_in, 
-                         record.official_office_out, 
-                        #  record.official_honorarium_time_in, 
-                        #  record.official_honorarium_time_out, 
-                         record.official_servicecredit_time_in, 
-                        #  record.official_servicecredit_time_out, 
-                        #  record.official_overtime_time_in, 
-                        #  record.official_overtime_time_out, 
-                         record.total_hours, 
-                         record.total_minutes, 
-                         record.total_seconds, 
-                         record.day) = calculate_time_difference(record.time_in.strftime("%H:%M:%S"),
+                         record.break_in1, record.break_out1,record.official_office_in_datetime,record.official_office_out_datetime, record.official_office_in_datetime, record.official_office_out_datetime, record.total_hours, record.total_minutes, record.total_seconds, record.day = calculate_time_difference(record.time_in.strftime("%H:%M:%S"),
                                                                     record.time_out.strftime("%H:%M:%S"),
                                                                     record.break_in.strftime("%H:%M:%S"),
                                                                     record.break_out.strftime("%H:%M:%S"),
@@ -648,16 +801,7 @@ def search_records(request):
 
                                     # Update record's total time components
 
-                    else:
-                        record.total_time = None
-                
-                    
 
-                if record.surplusHour_time_in and record.surplusHour_time_out:
-                    record.surplus_time = calculate_surplus_time(record.surplusHour_time_in.strftime("%H:%M:%S"), record.surplusHour_time_out.strftime("%H:%M:%S"))
-                else:
-                    record.surplus_time = None
-      
             return render(request, 'hris/records.html', {
     'records': records, 
     'employee': employee, 
