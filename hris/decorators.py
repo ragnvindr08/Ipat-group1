@@ -46,9 +46,9 @@ def admin_only(view_func):
             if request.user.groups.exists():
                 group = request.user.groups.all()[0].name
 
-            if group in ['JO','employee','faculty']:
+            if group in ['JO','EMPLOYEE','FACULTY']:
                 return redirect('user-page')
-            elif  group in ['admin','hrstaff']:
+            elif  group in ['ADMIN','HR','ACCOUNTING']:
                 return view_func(request, *args, **kwargs)
             else:
                 return HttpResponseForbidden("You don't have permission to access this page.")

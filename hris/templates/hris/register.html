@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Registration Page</title>
+  <title>EARIST | User Registration Page</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -72,7 +72,7 @@
             </select>
         </div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Employee Number" name="employee_number" required>
+            <input type="text" class="form-control" placeholder="Employee Number for Biometrics" name="employee_number" required>
             <div class="input-group-append">
                 <div class="input-group-text">
                     <span class="fas fa-id-card"></span>
@@ -93,7 +93,7 @@
     <!-- /.form-box -->
   </div><!-- /.card -->
 </div>
-<div class="alert alert-success" role="alert">
+<div class="alert " role="alert">
   {% for message in messages %}
   <p id="messages">{{message}}</p>
   {% endfor %}
