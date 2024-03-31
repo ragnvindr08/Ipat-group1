@@ -395,6 +395,13 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
         print(time_object2, "timeobject2")
         time_object_replace = time(12, 0, 0)
         time_object_replace2 = datetime.combine(datetime.today(), time_object_replace)
+        if official_office_in_datetime > time_object2:             
+        # Calculate the end of break time
+            break_starts = official_office_in_datetime + timedelta(hours=4)
+            break_end = break_starts + timedelta(hours=1)
+        else:
+            break_starts =time_object2
+            break_end = time_object2
 
         faculty_official_office_in = official_office_in_datetime.time() if official_office_in_datetime else None
         office_in = official_office_in_datetime.time() if official_office_in_datetime else None
@@ -449,13 +456,32 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
         #     total_seconds: "total_seconds",
         #     day: "day"
         #         }
-        if break_in == datetime_with_midnight:
+        break_in1 = datetime_with_midnight
+        break_out1 = datetime_with_midnight
+
+
+        if break_out == time_object2:
+            break_out = break_end
+            break_out1 = time_object2
+        else:
+            break_out = break_out
+            break_out1 = break_out
+
+        if break_in == time_object2:
+            break_in = break_starts
+            break_in1 = time_object2
+        else:
+            break_in = break_in
+            break_in1 = break_in
+        
+
+        if break_in1 == datetime_with_midnight:
             break_in1 = "N/A"
         else:
             break_in1 = break_in.time()
 
 
-        if break_out == datetime_with_midnight:
+        if break_out1 == datetime_with_midnight:
             break_out1 = "N/A"
         else:
             break_out1 = break_out.time()
@@ -480,19 +506,14 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
             break_end = break_starts + timedelta(hours=1)
         else:
             break_starts =time_object2
-            break_end = time_object2
-        print(break_starts, "break_starts")
-        print(break_end, "break_end")
-
-        print(break_in,"break_in")
-        print(break_out,"break_out")       
+            break_end = time_object2   
 
         # Check if time_in is before official_office_in
         if time_in < official_office_in and time_in > time_object2:
             office_in = official_office_in
 
         # Check if break_in is after break_starts
-        if break_in  < break_starts and break_in != time_object:
+        if break_in  < break_starts and break_in != time_object2:
             break_in_time = break_in
         else:
             break_in_time = break_starts
@@ -510,6 +531,29 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
             office_out = time_out
 
 
+        if break_in == time_object2 or break_out == time_object2:
+            deduction_time = 1
+        
+        break_in1 = None
+        break_out1 = None
+        
+
+        if break_out == time_object:
+            break_out_time = break_end
+            break_out1 = time_object
+        else:
+            break_out = break_out
+            break_out1 = break_out
+
+        if break_in == time_object:
+            break_in_time = break_starts
+            break_in1 = time_object
+        else:
+            break_in = break_in
+            break_in1 = break_in
+
+
+
 
         # Initialize time differences as None
         difference_morning = None
@@ -517,23 +561,29 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
         
         # Check if break_in and time_in are not None
         # if break_in and office_in is not None:
-        break_in_time = break_in_time.time() if break_in_time else time_object2
+        
+        break_in_time = break_in_time.time() if break_in_time else break_starts
         time_in_time = office_in.time() if office_in else time_object2
-        break_out_time = break_out_time.time() if break_out_time else time_object2
+        break_out_time = break_out_time.time() if break_out_time else break_end
         time_out_time = office_out.time() if office_out else time_object2  
 
+
+
+        print(office_out,"office_out")
+        print(break_in, "break_in")
+        print(break_in1, "break_in1")
+        print(break_starts, "break_starts")
+        print(break_end, "break_end")
+        print(time_object,"time_object")
         print(time_in_time,"time_in_time")
         print(time_out_time,"time_out_time")
         print(break_in_time,"break_in_time")
         print(break_out_time,"break_out_time")
 
-        if break_in == time_object2 or break_out == time_object2:
-            break_in = break_starts
-            break_out = break_end
-            deduction_time = 1
 
-        print(deduction_time, "deduction_time")
-        if break_in_time and time_in_time != time_object2:
+
+
+        if break_in_time and time_in_time != time_object:
             difference_morning = datetime.combine(datetime.today(), break_in_time) - datetime.combine(datetime.today(), time_in_time)
 
 
@@ -571,7 +621,8 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
             difference_minutes_morning = 0
         if difference_hours_afternoon >= 4:
             difference_minutes_afternoon = 0
-
+        print(difference_hours_morning,"difference_hours_morning")
+        print(difference_hours_afternoon,"difference_hours_afternoon")
         midnight = time(0, 0)  # Represents 00:00:00
 # Combine the current date with the midnight time
         datetime_with_midnight = datetime.combine(today, midnight)
@@ -582,6 +633,7 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
             difference_hours_morning = 0
             difference_minutes_morning = 0
             difference_seconds_morning = 0
+        print(deduction_time,"deduction_time")
         # Calculate total hours, minutes, and seconds
         total_hours = (difference_hours_morning + difference_hours_afternoon + (difference_minutes_morning + difference_minutes_afternoon) // 60) - deduction_time
         total_minutes = (difference_minutes_morning + difference_minutes_afternoon) % 60
@@ -685,13 +737,13 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
         else:
             official_office_out_datetime = official_office_out_datetime.time()
 
-        if break_in == datetime_with_midnight:
+        if break_in1 == datetime_with_midnight:
             break_in1 = "N/A"
         else:
             break_in1 = break_in.time()
 
 
-        if break_out == datetime_with_midnight:
+        if break_out1 == datetime_with_midnight:
             break_out1 = "N/A"
         else:
             break_out1 = break_out.time()

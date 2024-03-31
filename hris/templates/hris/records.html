@@ -7,7 +7,7 @@
         font-size: 10pt;
     }
 </style>
-<div class="col-md-12 mx-auto">
+<div class="col-md-12 mx-auto ">
 
     <h2>Attendance Records</h2>
     <table id="attendance-table" class="table table-bordered table-sm" style="font-size: 10pt;">
@@ -24,30 +24,46 @@
                 <th style="text-align: center; vertical-align: middle;"rowspan="2">Time Out</th> <!-- HEADER 8 -->
                 <th style="text-align: center; vertical-align: middle;"rowspan="2">Official Time In</th> <!-- HEADER 16 -->
                 <th style="text-align: center; vertical-align: middle;"rowspan="2">Official Time Out</th> <!-- HEADER 17 -->
-                <th  style="text-align: center; vertical-align: middle;" colspan="3" >Total Office <br> HR | MN | SC</th> <!-- HEADER 9 -->
+                <th  style="text-align: center; vertical-align: middle;" colspan="3" >Total Office</th> <!-- HEADER 9 -->
+                <th  style="text-align: center; vertical-align: middle;" colspan="3" class="table-danger" >Total Office Tardiness </th> <!-- HEADER 9 -->
                 <th style="text-align: center; vertical-align: middle;"rowspan="2">Official HN Time In</th> <!-- HEADER 10 -->
                 <th style="text-align: center;vertical-align: middle;"rowspan="2">Official HN Time Out</th> <!-- HEADER 11 -->
                 <th style="text-align: center;vertical-align: middle;" colspan="3" >Total Honorarium</th> <!-- HEADER 12 -->
+                <th  style="text-align: center; vertical-align: middle;" colspan="3" class="table-danger" >Total Honorarium Tardiness </th> <!-- HEADER 9 -->
                 <th style="text-align: center; vertical-align: middle;" rowspan="2">Official SC Time In</th> <!-- HEADER 13 -->
                 <th style="text-align: center;vertical-align: middle;" rowspan="2">Official SC Time Out</th> <!-- HEADER 14 -->
-                <th style="text-align: center; vertical-align: middle;" colspan="3" >Official Total Service Credit</th> <!-- HEADER 15 -->
+                <th style="text-align: center; vertical-align: middle;" colspan="3" > Total Service Credit</th> <!-- HEADER 15 -->
+                <th style="text-align: center; vertical-align: middle;" colspan="3" class="table-danger" > Total Service Credit Tardiness</th> <!-- HEADER 15 -->                  
                 <th style=" text-align: center;vertical-align: middle;" rowspan="2">Official OT Time In</th> <!-- HEADER 16 -->
                 <th style=" text-align: center;vertical-align: middle;" rowspan="2">Official OT Time Out</th> <!-- HEADER 17 -->
                 <th style="text-align: center; vertical-align: middle;" colspan="3" >Total Overtime</th> <!-- HEADER 18 -->
+                <th style="text-align: center; vertical-align: middle;" colspan="3" class="table-danger" >Total Overtime Tardiness</th> <!-- HEADER 18 -->
             </tr>
             <tr>
                 <td style="text-align: center;vertical-align: middle;">HR</td>
                 <td style="text-align: center;vertical-align: middle;">MN</td>
                 <td style="text-align: center;vertical-align: middle;">SC</td>
+                <td style="text-align: center;vertical-align: middle;" class="table-danger">HR</td>
+                <td style="text-align: center;vertical-align: middle;" class="table-danger">MN</td>
+                <td style="text-align: center;vertical-align: middle;" class="table-danger">SC</td>
                 <td style="text-align: center;vertical-align: middle;">HR</td>
                 <td style="text-align: center;vertical-align: middle;">MN</td>
                 <td style="text-align: center;vertical-align: middle;">SC</td>
+                <td style="text-align: center;vertical-align: middle;" class="table-danger">HR</td>
+                <td style="text-align: center;vertical-align: middle;"class="table-danger">MN</td>
+                <td style="text-align: center;vertical-align: middle;"class="table-danger">SC</td>
                 <td style="text-align: center;vertical-align: middle;">HR</td>
                 <td style="text-align: center;vertical-align: middle;">MN</td>
                 <td style="text-align: center;vertical-align: middle;">SC</td>
+                <td style="text-align: center;vertical-align: middle;"class="table-danger">HR</td>
+                <td style="text-align: center;vertical-align: middle;"class="table-danger">MN</td>
+                <td style="text-align: center;vertical-align: middle;"class="table-danger">SC</td>
                 <td style="text-align: center;vertical-align: middle;">HR</td>
                 <td style="text-align: center;vertical-align: middle;">MN</td>
                 <td style="text-align: center;vertical-align: middle;">SC</td>
+                <td style="text-align: center;vertical-align: middle;"class="table-danger">HR</td>
+                <td style="text-align: center;vertical-align: middle;"class="table-danger">MN</td>
+                <td style="text-align: center;vertical-align: middle;"class="table-danger">SC</td>
             </tr>
 
         </thead>
@@ -58,77 +74,121 @@
 
 
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;">{{ record.employee_id }} | {{ employee.surname }}, {{ employee.first_name }}</td> <!-- table data 1 -->
-                <td style="white-space: nowrap; text-align: center;vertical-align: middle;">{{ employee.employment_status }}</td> <!-- table data 3 -->
-                <td style="white-space: nowrap; text-align: center; vertical-align: middle;">{{ record.date }}</td> <!-- table data 4 -->
+                <td style="white-space: nowrap; text-align: center;vertical-align: middle;">{{ employee.employment_status }}</td> <!-- table data 2 -->
+                <td style="white-space: nowrap; text-align: center; vertical-align: middle;">{{ record.date }}</td> <!-- table data 3 -->
                 <td style="text-align: center;vertical-align: middle;">{{ record.day }}</td> <!-- table data 4 -->
                 <td style="text-align: center;vertical-align: middle;">{{ record.time_in|time:"g:i:s A" }}</td> <!-- table data 5 -->
-                <td style="text-align: center;vertical-align: middle;">{{ record.break_in1}}</td> <!-- table data 6 -->
-                <td style="text-align: center;vertical-align: middle;">{{ record.break_out1 }}</td> <!-- table data 7 -->
+                <td style="text-align: center;vertical-align: middle;">{{ record.break_in1 |time:"g:i:s A" }}</td> <!-- table data 6 -->
+                <td style="text-align: center;vertical-align: middle;">{{ record.break_out1 |time:"g:i:s A" }}</td> <!-- table data 7 -->
                 <td style="text-align: center;vertical-align: middle;">{{ record.time_out|time:"g:i:s A" }}</td> <!-- table data 8 -->
-                <td style="text-align: center; vertical-align: middle;">{{ record.official_office_in_datetime}}</td>
-                <td style="text-align: center; vertical-align: middle;">{{ record.official_office_out_datetime}}</td> <!-- table data 12 -->
-                <td style="text-align: center; vertical-align: middle;">{{ record.total_hours }}</td> <!-- table data 9 -->
-                <td style="text-align: center; vertical-align: middle;">{{ record.total_minutes }}</td> <!-- table data 9 -->
-                <td style="text-align: center; vertical-align: middle;">{{ record.total_seconds }}</td> <!-- table data 9 -->
-                <td style="text-align: center; vertical-align: middle;">{{record.official_honorarium_time_in}}</td> <!-- table data 10 -->
-                <td style="text-align: center; vertical-align: middle;">{{record.official_honorarium_time_out}}</td> <!-- table data 11 -->
+                <td style="text-align: center; vertical-align: middle;">{{ record.official_office_in_datetime}}</td> <!-- table data 9 -->
+                <td style="text-align: center; vertical-align: middle;">{{ record.official_office_out_datetime}}</td> <!-- table data 10 -->
 
-                <td style="text-align: center; vertical-align: middle;">{{ record.difference_hours_hn }}</td> <!-- table data 12 -->
-                <td style="text-align: center; vertical-align: middle;">{{ record.difference_minutes_hn }}</td> <!-- table data 12 -->
-                <td style="text-align: center; vertical-align: middle;">{{ record.difference_seconds_hn }}</td> <!-- table data 12 -->
+                <td style="text-align: center; vertical-align: middle;">{{ record.total_hours }}</td> <!-- table data 11 -->
+                <td style="text-align: center; vertical-align: middle;">{{ record.total_minutes }}</td> <!-- table data 12 -->
+                <td style="text-align: center; vertical-align: middle;">{{ record.total_seconds }}</td> <!-- table data 13 -->
+                <!-- TARDINESS TABLE OFFICE TIME -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 14 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 15 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 16 -->
 
-                <td style="text-align: center; vertical-align: middle;">{{record.official_servicecredit_time_in}}</td> <!-- table data 13 -->
-                <td style="text-align: center; vertical-align: middle;">{{record.official_servicecredit_time_out}}</td> <!-- table data 14 -->
+                <td style="text-align: center; vertical-align: middle;">{{record.official_honorarium_time_in}}</td> <!-- table data 17 -->
+                <td style="text-align: center; vertical-align: middle;">{{record.official_honorarium_time_out}}</td> <!-- table data 18 -->
 
-                <td style="text-align: center; vertical-align: middle;">{{ record.difference_hours_sc }}</td> <!-- table data 15 -->
-                <td style="text-align: center; vertical-align: middle;">{{ record.difference_minutes_sc }}</td> <!-- table data 15 -->
-                <td style="text-align: center; vertical-align: middle;">{{ record.difference_seconds_sc }}</td> <!-- table data 15-->
+                <td style="text-align: center; vertical-align: middle;">{{ record.difference_hours_hn }}</td> <!-- table data 19 -->
+                <td style="text-align: center; vertical-align: middle;">{{ record.difference_minutes_hn }}</td> <!-- table data 20 -->
+                <td style="text-align: center; vertical-align: middle;">{{ record.difference_seconds_hn }}</td> <!-- table data 21 -->
 
-                <td style="text-align: center; vertical-align: middle;">{{record.official_overtime_time_in}}</td> <!-- table data 16 -->
-                <td style="text-align: center; vertical-align: middle;">{{record.official_overtime_time_out}}</td> <!-- table data 17 -->
+                <!-- TARDINESS TABLE HONORARIUM TIME -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 22 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 23 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 24 -->
 
-                <td style="text-align: center; vertical-align: middle;">{{ record.difference_hours_ot }}</td> <!-- table data 18 -->
-                <td style="text-align: center; vertical-align: middle;">{{ record.difference_minutes_ot }}</td> <!-- table data 18 -->
-                <td style="text-align: center; vertical-align: middle;">{{ record.difference_seconds_ot }}</td> <!-- table data 18 -->
+                <td style="text-align: center; vertical-align: middle;">{{record.official_servicecredit_time_in}}</td> <!-- table data 25 -->
+                <td style="text-align: center; vertical-align: middle;">{{record.official_servicecredit_time_out}}</td> <!-- table data 26 -->
+
+                <td style="text-align: center; vertical-align: middle;">{{ record.difference_hours_sc }}</td> <!-- table data 27 -->
+                <td style="text-align: center; vertical-align: middle;">{{ record.difference_minutes_sc }}</td> <!-- table data 28 -->
+                <td style="text-align: center; vertical-align: middle;">{{ record.difference_seconds_sc }}</td> <!-- table data 29-->
+
+                <!-- TARDINESS TABLE SERVICE CREDIT TIME -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 30 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 31 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 32 -->
+
+                <td style="text-align: center; vertical-align: middle;">{{record.official_overtime_time_in}}</td> <!-- table data 33 -->
+                <td style="text-align: center; vertical-align: middle;">{{record.official_overtime_time_out}}</td> <!-- table data 34 -->
+
+                <td style="text-align: center; vertical-align: middle;">{{ record.difference_hours_ot }}</td> <!-- table data 35 -->
+                <td style="text-align: center; vertical-align: middle;">{{ record.difference_minutes_ot }}</td> <!-- table data 36 -->
+                <td style="text-align: center; vertical-align: middle;">{{ record.difference_seconds_ot }}</td> <!-- table data 37 -->
+
+                <!-- TARDINESS TABLE OVERTIME TIME -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 38 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 39 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 40 -->
 
             </tr>
             {% endfor %}
             <tr id="totals-row">
+                <td colspan="3" style="text-align: center; vertical-align: middle;">Total Computed Rendered Hours:</td>
+                <td colspan="6" style="text-align: center; vertical-align: middle;" id="ov-overall-total"></td>
 
-                <td colspan="9" style="text-align: center; vertical-align: middle;">Total Computed Rendered Hours:</td>
                 <td>Sub Total:</td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="total-hours"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="total-mn"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="total-sc"></td>
+                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                
                 <td></td>
                 <td>Sub Total:</td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="hn-total-hours"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="hn-total-mn"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="hn-total-sc"></td>
+                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
                 <td></td>
                 <td>Sub Total:</td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="sc-total-hours"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="sc-total-mn"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="sc-total-sc"></td>
+                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
                 <td></td>
                 <td>Sub Total:</td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="ot-total-hours"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="ot-total-mn"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="ot-total-sc"></td>
+                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
 
             </tr>
             <tr id="totals-row">
                 
-                <td style="white-space: nowrap; text-align: center; vertical-align: middle;" id="ov-overall-total" colspan="9"></td>
+                <td style="white-space: nowrap; text-align: center; vertical-align: middle;"  colspan="9"></td>
 
                 <td>Overall Total:</td>
                 <td id="overall-total" colspan="3"></td>
                 <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td>Overall Total:</td>
                 <td id="hn-overall-total" colspan="3"></td>
                 <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td>Overall Total:</td>
                 <td id="sc-overall-total" colspan="3"></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td></td>
                 <td>Overall Total:</td>
                 <td id="ot-overall-total" colspan="3"></td>
@@ -198,9 +258,9 @@
         // HONORARIUM
         for (var i = 2; i < rows.length - 2; i++) {
             var cells = rows[i].getElementsByTagName('td');
-            var hours = parseInt(cells[15].innerText) || 0;
-            var mn = parseInt(cells[16].innerText) || 0;
-            var sc = parseInt(cells[17].innerText) || 0;
+            var hours = parseInt(cells[18].innerText) || 0;
+            var mn = parseInt(cells[19].innerText) || 0;
+            var sc = parseInt(cells[20].innerText) || 0;
 
             hn_totalHours += hours;
             hn_totalMn += mn;
@@ -223,9 +283,9 @@
         // SERVICE CREDIT
         for (var i = 2; i < rows.length - 2; i++) {
             var cells = rows[i].getElementsByTagName('td');
-            var hours = parseInt(cells[20].innerText) || 0;
-            var mn = parseInt(cells[21].innerText) || 0;
-            var sc = parseInt(cells[22].innerText) || 0;
+            var hours = parseInt(cells[26].innerText) || 0;
+            var mn = parseInt(cells[27].innerText) || 0;
+            var sc = parseInt(cells[28].innerText) || 0;
 
             sc_totalHours += hours;
             sc_totalMn += mn;
@@ -248,9 +308,9 @@
         //OVERTIME
         for (var i = 2; i < rows.length - 2; i++) {
             var cells = rows[i].getElementsByTagName('td');
-            var hours = parseInt(cells[25].innerText) || 0;
-            var mn = parseInt(cells[26].innerText) || 0;
-            var sc = parseInt(cells[27].innerText) || 0;
+            var hours = parseInt(cells[34].innerText) || 0;
+            var mn = parseInt(cells[35].innerText) || 0;
+            var sc = parseInt(cells[36].innerText) || 0;
 
             ot_totalHours += hours;
             ot_totalMn += mn;
