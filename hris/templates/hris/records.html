@@ -88,9 +88,9 @@
                 <td style="text-align: center; vertical-align: middle;">{{ record.total_minutes }}</td> <!-- table data 12 -->
                 <td style="text-align: center; vertical-align: middle;">{{ record.total_seconds }}</td> <!-- table data 13 -->
                 <!-- TARDINESS TABLE OFFICE TIME -->
-                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 14 -->
-                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 15 -->
-                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 16 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger">{{ record.tardiness_total_hours }}</td> <!-- table data 14 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger">{{ record.tardiness_total_minutes }}</td> <!-- table data 15 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger">{{ record.tardiness_total_seconds }}</td> <!-- table data 16 -->
 
                 <td style="text-align: center; vertical-align: middle;">{{record.official_honorarium_time_in}}</td> <!-- table data 17 -->
                 <td style="text-align: center; vertical-align: middle;">{{record.official_honorarium_time_out}}</td> <!-- table data 18 -->
@@ -100,9 +100,9 @@
                 <td style="text-align: center; vertical-align: middle;">{{ record.difference_seconds_hn }}</td> <!-- table data 21 -->
 
                 <!-- TARDINESS TABLE HONORARIUM TIME -->
-                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 22 -->
-                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 23 -->
-                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 24 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger">{{ record.tardiness_difference_hours_hn }}</td> <!-- table data 22 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger">{{ record.tardiness_difference_minutes_hn }}</td> <!-- table data 23 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger">{{ record.tardiness_difference_seconds_hn }}</td> <!-- table data 24 -->
 
                 <td style="text-align: center; vertical-align: middle;">{{record.official_servicecredit_time_in}}</td> <!-- table data 25 -->
                 <td style="text-align: center; vertical-align: middle;">{{record.official_servicecredit_time_out}}</td> <!-- table data 26 -->
