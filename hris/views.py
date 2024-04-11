@@ -7,7 +7,7 @@ from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from .decorators import *
 from .signals import *
-
+from django.db.models import Q
 #upload imports
 import csv
 import xlrd
@@ -1044,3 +1044,29 @@ def search_records(request):
         form = SearchForm()
 
     return render(request, 'hris/search.html', {'form': form})
+
+
+def search_attendance(request):
+    if request.method == 'GET':
+        employee_id = request.GET.get('employee_id')
+        start_date = request.GET.get('start_date')
+        end_date = request.GET.get('end_date')
+
+        if employee_id and start_date and end_date:
+            # Convert start_date and end_date to datetime objects
+            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+
+            # Create a list of dates within the specified range
+            date_range = [start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)]
+
+            # Perform the search
+            records = AttendanceRecord.objects.filter(
+                Q(employee_id=employee_id) &
+                Q(date__gte=start_date) &
+                Q(date__lte=end_date)
+            )
+
+            return render(request, 'hris/search_results.html', {'date_range': date_range, 'records': records})
+
+    return render(request, 'hris/search_attendance.html')

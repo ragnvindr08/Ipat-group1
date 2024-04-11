@@ -1,0 +1,128 @@
+
+{% load custom_filters %}
+{% block content %}
+
+<style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    
+</style>
+<div class="container">
+    <div class="row">
+    
+
+        <label for="">Civil Service Form No. 48</label>
+        <h3 style="text-align: center; vertical-align: middle;">DAILY TIME RECORD</h3>
+
+            <table class="table side-by-side">
+      
+            <tr>
+                <th rowspan="2" style="text-align: center; vertical-align: middle;">DAY</th>
+                <th colspan="2" style="text-align: center; vertical-align: middle;">A.M.</th>
+                <th></th>
+                <th colspan="2" style="text-align: center; vertical-align: middle;">P.M.</th>
+                <th></th>
+                <th colspan="2" style="text-align: center; vertical-align: middle;">Undertime</th>
+            </tr>
+            <tr>
+                <td>ARRIVAL</td>
+                <td>DEPARTURE</td>
+                <td></td>
+                <td>ARRIVAL</td>
+                <td>DEPARTURE</td>
+                <td></th>
+                <td>Hours</td>
+                <td>Minutes</td>
+            </tr>
+            {% for date in date_range %}
+            <tr>
+                <td>{{ date|date:"d" }}</td>
+                {% with record_found=false %}
+                {% for record in records %}
+                    {% if record.date == date %}
+                        {% with record_found=true %}
+                        <td>{{ record.time_in|blank_if_midnight|time:"h:i A" }}</td>
+                        <td>{{ record.break_in|blank_if_midnight|time:"h:i A" }}</td>
+                        <td></td>
+                        <td>{{ record.break_out|blank_if_midnight|time:"h:i A" }}</td>
+                        <td>{{ record.time_out|blank_if_midnight|time:"h:i A" }}</td>
+
+                        {% endwith %}
+                    {% endif %}
+                {% endfor %}
+                {% if not record_found %}
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                {% endif %}
+                {% endwith %}
+            </tr>
+            {% endfor %}
+        </table>
+
+    
+
+        <label for="">Civil Service Form No. 48</label>
+        <h3 style="text-align: center; vertical-align: middle;">DAILY TIME RECORD</h3>
+
+            <table class="table side-by-side">
+            <tr>
+                <th rowspan="2" style="text-align: center; vertical-align: middle;">DAY</th>
+                <th colspan="2" style="text-align: center; vertical-align: middle;">A.M.</th>
+                <th></th>
+                <th colspan="2" style="text-align: center; vertical-align: middle;">P.M.</th>
+                <th></th>
+                <th colspan="2" style="text-align: center; vertical-align: middle;">Undertime</th>
+            </tr>
+            <tr>
+                <td>ARRIVAL</td>
+                <td>DEPARTURE</td>
+                <td></td>
+                <td>ARRIVAL</td>
+                <td>DEPARTURE</td>
+                <td></th>
+                <td>Hours</td>
+                <td>Minutes</td>
+            </tr>
+            {% for date in date_range %}
+            <tr>
+                <td>{{ date|date:"d" }}</td>
+                {% with record_found=false %}
+                {% for record in records %}
+                    {% if record.date == date %}
+                        {% with record_found=true %}
+                        <td>{{ record.time_in|blank_if_midnight|time:"h:i A" }}</td>
+                        <td>{{ record.break_in|blank_if_midnight|time:"h:i A" }}</td>
+                        <td></td>
+                        <td>{{ record.break_out|blank_if_midnight|time:"h:i A" }}</td>
+                        <td>{{ record.time_out|blank_if_midnight|time:"h:i A" }}</td>
+
+                        {% endwith %}
+                    {% endif %}
+                {% endfor %}
+                {% if not record_found %}
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                {% endif %}
+                {% endwith %}
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </div >
+</div >
+
+{% endblock %}
