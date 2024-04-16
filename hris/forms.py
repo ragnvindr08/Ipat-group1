@@ -12,6 +12,13 @@ class SearchForm(forms.Form):
     end_date = forms.DateField(label='End Date', widget=forms.TextInput(attrs={'autocomplete': 'off'}))
 
 
+
+class SearchAttendance(forms.Form):
+    employee_id = forms.CharField(label='Employee ID', max_length=100)
+    start_date = forms.DateField(label='Start Date', widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+    end_date = forms.DateField(label='End Date', widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+
+
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User

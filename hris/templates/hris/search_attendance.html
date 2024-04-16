@@ -1,17 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Attendance</title>
-</head>
-<body>
-    <h1>Search Attendance</h1>
-    <form method="GET">
+{%  extends 'hris/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<div class="container">
+    <h2>Search Attendance</h2>
+    <form method="post">
+        {% csrf_token %}
         Employee ID: <input type="text" name="employee_id"><br>
         Start Date: <input type="date" name="start_date"><br>
         End Date: <input type="date" name="end_date"><br>
         <input type="submit" value="Search">
     </form>
-</body>
-</html>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        $("#id_start_date").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            // Add any additional options you want here
+        });
+        
+        $("#id_end_date").datepicker({
+            dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            // Add any additional options you want here
+        });
+    });
+</script>   
+
+{% endblock content %}

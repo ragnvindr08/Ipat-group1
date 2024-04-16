@@ -1046,27 +1046,80 @@ def search_records(request):
     return render(request, 'hris/search.html', {'form': form})
 
 
+
+# def search_attendance(request):
+#     if request.method == 'GET':
+#         employee_id = request.GET.get('employee_id')
+#         start_date = request.GET.get('start_date')
+#         end_date = request.GET.get('end_date')
+
+#         if employee_id and start_date and end_date:
+#             # Convert start_date and end_date to datetime objects
+#             start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+#             end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+
+#             # Create a list of dates within the specified range
+#             date_range = [start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)]
+
+#             # Perform the search
+#             records = AttendanceRecord.objects.filter(
+#                 Q(employee_id=employee_id) &
+#                 Q(date__gte=start_date) &
+#                 Q(date__lte=end_date)
+#             )
+
+#             # Convert records queryset to a dictionary with dates as keys for easy access in the template
+#             records_dict = {record.date: record for record in records}
+
+#             return render(request, 'hris/search_results.html', {'date_range': date_range, 'records_dict': records_dict})
+
+#     return render(request, 'hris/search_attendance.html')
+
+
 def search_attendance(request):
-    if request.method == 'GET':
-        employee_id = request.GET.get('employee_id')
-        start_date = request.GET.get('start_date')
-        end_date = request.GET.get('end_date')
+    if request.method == 'POST':
+        employee_id = request.POST.get('employee_id')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        employee = get_object_or_404(Employee, employee_id=employee_id)
+        # Convert string dates to datetime objects
+        start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
 
-        if employee_id and start_date and end_date:
-            # Convert start_date and end_date to datetime objects
-            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+        # Generate date range
+        date_range = [start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)]
 
-            # Create a list of dates within the specified range
-            date_range = [start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)]
-
-            # Perform the search
+        # Query the database for attendance records within the date range and employee ID
+        attendance_records = {}
+        for day in date_range:
             records = AttendanceRecord.objects.filter(
-                Q(employee_id=employee_id) &
-                Q(date__gte=start_date) &
-                Q(date__lte=end_date)
+                employee_id=employee_id,
+                date=day
             )
+            attendance_records[day] = records
 
-            return render(request, 'hris/search_results.html', {'date_range': date_range, 'records': records})
+        return render(request, 'hris/search_results.html', {'attendance_records': attendance_records, 'date_range': date_range, 'start_date': start_date, 'end_date': end_date, 'employee':employee})
+    
 
     return render(request, 'hris/search_attendance.html')
+
+
+# def search_attendance(request):
+#     if request.method == 'POST':
+#         employee_id = request.POST.get('employee_id')
+#         start_date = request.POST.get('start_date')
+#         end_date = request.POST.get('end_date')
+#         if employee_id and start_date and end_date:
+#             # Convert string dates to datetime objects
+#             start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+#             end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+#             date_range = [start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)]
+#             # Query the database for attendance records within the date range and employee ID
+#             attendance_records = AttendanceRecord.objects.filter(
+#                 employee_id=employee_id,
+#                 date__range=(start_date, end_date)
+#             )
+
+#         return render(request, 'hris/search_results.html', {'attendance_records': attendance_records, 'date_range': date_range})
+
+#     return render(request, 'hris/search_attendance.html')

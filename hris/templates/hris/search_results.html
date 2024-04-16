@@ -1,128 +1,289 @@
-
 {% load custom_filters %}
+{% load static %}
 {% block content %}
 
 <style>
+    .print-button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px; /* Adjust margin as needed */
+    }
+
+    #printButton {
+        width: 200px;
+        height: 100px;
+        background-color: #007bff; /* Primary color in Bootstrap */
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    #printButton:hover {
+        background-color: #0056b3; /* Darken the color on hover */
+    }
+
+        .header-container {
+        display: flex;
+        align-items: center; /* Align items vertically */
+    }
+
+    .logo-earist {
+        margin-right: 10px; /* Adjust margin as needed */
+    }
+        /* Styles for portrait mode */
+    @media screen and (orientation: portrait) {
+        /* Add your styles specific to portrait mode here */
+    }
     table, th, td {
         border: 1px solid black;
         border-collapse: collapse;
     }
     
+    .table-container {
+        display: flex;
+        justify-content: center;
+    }
+
+    
+    .table-container .table {
+        flex: 1; /* Outer columns occupy remaining space */
+    }
+
+    .table-container .spacer {
+        width: 10px; /* Width of the spacer column */
+    }
+
+
+    .table-header {
+        margin: 0; /* Remove default margin */
+        text-align: center; /* Center text horizontally */
+    }
+
+    /* Hide the content in HTML view */
+    .print-visible {
+        display: none;
+    }
+
+    /* Show the content in print view */
+    @media print {
+        .print-visible {
+            display: block;
+        }
+    }
+    @media print {
+    #printButton {
+        display: none !important;
+    }
+}
 </style>
+
 <div class="container">
-    <div class="row">
-    
+    <div class="table-container">
+        <div class="table-wrapper">
+            <h6 class="table-header">Republic of the Philippines</h6>
+            <div class="header-container">
+                <img class="logo-earist" src="{% static './images/earist-logo.png' %}" alt="" width="55" height="55" style="margin-top: -28px;">
+                <p class="table-header" style="font-size: 15px; font-weight: bold;">
+                    EULOGIO "AMANG" RODRIGUEZ <br> INSTITUTE OF SCIENCE & TECHNOLOGY 
+                </p>
+                
+            </div>
+            <p class="table-header" style="font-size: 12px; font-weight: bold;" >Nagtahan, Sampaloc Manila</p>
+            
+            <p class="table-header" style="font-size: 12px; margin-top: 12px; margin-bottom: 12px;">Civil Service Form No. 48</p>
+            <h4 class="table-header">DAILY TIME RECORD</h4>
+            <p style="font-size: 12px; font-weight: bold; text-transform: uppercase;">NAME: <span style="position: relative; display: inline-block;">{{ employee.surname }} {{ employee.first_name }}, {{ employee.middle_name|slice:":1" }}{% if employee.middle_name %}.{% endif %}<span style="position: absolute; bottom: -1px; left: 0; width: 100%; border-bottom: 1px solid black;"></span></span></p>
 
-        <label for="">Civil Service Form No. 48</label>
-        <h3 style="text-align: center; vertical-align: middle;">DAILY TIME RECORD</h3>
 
-            <table class="table side-by-side">
-      
-            <tr>
-                <th rowspan="2" style="text-align: center; vertical-align: middle;">DAY</th>
-                <th colspan="2" style="text-align: center; vertical-align: middle;">A.M.</th>
-                <th></th>
-                <th colspan="2" style="text-align: center; vertical-align: middle;">P.M.</th>
-                <th></th>
-                <th colspan="2" style="text-align: center; vertical-align: middle;">Undertime</th>
-            </tr>
-            <tr>
-                <td>ARRIVAL</td>
-                <td>DEPARTURE</td>
-                <td></td>
-                <td>ARRIVAL</td>
-                <td>DEPARTURE</td>
-                <td></th>
-                <td>Hours</td>
-                <td>Minutes</td>
-            </tr>
-            {% for date in date_range %}
-            <tr>
-                <td>{{ date|date:"d" }}</td>
-                {% with record_found=false %}
-                {% for record in records %}
-                    {% if record.date == date %}
-                        {% with record_found=true %}
-                        <td>{{ record.time_in|blank_if_midnight|time:"h:i A" }}</td>
-                        <td>{{ record.break_in|blank_if_midnight|time:"h:i A" }}</td>
-                        <td></td>
-                        <td>{{ record.break_out|blank_if_midnight|time:"h:i A" }}</td>
-                        <td>{{ record.time_out|blank_if_midnight|time:"h:i A" }}</td>
-
-                        {% endwith %}
-                    {% endif %}
-                {% endfor %}
-                {% if not record_found %}
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                {% endif %}
-                {% endwith %}
-            </tr>
-            {% endfor %}
-        </table>
-
-    
-
-        <label for="">Civil Service Form No. 48</label>
-        <h3 style="text-align: center; vertical-align: middle;">DAILY TIME RECORD</h3>
+            <p class="" style="font-size: 12px; font-weight: bold;" >Covered Dates: <span style="font-size: 14px; font-weight: bold; text-transform: uppercase; position: relative; display: inline-block;">{{ start_date|date:"F j" }} - {{ end_date|date:"j, Y" }}<span style="position: absolute; bottom: -1px; left: 0; width: 100%; border-bottom: 1px solid black;"></span></span></p>
+            <p style="font-size: 12px; font-weight: bold; "> For the month of: <span style="font-size: 14px; font-weight: bold; text-transform: uppercase; position: relative; display: inline-block;">{{ start_date|date:"F Y" }}<span style="position: absolute; bottom: -1px; left: 0; width: 100%; border-bottom: 1px solid black;"></span></span> </p>
 
             <table class="table side-by-side">
-            <tr>
-                <th rowspan="2" style="text-align: center; vertical-align: middle;">DAY</th>
-                <th colspan="2" style="text-align: center; vertical-align: middle;">A.M.</th>
-                <th></th>
-                <th colspan="2" style="text-align: center; vertical-align: middle;">P.M.</th>
-                <th></th>
-                <th colspan="2" style="text-align: center; vertical-align: middle;">Undertime</th>
-            </tr>
-            <tr>
-                <td>ARRIVAL</td>
-                <td>DEPARTURE</td>
-                <td></td>
-                <td>ARRIVAL</td>
-                <td>DEPARTURE</td>
-                <td></th>
-                <td>Hours</td>
-                <td>Minutes</td>
-            </tr>
-            {% for date in date_range %}
-            <tr>
-                <td>{{ date|date:"d" }}</td>
-                {% with record_found=false %}
-                {% for record in records %}
-                    {% if record.date == date %}
-                        {% with record_found=true %}
-                        <td>{{ record.time_in|blank_if_midnight|time:"h:i A" }}</td>
-                        <td>{{ record.break_in|blank_if_midnight|time:"h:i A" }}</td>
-                        <td></td>
-                        <td>{{ record.break_out|blank_if_midnight|time:"h:i A" }}</td>
-                        <td>{{ record.time_out|blank_if_midnight|time:"h:i A" }}</td>
-
-                        {% endwith %}
-                    {% endif %}
+                <tr>
+                    <th rowspan="2" style="text-align: center; vertical-align: middle;">DAY</th>
+                    <th colspan="2" style="text-align: center; vertical-align: middle;">A.M.</th>
+                    <th></th>
+                    <th colspan="2" style="text-align: center; vertical-align: middle;">P.M.</th>
+                    <th></th>
+                    <th colspan="2" style="text-align: center; vertical-align: middle;">Undertime</th>
+                </tr>
+                <tr>
+                    <td style="font-size: 11px; font-weight: bold; text-align: center; vertical-align: middle;">ARRIVAL</td>
+                    <td style="font-size: 11px; font-weight: bold; text-align: center; vertical-align: middle;">DEPARTURE</td>
+                    <td></td>
+                    <td style="font-size: 11px; font-weight: bold; text-align: center; vertical-align: middle;">ARRIVAL</td>
+                    <td style="font-size: 11px; font-weight: bold; text-align: center; vertical-align: middle;">DEPARTURE</td>
+                    <td></td>
+                    <td>Hours</td>
+                    <td>Minutes</td>
+                </tr>
+                {% for day, records in attendance_records.items %}
+                    <tr>
+                        <td>{{ day|date:"d" }}</td>
+                        {% if records %}
+                            {% for record in records %}
+                                <td>{{ record.time_in|blank_if_midnight|time:"h:i A"  }}</td>
+                                <td>{{ record.break_in|blank_if_midnight|time:"h:i A" }}</td>
+                                
+                                <td></td>
+                                <td>{{ record.break_out|blank_if_midnight|time:"h:i A"  }}</td>
+                                <td>{{ record.time_out|blank_if_midnight|time:"h:i A"  }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            {% endfor %}
+                        {% else %}
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        {% endif %}
+                    </tr>
                 {% endfor %}
-                {% if not record_found %}
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                {% endif %}
-                {% endwith %}
-            </tr>
-            {% endfor %}
-        </table>
+            </table>
+            <div class="print-visible">
+            <br>
+            <hr style="border-top: 3px solid black; width: 94%; margin-left: 0; margin-right: auto;">
+            <p style="text-align: justify; width: 95%; margin-left: 0; margin-right: auto;">
+                I certify on my honor that the above is a true and 
+                correct report of the hours of work performed, 
+                record of which was made daily at the time of 
+                arrival and departure from office.
+            </p>
+            <br>
+            <hr style="border-top: 3px solid black; width: 55%; margin-left: auto; margin-right: 5%;">
+            <p style="text-align: right; margin-top: -8px;  margin-left: auto; margin-right: 10%;">
+                Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+            <hr style="border-top: 3px double black; width: 94%; margin-left: 0; margin-right: auto;">
+            <p style="text-align: center; margin-top: -8px;">
+                Verified as to prescribe office hours.
+            </p>
+            <br>
+            <hr style="border-top: 3px solid black; width: 55%; margin-left: auto; margin-right: 5%;">
+            <p style="text-align: right; margin-top: -8px;  margin-left: auto; margin-right: 10%;">
+                In-Charge &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </p>
+            <p style="text-align: right; margin-top: -12px;  margin-left: auto; margin-right: 10%;">
+                (Signature Over Printed Name)
+            </p>   
         </div>
-    </div >
-</div >
 
+        </div>
+        <div class="spacer">&nbsp;&nbsp;&nbsp;</div>
+        <div class="table-wrapper">
+            <h6 class="table-header">Republic of the Philippines</h6>
+            <div class="header-container">
+                <img class="logo-earist" src="{% static './images/earist-logo.png' %}" alt="" width="55" height="55" style="margin-top: -28px;">
+                <p class="table-header" style="font-size: 15px; font-weight: bold;">
+                    EULOGIO "AMANG" RODRIGUEZ <br> INSTITUTE OF SCIENCE & TECHNOLOGY 
+                </p>
+                
+            </div>
+            <p class="table-header" style="font-size: 12px; font-weight: bold;" >Nagtahan, Sampaloc Manila</p>
+            
+            <p class="table-header" style="font-size: 12px; margin-top: 12px; margin-bottom: 12px;">Civil Service Form No. 48</p>
+            <h4 class="table-header">DAILY TIME RECORD</h4>
+            <p style="font-size: 12px; font-weight: bold; text-transform: uppercase;">NAME: <span style="position: relative; display: inline-block;">{{ employee.surname }} {{ employee.first_name }}, {{ employee.middle_name|slice:":1" }}{% if employee.middle_name %}.{% endif %}<span style="position: absolute; bottom: -1px; left: 0; width: 100%; border-bottom: 1px solid black;"></span></span></p>
+
+
+            <p class="" style="font-size: 12px; font-weight: bold;" >Covered Dates: <span style="font-size: 14px; font-weight: bold; text-transform: uppercase; position: relative; display: inline-block;">{{ start_date|date:"F j" }} - {{ end_date|date:"j, Y" }}<span style="position: absolute; bottom: -1px; left: 0; width: 100%; border-bottom: 1px solid black;"></span></span></p>
+            <p style="font-size: 12px; font-weight: bold; "> For the month of: <span style="font-size: 14px; font-weight: bold; text-transform: uppercase; position: relative; display: inline-block;">{{ start_date|date:"F Y" }}<span style="position: absolute; bottom: -1px; left: 0; width: 100%; border-bottom: 1px solid black;"></span></span> </p>
+
+            <table class="table side-by-side">
+                <tr>
+                    <th rowspan="2" style="text-align: center; vertical-align: middle;">DAY</th>
+                    <th colspan="2" style="text-align: center; vertical-align: middle;">A.M.</th>
+                    <th></th>
+                    <th colspan="2" style="text-align: center; vertical-align: middle;">P.M.</th>
+                    <th></th>
+                    <th colspan="2" style="text-align: center; vertical-align: middle;">Undertime</th>
+                </tr>
+                <tr>
+                    <td style="font-size: 11px; font-weight: bold; text-align: center; vertical-align: middle;">ARRIVAL</td>
+                    <td style="font-size: 11px; font-weight: bold; text-align: center; vertical-align: middle;">DEPARTURE</td>
+                    <td></td>
+                    <td style="font-size: 11px; font-weight: bold; text-align: center; vertical-align: middle;">ARRIVAL</td>
+                    <td style="font-size: 11px; font-weight: bold; text-align: center; vertical-align: middle;">DEPARTURE</td>
+                    <td></td>
+                    <td>Hours</td>
+                    <td>Minutes</td>
+                </tr>
+                {% for day, records in attendance_records.items %}
+                    <tr>
+                        <td>{{ day|date:"d" }}</td>
+                        {% if records %}
+                            {% for record in records %}
+                                <td>{{ record.time_in|blank_if_midnight|time:"h:i A"  }}</td>
+                                <td>{{ record.break_in|blank_if_midnight|time:"h:i A" }}</td>
+                                
+                                <td></td>
+                                <td>{{ record.break_out|blank_if_midnight|time:"h:i A"  }}</td>
+                                <td>{{ record.time_out|blank_if_midnight|time:"h:i A"  }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            {% endfor %}
+                        {% else %}
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+            <div class="print-visible">
+            <br>
+            <hr style="border-top: 3px solid black; width: 94%; margin-left: 0; margin-right: auto;">
+            <p style="text-align: justify; width: 95%; margin-left: 0; margin-right: auto;">
+                I certify on my honor that the above is a true and 
+                correct report of the hours of work performed, 
+                record of which was made daily at the time of 
+                arrival and departure from office.
+            </p>
+            <br>
+            <hr style="border-top: 3px solid black; width: 55%; margin-left: auto; margin-right: 5%;">
+            <p style="text-align: right; margin-top: -8px;  margin-left: auto; margin-right: 10%;">
+                Signature &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </p>
+
+
+            <hr style="border-top: 3px double black; width: 94%; margin-left: 0; margin-right: auto;">
+            <p style="text-align: center; margin-top: -8px;">
+                Verified as to prescribe office hours.
+            </p>
+            <br>
+            <hr style="border-top: 3px solid black; width: 55%; margin-left: auto; margin-right: 5%;">
+            <p style="text-align: right; margin-top: -8px;  margin-left: auto; margin-right: 10%;">
+                In-Charge &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </p>
+            <p style="text-align: right; margin-top: -12px;  margin-left: auto; margin-right: 10%;">
+                (Signature Over Printed Name)
+            </p>   
+        </div>
+        </div>
+    </div>
+</div>
+<div class="print-button-container">
+    <button id="printButton" onclick="printPage()">Print</button>
+</div>
+
+
+<script>
+function printPage() {
+    // Initiate printing
+    window.print();
+}
+
+</script>
 {% endblock %}
