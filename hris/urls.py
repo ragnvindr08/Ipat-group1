@@ -16,6 +16,8 @@ urlpatterns = [
         path('upload/success/', views.upload_success, name='upload_success'),  # Add this line
         path('search/', views.search_records, name='search_records'),
         path('dtr/', views.search_attendance, name='search_attendance'),
+        path('edit/', views.search_records2, name='search_record'),
+
 ]
 # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
   

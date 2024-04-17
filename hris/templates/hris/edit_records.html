@@ -1,0 +1,71 @@
+{% load custom_filters %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Records</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+    <h1>Edit Records</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="id_employee_id">Employee ID:</label>
+            <input type="text" name="employee_id" id="id_employee_id">
+        </div>
+        <div>
+            <label for="id_start_date">Start Date:</label>
+            <input type="text" name="start_date" id="id_start_date" class="datepicker" placeholder="Start Date">
+        </div>
+        <div>
+            <label for="id_end_date">End Date:</label>
+            <input type="text" name="end_date" id="id_end_date" class="datepicker" placeholder="End Date">
+        </div>
+        <button type="submit">Search</button>
+    </form>
+    {% if formset %}
+    <form method="post">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Date</th>
+                    <th>Time In</th>
+                    <th>Break In</th>
+                    <th>Break Out</th>
+                    <th>Time Out</th>
+                    <th>Surplus Hour Time In</th>
+                    <th>Surplus Hour Time Out</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in formset %}
+                    <tr>
+                        <td><input type="text" name="{{ form.employee_id.name }}" value="{{ form.employee_id.value }}"></td>
+                        <td><input type="text" name="{{ form.date.name }}" id="{{ form.date.id }}" class="datepicker" value="{{ form.date.value }}"></td>
+                        <td><input type="text" name="{{ form.time_in.name }}" value="{{ form.time_in.value |blank_if_midnight|time:'h:i A' }}"></td>
+                        <td><input type="text" name="{{ form.break_in.name }}" value="{{ form.break_in.value |blank_if_midnight|time:'h:i A' }}"></td>
+                        <td><input type="text" name="{{ form.break_out.name }}" value="{{ form.break_out.value |blank_if_midnight|time:'h:i A' }}"></td>
+                        <td><input type="text" name="{{ form.time_out.name }}" value="{{ form.time_out.value |blank_if_midnight|time:'h:i A' }}"></td>
+                        <td><input type="text" name="{{ form.surplusHour_time_in.name }}" value="{{ form.surplusHour_time_in.value |blank_if_midnight|time:'h:i A' }}"></td>
+                        <td><input type="text" name="{{ form.surplusHour_time_out.name }}" value="{{ form.surplusHour_time_out.value |blank_if_midnight|time:'h:i A' }}"></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit">Save Changes</button>
+    </form>
+    {% endif %}
+    <script>
+        $(function() {
+            $(".datepicker").datepicker();
+        });
+    </script>
+</body>
+</html>

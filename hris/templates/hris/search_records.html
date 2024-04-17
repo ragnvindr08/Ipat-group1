@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Records</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        $(function() {
+            $("#id_start_date").datepicker();
+            $("#id_end_date").datepicker();
+        });
+    </script>
+</head>
+<body>
+    <h1>Search Records</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="id_employee_id">Employee ID:</label>
+        {{ form.employee_id }}
+        <br>
+        <label for="id_start_date">Start Date:</label>
+        {{ form.start_date }}
+        <br>
+        <label for="id_end_date">End Date:</label>
+        {{ form.end_date }}
+        <br>
+        <button type="submit">Search</button>
+    </form>
+    {% if records %}
+        <ul>
+            {% for record in records %}
+                <li>{{ record.employee_id }} - {{ record.date }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

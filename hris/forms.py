@@ -4,6 +4,21 @@ from django.contrib.auth.models import User
 from django import forms
 
 from .models import *
+from django import forms
+from django.forms import modelformset_factory
+from .models import AttendanceRecord
+
+# class SearchForm(forms.Form):
+#     employee_id = forms.CharField(max_length=100)
+#     start_date = forms.DateField()
+#     end_date = forms.DateField()
+
+class AttendanceRecordForm(forms.ModelForm):
+    class Meta:
+        model = AttendanceRecord
+        fields = ['employee_id', 'date', 'time_in', 'break_in', 'break_out', 'time_out', 'surplusHour_time_in', 'surplusHour_time_out']
+
+AttendanceRecordFormSet = modelformset_factory(AttendanceRecord, form=AttendanceRecordForm, extra=0)
 
 
 class SearchForm(forms.Form):
@@ -37,3 +52,14 @@ class UploadFileForm(forms.Form):
 
 class FileUploadForm(forms.Form):
     file = forms.FileField()
+
+
+class SearchFormAttendance(forms.Form):
+    employee_id = forms.CharField(max_length=100)
+    start_date = forms.DateField()
+    end_date = forms.DateField()
+
+class AttendanceRecordForm(forms.ModelForm):
+    class Meta:
+        model = AttendanceRecord
+        fields = ['employee_id', 'date', 'time_in', 'break_in', 'break_out', 'time_out', 'surplusHour_time_in', 'surplusHour_time_out']

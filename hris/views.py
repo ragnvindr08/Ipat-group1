@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
+
 from .models import *
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
@@ -18,6 +19,11 @@ from datetime import datetime, timedelta
 
 from django.conf import settings
 import os
+from django.forms import modelformset_factory
+from django.forms import formset_factory
+from django.shortcuts import render, redirect
+from .models import AttendanceRecord
+from .forms import SearchForm, AttendanceRecordForm, AttendanceRecordFormSet
 # Create your views here.
 
 #UPLOAD DTR .DAT FILE
@@ -1047,35 +1053,6 @@ def search_records(request):
 
 
 
-# def search_attendance(request):
-#     if request.method == 'GET':
-#         employee_id = request.GET.get('employee_id')
-#         start_date = request.GET.get('start_date')
-#         end_date = request.GET.get('end_date')
-
-#         if employee_id and start_date and end_date:
-#             # Convert start_date and end_date to datetime objects
-#             start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-#             end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-
-#             # Create a list of dates within the specified range
-#             date_range = [start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)]
-
-#             # Perform the search
-#             records = AttendanceRecord.objects.filter(
-#                 Q(employee_id=employee_id) &
-#                 Q(date__gte=start_date) &
-#                 Q(date__lte=end_date)
-#             )
-
-#             # Convert records queryset to a dictionary with dates as keys for easy access in the template
-#             records_dict = {record.date: record for record in records}
-
-#             return render(request, 'hris/search_results.html', {'date_range': date_range, 'records_dict': records_dict})
-
-#     return render(request, 'hris/search_attendance.html')
-
-
 def search_attendance(request):
     if request.method == 'POST':
         employee_id = request.POST.get('employee_id')
@@ -1104,22 +1081,45 @@ def search_attendance(request):
     return render(request, 'hris/search_attendance.html')
 
 
-# def search_attendance(request):
+
+
+
+# def search_records(request):
+#     records = None
+#     formset = None
 #     if request.method == 'POST':
-#         employee_id = request.POST.get('employee_id')
-#         start_date = request.POST.get('start_date')
-#         end_date = request.POST.get('end_date')
-#         if employee_id and start_date and end_date:
-#             # Convert string dates to datetime objects
-#             start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
-#             end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
-#             date_range = [start_date + timedelta(days=x) for x in range((end_date - start_date).days + 1)]
-#             # Query the database for attendance records within the date range and employee ID
-#             attendance_records = AttendanceRecord.objects.filter(
-#                 employee_id=employee_id,
-#                 date__range=(start_date, end_date)
-#             )
+#         form = SearchFormAttendance(request.POST)
+#         if form.is_valid():
+#             employee_id = form.cleaned_data['employee_id']
+#             start_date = form.cleaned_data['start_date']
+#             end_date = form.cleaned_data['end_date']
+#             records = AttendanceRecord.objects.filter(employee_id=employee_id, date__range=(start_date, end_date))
+#             formset = AttendanceRecordFormSet(queryset=records)
+#     else:
+#         form = SearchFormAttendance()
+#     return render(request, 'hris/edit_records.html', {'form': form, 'formset': formset})
 
-#         return render(request, 'hris/search_results.html', {'attendance_records': attendance_records, 'date_range': date_range})
 
-#     return render(request, 'hris/search_attendance.html')
+
+def search_records2(request):
+    records = None
+    formset = None
+    if request.method == 'POST':
+        form = SearchFormAttendance(request.POST)
+        if form.is_valid():
+            employee_id = form.cleaned_data['employee_id']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            records = AttendanceRecord.objects.filter(employee_id=employee_id, date__range=(start_date, end_date))
+            formset = AttendanceRecordFormSet(queryset=records)
+            
+            # Check if the formset is submitted for changes
+            if 'submit_changes' in request.POST:
+                if formset.is_valid():
+                    formset.save()  # Save changes to the database
+                    return redirect('success_url')  # Redirect to success page
+                # If formset is not valid, handle the error or display a message
+
+    else:
+        form = SearchFormAttendance()
+    return render(request, 'hris/edit_records.html', {'form': form, 'formset': formset})
