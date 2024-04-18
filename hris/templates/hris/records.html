@@ -112,9 +112,9 @@
                 <td style="text-align: center; vertical-align: middle;">{{ record.difference_seconds_sc }}</td> <!-- table data 29-->
 
                 <!-- TARDINESS TABLE SERVICE CREDIT TIME -->
-                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 30 -->
-                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 31 -->
-                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 32 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger">{{ record.tardiness_difference_hours_sc }}</td> <!-- table data 22 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger">{{ record.tardiness_difference_minutes_sc }}</td> <!-- table data 23 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger">{{ record.tardiness_difference_seconds_sc }}</td> <!-- table data 24 -->
 
                 <td style="text-align: center; vertical-align: middle;">{{record.official_overtime_time_in}}</td> <!-- table data 33 -->
                 <td style="text-align: center; vertical-align: middle;">{{record.official_overtime_time_out}}</td> <!-- table data 34 -->
@@ -124,75 +124,71 @@
                 <td style="text-align: center; vertical-align: middle;">{{ record.difference_seconds_ot }}</td> <!-- table data 37 -->
 
                 <!-- TARDINESS TABLE OVERTIME TIME -->
-                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 38 -->
-                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 39 -->
-                <td style="text-align: center; vertical-align: middle;" class="table-danger"></td> <!-- table data 40 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger">{{ record.tardiness_difference_hours_ot }}</td> <!-- table data 22 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger">{{ record.tardiness_difference_minutes_ot }}</td> <!-- table data 23 -->
+                <td style="text-align: center; vertical-align: middle;" class="table-danger">{{ record.tardiness_difference_seconds_ot }}</td> <!-- table data 24 -->
 
             </tr>
             {% endfor %}
             <tr id="totals-row">
-                <td colspan="3" style="text-align: center; vertical-align: middle;">Total Computed Rendered Hours:</td>
+                <td colspan="3" style="text-align: center; vertical-align: middle;">Total Computed Rendered Time:</td>
                 <td colspan="6" style="text-align: center; vertical-align: middle;" id="ov-overall-total"></td>
 
                 <td>Sub Total:</td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="total-hours"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="total-mn"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="total-sc"></td>
-                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
-                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
-                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                <td class="table-danger"  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td-total-hours"></td>
+                <td class="table-danger"  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td-total-mn"></td>
+                <td class="table-danger"  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td-total-sc"></td>
                 
                 <td></td>
                 <td>Sub Total:</td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="hn-total-hours"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="hn-total-mn"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="hn-total-sc"></td>
-                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
-                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
-                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                <td class="table-danger"  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td_hn-total-hours"></td>
+                <td class="table-danger"  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td_hn-total-mn"></td>
+                <td class="table-danger"  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td_hn-total-sc"></td>
                 <td></td>
                 <td>Sub Total:</td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="sc-total-hours"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="sc-total-mn"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="sc-total-sc"></td>
-                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
-                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
-                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                <td class="table-danger"  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td-sc-total-hours"></td>
+                <td class="table-danger"  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td-sc-total-mn"></td>
+                <td class="table-danger"  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td-sc-total-sc"></td>
                 <td></td>
                 <td>Sub Total:</td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="ot-total-hours"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="ot-total-mn"></td>
                 <td  style="white-space: nowrap; text-align: center; vertical-align: middle;" id="ot-total-sc"></td>
-                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
-                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
-                <td style="text-align: center; vertical-align: middle;"></td> <!-- table data 9 -->
+                <td  class="table-danger" style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td-ot-total-hours"></td>
+                <td class="table-danger" style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td-ot-total-mn"></td>
+                <td class="table-danger" style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td-ot-total-sc"></td>
 
             </tr>
             <tr id="totals-row">
-                
-                <td style="white-space: nowrap; text-align: center; vertical-align: middle;"  colspan="9"></td>
+                <td colspan="3" style="text-align: center; vertical-align: middle;">Total Computed Tardiness Time:</td>
+                <td style="white-space: nowrap; text-align: center; vertical-align: middle;" id="td-ov-overall-total" colspan="6"></td>
 
                 <td>Overall Total:</td>
                 <td id="overall-total" colspan="3"></td>
-                <td></td>
-                <td></td>
-                <td></td>
+
+                <td class="table-danger" colspan="3" id="td-overall-total"></td>
+
                 <td></td>
                 <td>Overall Total:</td>
                 <td id="hn-overall-total" colspan="3"></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td class="table-danger" colspan="3" id="td-hn-overall-total"></td>
                 <td></td>
                 <td>Overall Total:</td>
                 <td id="sc-overall-total" colspan="3"></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td class="table-danger" colspan="3" id="td-sc-overall-total"></td>
                 <td></td>
                 <td>Overall Total:</td>
                 <td id="ot-overall-total" colspan="3"></td>
-
+                <td class="table-danger" id="td-ot-overall-total" colspan="3"></td>
             </tr>
         </tbody>
     </table>
@@ -227,6 +223,22 @@
         var ot_totalHours = 0;
         var ot_totalMn = 0;
         var ot_totalSc = 0;
+
+        var td_totalHours = 0;
+        var td_totalMn = 0;
+        var td_totalSc = 0;
+
+        var td_hn_totalHours = 0;
+        var td_hn_totalMn = 0;
+        var td_hn_totalSc = 0;
+        
+        var td_sc_totalHours = 0;
+        var td_sc_totalMn = 0;
+        var td_sc_totalSc = 0;
+        
+        var td_ot_totalHours = 0;
+        var td_ot_totalMn = 0;
+        var td_ot_totalSc = 0;
 
         var table = document.getElementById('attendance-table');
         var rows = table.getElementsByTagName('tr');
@@ -337,6 +349,126 @@
 
         var ov_overallTotal = ov_hours + ' hours ' + ov_minutes + ' minutes  and  ' + ov_seconds + ' seconds ';
         document.getElementById('ov-overall-total').innerText = ov_overallTotal;
+            //13 14 15
+            //21 22 23
+            //29 30 31
+            //37 38 39
+
+        for (var i = 2; i < rows.length - 2; i++) {
+            var cells = rows[i].getElementsByTagName('td');
+            var hours = parseInt(cells[13].innerText) || 0;
+            var mn = parseInt(cells[14].innerText) || 0;
+            var sc = parseInt(cells[15].innerText) || 0;
+
+            td_totalHours += hours;
+            td_totalMn += mn;
+            td_totalSc += sc;
+        }
+
+        document.getElementById('td-total-hours').innerText = td_totalHours;
+        document.getElementById('td-total-mn').innerText = td_totalMn;
+        document.getElementById('td-total-sc').innerText = td_totalSc;
+
+        var td_totalSeconds = (td_totalHours * 3600) + (td_totalMn * 60) + td_totalSc;
+        var td_hours = Math.floor(td_totalSeconds / 3600);
+        var td_minutes = Math.floor((td_totalSeconds % 3600) / 60);
+        var td_seconds = td_totalSeconds % 60;
+
+        var td_overallTotal = td_hours + ' hours ' + td_minutes + ' minutes  and  ' + td_seconds + ' seconds ';
+
+        document.getElementById('td-overall-total').innerText = td_overallTotal;
+
+
+
+// HONORARIUM
+for (var i = 2; i < rows.length - 2; i++) {
+            var cells = rows[i].getElementsByTagName('td');
+            var hours = parseInt(cells[21].innerText) || 0;
+            var mn = parseInt(cells[22].innerText) || 0;
+            var sc = parseInt(cells[23].innerText) || 0;
+
+            td_hn_totalHours += hours;
+            td_hn_totalMn += mn;
+            td_hn_totalSc += sc;
+        }
+
+        document.getElementById('td_hn-total-hours').innerText = td_hn_totalHours;
+        document.getElementById('td_hn-total-mn').innerText = td_hn_totalMn;
+        document.getElementById('td_hn-total-sc').innerText = td_hn_totalSc;
+
+        var td_hn_totalSeconds = (td_hn_totalHours * 3600) + (td_hn_totalMn * 60) + td_hn_totalSc;
+        var td_hn_hours = Math.floor(td_hn_totalSeconds / 3600);
+        var td_hn_minutes = Math.floor((td_hn_totalSeconds % 3600) / 60);
+        var td_hn_seconds = td_hn_totalSeconds % 60;
+
+        var td_hn_overallTotal = td_hn_hours + ' hours ' + td_hn_minutes + ' minutes  and  ' + td_hn_seconds + ' seconds ';
+
+        document.getElementById('td-hn-overall-total').innerText = td_hn_overallTotal;
+         //13 14 15
+            //21 22 23
+            //29 30 31
+            //37 38 39
+        // SERVICE CREDIT
+        for (var i = 2; i < rows.length - 2; i++) {
+            var cells = rows[i].getElementsByTagName('td');
+            var hours = parseInt(cells[29].innerText) || 0;
+            var mn = parseInt(cells[30].innerText) || 0;
+            var sc = parseInt(cells[31].innerText) || 0;
+
+            td_sc_totalHours += hours;
+            td_sc_totalMn += mn;
+            td_sc_totalSc += sc;
+        }
+
+        document.getElementById('td-sc-total-hours').innerText = td_sc_totalHours;
+        document.getElementById('td-sc-total-mn').innerText = td_sc_totalMn;
+        document.getElementById('td-sc-total-sc').innerText = td_sc_totalSc;
+
+        var td_sc_totalSeconds = (td_sc_totalHours * 3600) + (td_sc_totalMn * 60) + td_sc_totalSc;
+        var td_sc_hours = Math.floor(td_sc_totalSeconds / 3600);
+        var td_sc_minutes = Math.floor((td_sc_totalSeconds % 3600) / 60);
+        var td_sc_seconds = td_sc_totalSeconds % 60;
+
+        var td_sc_overallTotal = td_sc_hours + ' hours ' + td_sc_minutes + ' minutes  and  ' + td_sc_seconds + ' seconds ';
+
+        document.getElementById('td-sc-overall-total').innerText = td_sc_overallTotal;
+
+        //OVERTIME
+        for (var i = 2; i < rows.length - 2; i++) {
+            var cells = rows[i].getElementsByTagName('td');
+            var hours = parseInt(cells[37].innerText) || 0;
+            var mn = parseInt(cells[38].innerText) || 0;
+            var sc = parseInt(cells[39].innerText) || 0;
+
+            td_ot_totalHours += hours;
+            td_ot_totalMn += mn; 
+            td_ot_totalSc += sc;
+        }
+//asasa
+        document.getElementById('td-ot-total-hours').innerText = td_ot_totalHours;
+        document.getElementById('td-ot-total-mn').innerText = td_ot_totalMn;
+        document.getElementById('td-ot-total-sc').innerText = td_ot_totalSc;
+
+        var td_ot_totalSeconds = (td_ot_totalHours * 3600) + (td_ot_totalMn * 60) + td_ot_totalSc;
+        var td_ot_hours = Math.floor(td_ot_totalSeconds / 3600);
+        var td_ot_minutes = Math.floor((td_ot_totalSeconds % 3600) / 60);
+        var td_ot_seconds = td_ot_totalSeconds % 60;
+
+        var td_ot_overallTotal = td_ot_hours + ' hours ' + td_ot_minutes + ' minutes  and  ' + td_ot_seconds + ' seconds ';
+
+        document.getElementById('td-ot-overall-total').innerText = td_ot_overallTotal;
+
+        var td_overall_total = td_totalSeconds + td_ot_totalSeconds + td_sc_totalSeconds + td_hn_totalSeconds
+        var td_ov_hours = Math.floor(td_overall_total / 3600);
+        var td_ov_minutes = Math.floor((td_overall_total % 3600) / 60);
+        var td_ov_seconds = td_overall_total % 60;
+
+        var td_ov_overallTotal = td_ov_hours + ' hours ' + td_ov_minutes + ' minutes  and  ' + td_ov_seconds + ' seconds ';
+        document.getElementById('td-ov-overall-total').innerText = td_ov_overallTotal;
+
+
+
+
 
     }
 </script>

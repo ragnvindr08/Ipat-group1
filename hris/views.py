@@ -458,13 +458,14 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
         tardiness_total_hours = tardiness_difference_hours_faculty
         tardiness_total_minutes = tardiness_difference_minutes_faculty % 60
         tardiness_total_seconds = tardiness_difference_seconds_faculty
-
+        print( tardiness_total_hours," tardiness_total_hours")
 
         if official_office_in_datetime == datetime_with_midnight:
             official_office_in = "N/A"
             total_hours = 0
             total_minutes = 0
             total_seconds = 0
+            tardiness_total_hours = 0
         else:
             official_office_in = official_office_in_datetime.time()
 
@@ -474,6 +475,8 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
             total_hours = 0
             total_minutes = 0
             total_seconds = 0
+            tardiness_total_hours = 0
+            
         else:
             official_office_out = official_office_out_datetime.time()
         
@@ -519,14 +522,7 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
             difference_minutes_hn = (difference_hn.total_seconds() % 3600) // 60
             difference_seconds_hn = difference_hn.total_seconds() % 60
 
-        # tardiness_difference_faculty = (datetime.combine(datetime.today(), office_in) - datetime.combine(datetime.today(), faculty_official_office_in)) + (datetime.combine(datetime.today(), faculty_official_office_out) - office_out)
-        # tardiness_difference_hours_faculty = tardiness_difference_faculty.total_seconds() // 3600
-        # tardiness_difference_minutes_faculty = (tardiness_difference_faculty.total_seconds() % 3600) // 60
-        # tardiness_difference_seconds_faculty = tardiness_difference_faculty.total_seconds() % 60
 
-        # tardiness_total_hours = tardiness_difference_hours_faculty
-        # tardiness_total_minutes = tardiness_difference_minutes_faculty % 60
-        # tardiness_total_seconds = tardiness_difference_seconds_faculty
         tardiness_difference_hn =  0
         tardiness_difference_hours_hn = 0
         tardiness_difference_minutes_hn = 0
@@ -540,15 +536,18 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
             tardiness_difference_seconds_hn = tardiness_difference_hn.total_seconds() % 60
             print(tardiness_difference_hn,"tardiness_difference_hn")
 
-        if tardiness_difference_hours_hn < 0:
+        if difference_hours_hn < 0:
             tardiness_difference_hours_hn =  official_honorarium_time_out - official_honorarium_time_in
             tardiness_difference_minutes_hn = 0
             tardiness_difference_seconds_hn = 0
-            print(tardiness_difference_hours_hn,"tardiness_difference_hours_hn")
-            tardiness_difference_hours_hn = datetime.strptime('2024-04-04 03:00:00', '%Y-%m-%d %H:%M:%S')
+            difference_hn = 0
+            difference_hours_hn = 0
+            difference_minutes_hn = 0
+            difference_seconds_hn = 0
+            tardiness_difference_hours_hn  = int(tardiness_difference_hours_hn.total_seconds() // 3600)
+  
+            
 
-            # Extracting hours from the given datetime
-            tardiness_difference_hours_hn = tardiness_difference_hours_hn.hour
         # + (  official_honorarium_time_out - time_out_hn)
 
         #----------------------------------------COMPUTE HONORARIUM----------------------------
@@ -569,31 +568,76 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
             difference_minutes_sc = (difference_sc.total_seconds() % 3600) // 60
             difference_seconds_sc = difference_sc.total_seconds() % 60
 
+
+        tardiness_difference_sc =  0
+        tardiness_difference_hours_sc = 0
+        tardiness_difference_minutes_sc = 0
+        tardiness_difference_seconds_sc = 0
+
+        if (official_servicecredit_time_in and official_servicecredit_time_out) and (official_servicecredit_time_in !=datetime_with_midnight and official_servicecredit_time_out != datetime_with_midnight ):
+
+            tardiness_difference_sc =  (  time_in_sc - official_servicecredit_time_in) + (  official_servicecredit_time_out - time_out_sc)
+            tardiness_difference_hours_sc = tardiness_difference_sc.total_seconds() // 3600
+            tardiness_difference_minutes_sc = (tardiness_difference_sc.total_seconds() % 3600) // 60
+            tardiness_difference_seconds_sc = tardiness_difference_sc.total_seconds() % 60
+            #print(tardiness_difference_seconds_sc,"tardiness_difference_hn")
+
+        if tardiness_difference_hours_sc < 0:
+            tardiness_difference_hours_sc =  official_servicecredit_time_out - official_servicecredit_time_in
+            tardiness_difference_minutes_sc = 0
+            tardiness_difference_seconds_sc = 0
+           # print(tardiness_difference_hours_hn,"tardiness_difference_hours_hn")
+            #tardiness_difference_hours_hn = datetime.strptime('2024-04-04 03:00:00', '%Y-%m-%d %H:%M:%S')
+
+            # Extracting hours from the given datetime
+            tardiness_difference_hours_sc = tardiness_difference_hours_sc.hour
+        # + (  official_honorarium_time_out - time_out_hn)
+
+
             #----------------------------------------COMPUTE SERVICE CREDIT----------------------------    
 
             #----------------------------------------COMPUTE OVERTIME----------------------------
             
-        if (time_out_ot > timeref and time_in_ot == datetime_with_midnight) or (time_out_ot== datetime_with_midnight and time_in_ot > datetime_with_midnight) or (time_out_ot == datetime_with_midnight and time_in_ot == datetime_with_midnight):
+     
+        if (time_out_ot > datetime_with_midnight and time_in_ot == datetime_with_midnight) or (time_out_ot == datetime_with_midnight and time_in_ot > datetime_with_midnight) or (time_out_ot == datetime_with_midnight and time_in_ot == datetime_with_midnight):
+            
             difference_ot = 0
             difference_hours_ot = 0
             difference_minutes_ot = 0
             difference_seconds_ot = 0
+    
         else:
-            # Inside the COMPUTE OVERTIME block
             difference_ot = time_out_ot - time_in_ot
             difference_hours_ot = difference_ot.total_seconds() // 3600
             difference_minutes_ot = (difference_ot.total_seconds() % 3600) // 60
             difference_seconds_ot = difference_ot.total_seconds() % 60
+
+
+        tardiness_difference_ot =  0
+        tardiness_difference_hours_ot = 0
+        tardiness_difference_minutes_ot = 0
+        tardiness_difference_seconds_ot = 0
+
+        if (official_overtime_time_in and official_overtime_time_out) and (official_overtime_time_in !=datetime_with_midnight and official_overtime_time_out != datetime_with_midnight ):
+
+            tardiness_difference_ot =  (  time_in_ot - official_overtime_time_in) + (  official_overtime_time_out - time_out_ot)
+            tardiness_difference_hours_ot = tardiness_difference_ot.total_seconds() // 3600
+            tardiness_difference_minutes_ot = (tardiness_difference_ot.total_seconds() % 3600) // 60
+            tardiness_difference_seconds_ot = tardiness_difference_ot.total_seconds() % 60
+            print(tardiness_difference_ot,"tardiness_difference_ot")
+
+        if difference_hours_ot < 0:
+            tardiness_difference_hours_ot =  official_overtime_time_out - official_overtime_time_in
+            tardiness_difference_minutes_ot = 0
+            tardiness_difference_seconds_ot = 0
+            difference_ot = 0
+            difference_hours_ot = 0
+            difference_minutes_ot = 0
+            difference_seconds_ot = 0
+            tardiness_difference_hours_ot  = int(tardiness_difference_hours_ot.total_seconds() // 3600)
             
         #----------------------------------------COMPUTE OVERTIME----------------------------
 
-        # context = {
-
-        #     total_hours: "total_hours",
-        #     total_minutes: "total_minutes",
-        #     total_seconds: "total_seconds",
-        #     day: "day"
-        #         }
         break_in1 = datetime_with_midnight
         break_out1 = datetime_with_midnight
 
@@ -656,10 +700,11 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
         else:
             official_overtime_time_out = official_overtime_time_out.time()
         
+        print(tardiness_total_hours,'tardiness_total_hours1')
 
 
 
-        return tardiness_difference_hours_hn, tardiness_difference_minutes_hn, tardiness_difference_seconds_hn, tardiness_total_seconds, tardiness_total_minutes, tardiness_total_hours, difference_hours_hn, difference_minutes_hn, difference_seconds_hn, difference_hours_sc, difference_minutes_sc, difference_seconds_sc,difference_hours_ot, difference_minutes_ot, difference_seconds_ot,official_honorarium_time_in, official_honorarium_time_out, official_servicecredit_time_in, official_servicecredit_time_out, official_overtime_time_in, official_overtime_time_out, break_in1, break_out1,official_office_in_datetime, official_office_out_datetime, official_office_in ,official_office_out, total_hours, total_minutes, total_seconds, day
+        return tardiness_difference_hours_ot, tardiness_difference_minutes_ot, tardiness_difference_seconds_ot, tardiness_difference_hours_sc, tardiness_difference_minutes_sc, tardiness_difference_seconds_sc, tardiness_difference_hours_hn, tardiness_difference_minutes_hn, tardiness_difference_seconds_hn, tardiness_total_seconds, tardiness_total_minutes, tardiness_total_hours, difference_hours_hn, difference_minutes_hn, difference_seconds_hn, difference_hours_sc, difference_minutes_sc, difference_seconds_sc,difference_hours_ot, difference_minutes_ot, difference_seconds_ot,official_honorarium_time_in, official_honorarium_time_out, official_servicecredit_time_in, official_servicecredit_time_out, official_overtime_time_in, official_overtime_time_out, break_in1, break_out1,official_office_in_datetime, official_office_out_datetime, official_office_in ,official_office_out, total_hours, total_minutes, total_seconds, day
         
     else:
         official_office_in_datetime = official_office_in
@@ -1018,7 +1063,7 @@ def search_records(request):
 
                     else:
                         
-                         record.tardiness_difference_hours_hn, record.tardiness_difference_minutes_hn, record.tardiness_difference_seconds_hn, record.tardiness_total_seconds, record.tardiness_total_minutes, record.tardiness_total_hours,record.difference_hours_hn, record.difference_minutes_hn, record.difference_seconds_hn, record.difference_hours_sc, record.difference_minutes_sc, record.difference_seconds_sc, record.difference_hours_ot, record.difference_minutes_ot, record.difference_seconds_ot, record.official_honorarium_time_in, record.official_honorarium_time_out, record.official_servicecredit_time_in, record.official_servicecredit_time_out, record.official_overtime_time_in, record.official_overtime_time_out, record.break_in1, record.break_out1,record.official_office_in_datetime,record.official_office_out_datetime, record.official_office_in_datetime, record.official_office_out_datetime, record.total_hours, record.total_minutes, record.total_seconds, record.day = calculate_time_difference(record.time_in.strftime("%H:%M:%S"),
+                         record.tardiness_difference_hours_ot, record.tardiness_difference_minutes_ot, record.tardiness_difference_seconds_ot, record.tardiness_difference_hours_sc, record.tardiness_difference_minutes_sc, record.tardiness_difference_seconds_sc, record.tardiness_difference_hours_hn, record.tardiness_difference_minutes_hn, record.tardiness_difference_seconds_hn, record.tardiness_total_seconds, record.tardiness_total_minutes, record.tardiness_total_hours,record.difference_hours_hn, record.difference_minutes_hn, record.difference_seconds_hn, record.difference_hours_sc, record.difference_minutes_sc, record.difference_seconds_sc, record.difference_hours_ot, record.difference_minutes_ot, record.difference_seconds_ot, record.official_honorarium_time_in, record.official_honorarium_time_out, record.official_servicecredit_time_in, record.official_servicecredit_time_out, record.official_overtime_time_in, record.official_overtime_time_out, record.break_in1, record.break_out1,record.official_office_in_datetime,record.official_office_out_datetime, record.official_office_in_datetime, record.official_office_out_datetime, record.total_hours, record.total_minutes, record.total_seconds, record.day = calculate_time_difference(record.time_in.strftime("%H:%M:%S"),
                                                                     record.time_out.strftime("%H:%M:%S"),
                                                                     record.break_in.strftime("%H:%M:%S"),
                                                                     record.break_out.strftime("%H:%M:%S"),
