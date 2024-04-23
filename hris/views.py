@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
@@ -12,18 +12,15 @@ from django.db.models import Q
 #upload imports
 import csv
 import xlrd
-from django.shortcuts import render
-from django.shortcuts import get_object_or_404
 import datetime
 from datetime import datetime, timedelta
-
+from django.urls import reverse  # Import reverse here
 from django.conf import settings
 import os
 from django.forms import modelformset_factory
 from django.forms import formset_factory
-from django.shortcuts import render, redirect
-from .models import AttendanceRecord
-from .forms import SearchForm, AttendanceRecordForm, AttendanceRecordFormSet
+from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 # Create your views here.
 
 #UPLOAD DTR .DAT FILE
@@ -128,20 +125,7 @@ def registerPage(request):
                             employee_id=employee_number,
                             day=day
                         )
-                # try:
-                #     # Try to retrieve existing employee profile for the user
-                #     employee_profile = Employee.objects.get(user=user)
-                #     # Update existing employee profile with new employee number
-                #     employee_profile.employee_id = employee_number
-                #     employee_profile.save()
-                # except Employee.DoesNotExist:
-                #     # Create new employee profile if it doesn't exist
-                #     employee_profile = Employee.objects.create(
-                #         user=user,
-                #         employee_id=employee_number,
-                #         first_name=user.first_name,
-                #         surname=user.last_name
-                #     )
+
                 try:
                     # Try to retrieve existing employee profile for the user
                     employee_profile = Employee.objects.get(user=user)
@@ -194,18 +178,7 @@ def logoutUser(request):
 # @login_required(login_url='login')
 @admin_only
 def home(request):
-    # # orders = Order.objects.all()
-    # customers = Employee.objects.all()
-    # profile = request.user.customer
-    # total_customers = customers.count()
-    # total_orders = orders.count()
-    # delivered = orders.filter(status='Delivered').count()
-    # pending = orders.filter(status='Pending').count()
-    
-    # context = {'orders':orders, 'customers':customers, 
-    # 'total_orders':total_orders, 'delivered': delivered,
-    # 'pending': pending }
-    
+
     return render(request, 'hris/home.html',)
 
 
@@ -700,7 +673,7 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
         else:
             official_overtime_time_out = official_overtime_time_out.time()
         
-        print(tardiness_total_hours,'tardiness_total_hours1')
+       
 
 
 
@@ -1127,44 +1100,133 @@ def search_attendance(request):
 
 
 
-
-
-# def search_records(request):
-#     records = None
-#     formset = None
-#     if request.method == 'POST':
-#         form = SearchFormAttendance(request.POST)
-#         if form.is_valid():
-#             employee_id = form.cleaned_data['employee_id']
-#             start_date = form.cleaned_data['start_date']
-#             end_date = form.cleaned_data['end_date']
-#             records = AttendanceRecord.objects.filter(employee_id=employee_id, date__range=(start_date, end_date))
-#             formset = AttendanceRecordFormSet(queryset=records)
-#     else:
-#         form = SearchFormAttendance()
-#     return render(request, 'hris/edit_records.html', {'form': form, 'formset': formset})
-
-
-
-def search_records2(request):
-    records = None
-    formset = None
+def search_attendance_record(request):
     if request.method == 'POST':
-        form = SearchFormAttendance(request.POST)
+        form = AttendanceSearchForm(request.POST)
         if form.is_valid():
-            employee_id = form.cleaned_data['employee_id']
-            start_date = form.cleaned_data['start_date']
-            end_date = form.cleaned_data['end_date']
-            records = AttendanceRecord.objects.filter(employee_id=employee_id, date__range=(start_date, end_date))
-            formset = AttendanceRecordFormSet(queryset=records)
-            
-            # Check if the formset is submitted for changes
-            if 'submit_changes' in request.POST:
-                if formset.is_valid():
-                    formset.save()  # Save changes to the database
-                    return redirect('success_url')  # Redirect to success page
-                # If formset is not valid, handle the error or display a message
+            employee_id = form.cleaned_data.get('employee_id')
+            start_date = form.cleaned_data.get('start_date')
+            end_date = form.cleaned_data.get('end_date')
 
+            # Convert datetime.date objects to strings
+            start_date_str = start_date.strftime('%B %d, %Y')
+            end_date_str = end_date.strftime('%B %d, %Y')
+
+            # Convert start_date and end_date to the desired format (YYYY-MM-DD)
+            start_date = start_date.strftime('%Y-%m-%d')
+            end_date = end_date.strftime('%Y-%m-%d')
+
+            records = AttendanceRecord.objects.filter(
+                employee_id=employee_id,
+                date__range=[start_date, end_date]
+            )
+            if records.exists():  # Check if there are any matching records
+                first_record = records.first()  # Retrieve the first record from the queryset
+                old_time_in = first_record.time_in
+                print(old_time_in)
+            else:
+                print("No attendance record found for the specified criteria")
+
+            # Pass start_date and end_date to the template
+            return render(request, 'hris/attendance_records.html', {'records': records, 'start_date': start_date_str, 'end_date': end_date_str})
     else:
-        form = SearchFormAttendance()
-    return render(request, 'hris/edit_records.html', {'form': form, 'formset': formset})
+        # Check if there is stored form data in session
+        stored_form_data = request.session.pop('search_form_data', None)
+        if stored_form_data:
+            # Use stored form data to pre-populate the form
+            form = AttendanceSearchForm(stored_form_data)
+        else:
+            form = AttendanceSearchForm()
+
+    return render(request, 'hris/search_attendance_record.html', {'form': form})
+
+
+@login_required
+def edit_attendance_record(request, record_id, start_date=None, end_date=None):
+    record = get_object_or_404(AttendanceRecord, id=record_id)
+    initial_record = {
+        'employee_id': record.employee_id,
+        'date': record.date,
+        'time_in': record.time_in,
+        'break_in': record.break_in,
+        'break_out': record.break_out,
+        'time_out': record.time_out,
+        'surplusHour_time_in': record.surplusHour_time_in,
+        'surplusHour_time_out': record.surplusHour_time_out,
+    }
+    start_date = start_date if start_date else request.GET.get('start_date')
+    end_date = end_date if end_date else request.GET.get('end_date')
+
+    start_date = datetime.strptime(start_date, '%B %d, %Y')
+
+    # Format the datetime object to 'YYYY-MM-DD' format
+    start_date = start_date.strftime('%Y-%m-%d')
+    
+    end_date = datetime.strptime(end_date, '%B %d, %Y')
+
+    # Format the datetime object to 'YYYY-MM-DD' format
+    end_date = end_date.strftime('%Y-%m-%d')
+
+    old_time_in = initial_record['time_in']
+    old_break_in = initial_record['break_in']
+    old_break_out = initial_record['break_out']
+    old_time_out = initial_record['time_out']
+    old_surplusHour_time_in = initial_record['surplusHour_time_in']
+    old_surplusHour_time_out = initial_record['surplusHour_time_out']
+
+    if request.method == 'POST':
+        form = AttendanceRecordForm(request.POST, instance=record)
+        if form.is_valid():
+            edited_record = form.save()
+            # Save log entry
+            log_data = f"Employee ID: {edited_record.employee_id}\n"
+            log_data += f"Date: {edited_record.date}\n"
+            log_data += f"Time In: {old_time_in} -> {edited_record.time_in}\n"
+            log_data += f"Break In: {old_break_in} -> {edited_record.break_in}\n"
+            log_data += f"Break Out: {old_break_out} -> {edited_record.break_out}\n"
+            log_data += f"Time Out: {old_time_out} -> {edited_record.time_out}\n"
+            log_data += f"Surplus Hour Time In: {old_surplusHour_time_in} -> {edited_record.surplusHour_time_in}\n"
+            log_data += f"Surplus Hour Time Out: {old_surplusHour_time_out} -> {edited_record.surplusHour_time_out}\n"
+            log_data += f"Edited By: {request.user.username}\n"
+
+            EditLogs.objects.create(
+                attendance_record=edited_record,
+                edited_by=request.user,
+                logged_data=log_data
+            )
+
+            # Redirect to the attendance_records view with search parameters
+            return HttpResponseRedirect(reverse('attendance_records') + f'?employee_id={edited_record.employee_id}&start_date={start_date}&end_date={end_date}')
+    else:
+        form = AttendanceRecordForm(instance=record, initial=initial_record)
+    
+    # Pass start_date and end_date to the template context
+
+
+    return render(request, 'hris/edit_record.html', {'form': form, 'record': record, 'start_date': start_date, 'end_date': end_date})
+
+
+
+
+def view_attendance_records(request):
+    # Retrieve search parameters from the request
+    employee_id = request.GET.get('employee_id')
+    start_date_str = request.GET.get('start_date')
+    end_date_str = request.GET.get('end_date')
+
+    # Parse the dates in the format '%Y-%m-%d'
+    try:
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+    except ValueError:
+        # Handle invalid date format, for example, redirect to a page with an error message
+        return HttpResponse("Invalid date format")
+
+    # Query the database to retrieve attendance records based on the search parameters
+    records = AttendanceRecord.objects.filter(
+        employee_id=employee_id,
+        date__range=[start_date, end_date]
+    )
+
+    # Render the attendance_records.html template with the retrieved records
+    return render(request, 'hris/attendance_records.html', {'records': records, 'start_date': start_date, 'end_date': end_date})

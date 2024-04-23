@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance Records</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Attendance Records</h1>
+    <p>Showing records from {{ start_date }} to {{ end_date }}</p>
+    <table>
+        <tr>
+            <th>Employee ID</th>
+            <th>Date</th>
+            <th>Time In</th>
+            <th>Break In</th>
+            <th>Break Out</th>
+            <th>Time Out</th>
+            <th>Surplus Hour Time In</th>
+            <th>Surplus Hour Time Out</th>
+            <th>Actions</th>
+        </tr>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.employee_id }}</td>
+            <td>{{ record.date }}</td>
+            <td>{{ record.time_in }}</td>
+            <td>{{ record.break_in }}</td>
+            <td>{{ record.break_out }}</td>
+            <td>{{ record.time_out }}</td>
+            <td>{{ record.surplusHour_time_in }}</td>
+            <td>{{ record.surplusHour_time_out }}</td>
+            <td><a href="{% url 'edit_attendance_record' record.id %}?start_date={{ start_date }}&end_date={{ end_date }}">Edit</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

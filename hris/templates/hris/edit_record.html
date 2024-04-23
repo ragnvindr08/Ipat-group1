@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <title>Edit Attendance Record</title>
+</head>
+<body>
+    <h1>Attendance Records</h1>
+    <p>Showing records from {{ start_date|date:"Y-m-d" }} to {{ end_date|date:"Y-m-d" }}</p>
+
+   <h1>Edit Attendance Record</h1>
+   <form method="post">
+       {% csrf_token %}
+       {{ form.as_p }}
+       <input type="hidden" name="start_date" value="{{ start_date |date:'Y-m-d' }}">
+       <input type="hidden" name="end_date" value="{{ end_date |date:'Y-m-d' }}">
+       <button type="submit">Save</button>
+   </form>
+</body>
+</html>

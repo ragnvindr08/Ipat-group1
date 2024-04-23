@@ -49,12 +49,27 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
+                <!-- EMPLOYEE RECORDS -->
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
-                        <i class="lni lni-network"></i>
-                        <span>Employee Records</span>
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
+                        <i class="fa fa-users" aria-hidden="true"></i>
+                        </i>
+                        <span>Employee Record</span>
                     </a>
+                    <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="{% url 'search_records' %}" class="sidebar-link">Attendance CHeck</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'search_attendance' %}" class="sidebar-link">Print DTR</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'search_attendance_record' %}" class="sidebar-link">Edit Attendance</a>
+                        </li>
+                    </ul>
                 </li>
+                <!-- EMPLOYEE RECORDS END-->
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link">
                         <i class="lni lni-credit-cards"></i>

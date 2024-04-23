@@ -1,31 +1,32 @@
+{% extends 'hris/base.html' %}
 {% load static %}
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>EARIST | User Registration Page</title>
-
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="{% static '/plugins/fontawesome-free/css/all.min.css' %}">
-  <!-- icheck bootstrap -->
-  <link rel="stylesheet" href="{% static './plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="{% static './dist/css/adminlte.min.css' %}">
+{% load custom_filters %}
+{% block content %}
+<style>
+    body {
+        /* Gradient background */
+        background: linear-gradient(to bottom, #fffec3, #750000);
+        /* Fallback color if gradients are not supported */
+        background-color: #ffffff; /* Old browsers */
+        /* Ensures the gradient stretches to fill the entire body */
+        height: 100vh;
+        margin: 0;
+        /* You can add additional styles to the body here */
+    }
+</style>
 </head>
-<body class="hold-transition register-page">
+<div class="container col-md-4">
+    <div class="row">
+
 <div class="register-box">
   <div class="register-logo">
-    <a href=""><b>EARIST</b>HRIS</a>
+    <a href="" style="color: #5c0000; text-decoration: none; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); font-size: 54px;"><b>EARIST</b> HRIS</a>
+
   </div>
 
   <div class="card">
     <div class="card-body register-card-body">
-      <p class="login-box-msg">Register a new membership</p>
+      <p class="login-box-msg">Register a new employee</p>
 
       <form action="" method="POST">
         {% csrf_token %}
@@ -125,5 +126,7 @@ for (var field in form_fields){
 form_fields[field].className += ' form-control'
 }
 </script>
-</body>
-</html>
+</div>
+</div>
+</div>
+{% endblock %}

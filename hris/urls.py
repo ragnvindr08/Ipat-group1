@@ -16,7 +16,9 @@ urlpatterns = [
         path('upload/success/', views.upload_success, name='upload_success'),  # Add this line
         path('search/', views.search_records, name='search_records'),
         path('dtr/', views.search_attendance, name='search_attendance'),
-        path('edit/', views.search_records2, name='search_record'),
+        path('search_attendance/', views.search_attendance_record, name='search_attendance_record'),
+        path('edit/<int:record_id>/', views.edit_attendance_record, name='edit_attendance_record'),
+        path('attendance_records/', views.view_attendance_records, name='attendance_records'),
 
 ]
 # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
@@ -31,3 +33,7 @@ urlpatterns = [
         # path('reset_password_sent', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
         # path('reset/<uidb64>/<toke>/', auth_views.PasswordResetConfirmView.as_view(), name='passqord_reset_confirm'),
         # path('reset_password_complete', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+
+
+
+

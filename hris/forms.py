@@ -54,10 +54,10 @@ class FileUploadForm(forms.Form):
     file = forms.FileField()
 
 
-class SearchFormAttendance(forms.Form):
-    employee_id = forms.CharField(max_length=100)
-    start_date = forms.DateField()
-    end_date = forms.DateField()
+class AttendanceSearchForm(forms.Form):
+    employee_id = forms.CharField(max_length=100, required=False)
+    start_date = forms.DateField(required=False)
+    end_date = forms.DateField(required=False)
 
 class AttendanceRecordForm(forms.ModelForm):
     class Meta:

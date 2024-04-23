@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Attendance Records</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+</head>
+<body>
+    <h1>Search Attendance Records</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.employee_id.label_tag }}
+            {{ form.employee_id }}
+        </div>
+        <div class="form-group">
+            {{ form.start_date.label_tag }}
+            <div class='input-group date' id='datetimepicker1'>
+                {{ form.start_date }}
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            {{ form.end_date.label_tag }}
+            <div class='input-group date' id='datetimepicker2'>
+                {{ form.end_date }}
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Bootstrap Datepicker JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#datetimepicker1').datepicker({
+                format: 'yyyy-mm-dd',
+            });
+            $('#datetimepicker2').datepicker({
+                format: 'yyyy-mm-dd',
+            });
+        });
+    </script>
+</body>
+</html>

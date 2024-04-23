@@ -24,3 +24,4 @@ class OfficialTimeAdmin(admin.ModelAdmin):
 admin.site.register(Employee)
 admin.site.register(OfficialTime,OfficialTimeAdmin)
 admin.site.register(AttendanceRecord, AttendanceRecordAdmin)
+admin.site.register(EditLogs)

@@ -95,3 +95,10 @@ class AttendanceRecord(models.Model):
 
     def __str__(self):
         return f"{self.employee_id} - {self.date}" if self.date else self.employee_id
+    
+
+class EditLogs(models.Model):
+    attendance_record = models.ForeignKey(AttendanceRecord, on_delete=models.CASCADE)
+    edited_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    logged_data = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
