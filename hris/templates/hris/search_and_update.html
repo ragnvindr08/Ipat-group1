@@ -1,0 +1,23 @@
+<form method="get">
+    <input type="text" name="employee_id" placeholder="Enter employee ID">
+    <button type="submit">Search</button>
+</form>
+
+{% if success_message %}
+    <p>{{ success_message }}</p>
+{% endif %}
+
+{% if formset %}
+    <form method="post">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        {% for form in formset %}
+            <div>
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+        <button type="submit">Update Records</button>
+    </form>
+{% else %}
+    <p>Enter an employee ID to view and edit records.</p>
+{% endif %}

@@ -19,6 +19,7 @@ urlpatterns = [
         path('search_attendance/', views.search_attendance_record, name='search_attendance_record'),
         path('edit/<int:record_id>/', views.edit_attendance_record, name='edit_attendance_record'),
         path('attendance_records/', views.view_attendance_records, name='attendance_records'),
+        path('official_time/', views.official_time_view, name='official_time'),
 
 ]
 # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

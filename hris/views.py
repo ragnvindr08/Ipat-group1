@@ -1334,3 +1334,34 @@ def view_attendance_records(request):
 
     # Render the attendance_records.html template with the retrieved records
     return render(request, 'hris/attendance_records.html', {'records': records, 'start_date': start_date, 'end_date': end_date})
+
+
+
+
+def official_time_view(request):
+    employee_id = request.GET.get('employee_id')
+    formset = None
+    success_message = None
+
+    if employee_id:
+        # Get all records for the given employee_id
+        queryset = OfficialTime.objects.filter(employee_id=employee_id)
+
+        # Create a formset factory for the OfficialTime model
+        OfficialTimeFormSet = modelformset_factory(OfficialTime, fields='__all__', extra=0)
+
+        if request.method == 'POST':
+            formset = OfficialTimeFormSet(request.POST, queryset=queryset)
+            if formset.is_valid():
+                formset.save()
+                success_message = "Records updated successfully."
+                # Reload the page with the same query
+                formset = OfficialTimeFormSet(queryset=queryset)
+        else:
+            formset = OfficialTimeFormSet(queryset=queryset)
+
+    context = {
+        'formset': formset,
+        'success_message': success_message,
+    }
+    return render(request, 'hris/search_and_update.html', context)
