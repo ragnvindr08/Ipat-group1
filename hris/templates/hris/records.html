@@ -1,7 +1,14 @@
-{% extends 'hris/base.html' %}
+{%  extends 'hris/base.html' %}
 {% load static %}
 {% load custom_filters %}
+{% load crispy_forms_tags %}
 {% block content %}
+    <div class="wrapper">
+        {% include 'hris/navbar.html' %}      
+        <div class="main p-3">
+            <div class="text-center">
+                <div class="row">
+                    
 <style>
     .small-font {
         font-size: 10pt;
@@ -9,7 +16,7 @@
 </style>
 <div class="col-md-12 mx-auto ">
 
-    <h2>Attendance Records</h2>
+    <a href="" style="color: maroon; text-decoration: none; text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5); font-size: 40px; display: block; margin: 0 auto; width: fit-content; text-align: center;">Attendance Record</a><br>
     <table id="attendance-table" class="table table-bordered table-sm" style="font-size: 10pt;">
         <thead>
             <tr>
@@ -472,4 +479,19 @@ for (var i = 2; i < rows.length - 2; i++) {
 
     }
 </script>
-{% endblock content %}
+                </div>
+                
+            </div>
+            {% include 'hris/footer.html' %}  
+          </div>
+          
+        </div>
+    </div>
+    {% endblock content %}
+
+
+
+
+
+
+

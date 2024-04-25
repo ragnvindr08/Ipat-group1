@@ -26,7 +26,7 @@
                     <img class="logo-earist" src="{% static './images/earist-logo.png' %}" alt="" width="60" height="60" >
                 </button>
                 <div class="sidebar-logo">
-                    <a class="brand" href="#">EARIST HRIS</a>
+                    <a class="brand" href="{% url 'home' %}">EARIST HRIS</a>
                 </div>
             </div>
             <div class="sidebar-footer" text-center>
@@ -43,12 +43,21 @@
                     </a>
                 </div>
             <ul class="sidebar-nav">
+
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#admn" aria-expanded="false" aria-controls="admn">
                         <i class="lni lni-graph"></i>
                         <span>Dashboard</span>
                     </a>
+                    <ul id="admn" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="{% url 'edit_logs' %}" class="sidebar-link">User Logs</a>
+                        </li>
+                    </ul>
                 </li>
+
+
                 <!-- EMPLOYEE RECORDS -->
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
@@ -59,6 +68,9 @@
                     </a>
                     <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
+                            <a href="{% url 'upload_file' %}" class="sidebar-link">Upload Attendance Log</a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{% url 'search_records' %}" class="sidebar-link">Attendance Check</a>
                         </li>
                         <li class="sidebar-item">
@@ -66,6 +78,9 @@
                         </li>
                         <li class="sidebar-item">
                             <a href="{% url 'search_attendance_record' %}" class="sidebar-link">Edit Attendance</a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{% url 'official_time' %}" class="sidebar-link">Edit Official Time</a>
                         </li>
                     </ul>
                 </li>

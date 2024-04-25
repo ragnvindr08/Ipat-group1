@@ -20,6 +20,7 @@ urlpatterns = [
         path('edit/<int:record_id>/', views.edit_attendance_record, name='edit_attendance_record'),
         path('attendance_records/', views.view_attendance_records, name='attendance_records'),
         path('official_time/', views.official_time_view, name='official_time'),
+        path('edit-logs/', views.edit_logs, name='edit_logs'),
 
 ]
 # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

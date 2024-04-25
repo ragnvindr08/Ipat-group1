@@ -2,69 +2,84 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
-<style>
-    body {
-        /* Gradient background */
-        /* background: linear-gradient(to bottom, #fffec3, #750000); */
-        /* Fallback color if gradients are not supported */
-        background-color: maroon; /* Old browsers */
-        /* Ensures the gradient stretches to fill the entire body */
-        height: 100vh;
-        margin: 0;
-        /* You can add additional styles to the body here */
-    }
-</style>
-<!-- <link rel="stylesheet" href="{% static './dist/css/jquery-ui-1.css' %}">
-<script src="{% static 'js/jquery-3.6.0-1.min.js' %}"></script>
-<script src="{% static 'js/jquery-ui-1.js' %}"></script> -->
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-<div class="container d-flex justify-content-center align-items-center" style="min-height: 20vh; color: white;">
-  <div class="register-logo">
-    <a href="" style="color: #ffffff; text-decoration: none; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); font-size: 54px;"><b>EARIST</b> HRIS</a>
-
-  </div>
-</div>
-
-<div class="form-group d-flex justify-content-center align-items-center" style="min-height: 20vh;" data-bs-theme="light">
-
-    <div class="card" style="width: 30rem;">
-        <div class="card-body">
- 
-            <a href="" style="color: maroon; text-decoration: none; text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5); font-size: 30px; display: block; margin: 0 auto; width: fit-content; text-align: center;"><b>Update Attendance Record</b></a><br>
-            
-          <form class="" method="post" data-bs-theme="primary">
-              {% csrf_token %}
-              {{ form | crispy }}
-              <button class="btn btn-primary btn-lg btn-block" type="submit"><b>Search</b></button>
-          </form>
+    <div class="wrapper">
+        {% include 'hris/navbar.html' %}      
+        <div class="main p-3">
+            <div class="text-center">
+                <div class="row">
+                    <style>
+                        body {
+                            /* Gradient background */
+                            /* background: linear-gradient(to bottom, #fffec3, #750000); */
+                            /* Fallback color if gradients are not supported */
+                            background-color: maroon; /* Old browsers */
+                            /* Ensures the gradient stretches to fill the entire body */
+                            height: 100vh;
+                            margin: 0;
+                            /* You can add additional styles to the body here */
+                        }
+                    </style>
+                    <!-- <link rel="stylesheet" href="{% static './dist/css/jquery-ui-1.css' %}">
+                    <script src="{% static 'js/jquery-3.6.0-1.min.js' %}"></script>
+                    <script src="{% static 'js/jquery-ui-1.js' %}"></script> -->
+                    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+                    
+                    <div class="container d-flex justify-content-center align-items-center" style="min-height: 20vh; color: white;">
+                      <div class="register-logo">
+                        <a href="{% url 'home' %}" style="color: maroon; text-decoration: none; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); font-size: 54px;"><b>EARIST</b> HRIS</a>
+                    
+                      </div>
+                    </div>
+                    
+                    <div class="form-group d-flex justify-content-center align-items-center" style="min-height: 20vh;" data-bs-theme="light">
+                    
+                        <div class="card" style="width: 30rem;">
+                            <div class="card-body">
+                     
+                                <a href="" style="color: maroon; text-decoration: none; text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5); font-size: 30px; display: block; margin: 0 auto; width: fit-content; text-align: center;"><b>Update Attendance Record</b></a><br>
+                                
+                              <form class="" method="post" data-bs-theme="primary">
+                                  {% csrf_token %}
+                                  {{ form | crispy }}
+                                  <button class="btn btn-primary btn-lg btn-block" type="submit"><b>Search</b></button>
+                              </form>
+                            </div>
+                          </div>
+                    
+                         
+                    
+                    
+                    
+                    </div>
+                    
+                        <script>
+                            $(document).ready(function() {
+                                $("#id_start_date").datepicker({
+                                    dateFormat: 'yy-mm-dd',
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    // Add any additional options you want here
+                                });
+                                
+                                $("#id_end_date").datepicker({
+                                    dateFormat: 'yy-mm-dd',
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    // Add any additional options you want here
+                                });
+                            });
+                        </script>   
+                </div>
+                
+            </div>
+            {% include 'hris/footer.html' %}  
+          </div>
+          
         </div>
-      </div>
-
-     
-
-
-
-</div>
-
-    <script>
-        $(document).ready(function() {
-            $("#id_start_date").datepicker({
-                dateFormat: 'yy-mm-dd',
-                changeMonth: true,
-                changeYear: true,
-                // Add any additional options you want here
-            });
-            
-            $("#id_end_date").datepicker({
-                dateFormat: 'yy-mm-dd',
-                changeMonth: true,
-                changeYear: true,
-                // Add any additional options you want here
-            });
-        });
-    </script>   
-
+    </div>
     {% endblock content %}
+
+
+

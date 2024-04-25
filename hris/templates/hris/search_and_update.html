@@ -1,23 +1,126 @@
-<form method="get">
-    <input type="text" name="employee_id" placeholder="Enter employee ID">
-    <button type="submit">Search</button>
-</form>
 
-{% if success_message %}
-    <p>{{ success_message }}</p>
-{% endif %}
+  
 
-{% if formset %}
-    <form method="post">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        {% for form in formset %}
-            <div>
-                {{ form.as_p }}
+
+{%  extends 'hris/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="wrapper">
+        {% include 'hris/navbar.html' %}      
+        <div class="main p-3">
+            <div class="text-center">
+                <div class="row">
+                    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .card {
+      margin-bottom: 20px;
+      margin-right: 20px;
+    }
+
+    /* Custom CSS to increase card size */
+    .custom-card {
+      width: 270px; /* Adjust width as needed */
+      height: 750px; /* Adjust height as needed */
+    }
+
+    /* Center align items */
+    .center-align {
+
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Center align the container */
+
+    .card-body{
+        margin-right: 15px;    
+    }
+
+    .custom-input {
+    width: 300px; /* Adjust width as needed */
+}
+
+.custom-button {
+    width: 300px; /* Adjust width as needed */
+}
+.custom-margin-right {
+    margin-right: 90px; /* Adjust the value as needed */
+    margin-left: 15px; /* Adjust the value as needed */
+}
+
+  </style>
+</head>
+<body>
+    <div class="">
+<div class="row center-align col-md-12">
+  <div class="col-md-4">
+    <a href="" style="color: maroon; text-decoration: none; text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5); font-size: 40px; display: block; margin-top: -25px ; width: fit-content; text-align: center;"><b>SET OFFICIAL TIME</b></a>
+
+                <a href="" style="color: maroon; text-decoration: none; text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5); font-size: 40px; display: block; margin-top: -15px ; width: fit-content; text-align: center;"><b>{{ employee_id1 }} | {{ first_name }} {{ last_name }}</b></a>
+  </div>
+    <div class="col-md-4" float-left>
+        <form class="form-group" method="get">
+            <input class="form-control " type="text" name="employee_id" placeholder="Enter employee ID">
+            <br>
+            <button class="btn btn-primary btn-block " type="submit">Search</button>
+        </form>
+ 
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+      <br>
+      {% if success_message %}
+      <p>{{ success_message }}</p>
+      {% endif %}
+    </div>
+ 
+
+
+
+<div class=" center-align">
+  <div class="row ">
+ 
+  {% if formset %}
+  <form  method="post">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    <div class="row ">
+      {% for form in formset %}
+      <div class="col-md-1 custom-margin-right"> <!-- Each card wrapped in a column -->
+        <div class="card custom-card">
+          <div class="card-body">
+            <div class="form-group">
+                {{ form | crispy }}
             </div>
-        {% endfor %}
-        <button type="submit">Update Records</button>
-    </form>
-{% else %}
-    <p>Enter an employee ID to view and edit records.</p>
-{% endif %}
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+      <div class="col-md-12 center-align"> <!-- Button column spans the entire row -->
+        <button class="btn btn-primary btn-block" type="submit">Update Records</button>
+      </div>
+    </div>
+  </form>
+  {% else %}
+  <p>Enter an employee ID to view and edit records.</p>
+  {% endif %}
+</div>
+</div>
+</div>
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+                </div>
+                
+            </div>
+            {% include 'hris/footer.html' %}  
+          </div>
+          
+        </div>
+    </div>
+    {% endblock content %}

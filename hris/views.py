@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import *
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
@@ -402,18 +402,18 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
         faculty_official_office_out = official_office_out_datetime.time() if official_office_out_datetime else None
         
         if time_in < official_office_in and time_in != timeref:
-            office_in = official_office_in_datetime
+            office_in = official_office_in_datetime.time()
 
         # Check if time_out is after official_office_out
         if time_out  > official_office_out_datetime and time_out != time_object2:
-            office_out = official_office_out_datetime
+            office_out = official_office_out_datetime.time()
         else:
             office_out = time_out
 
 
 
 
-        difference_faculty = office_out - datetime.combine(datetime.today(), office_in)
+        difference_faculty = datetime.combine(datetime.today(), office_out) - datetime.combine(datetime.today(), office_in)
         difference_hours_faculty = difference_faculty.total_seconds() // 3600
         difference_minutes_faculty = (difference_faculty.total_seconds() % 3600) // 60
         difference_seconds_faculty = difference_faculty.total_seconds() % 60
@@ -423,7 +423,7 @@ def calculate_time_difference(time_in_str, time_out_str, break_in_str, break_out
         total_seconds = difference_seconds_faculty
 
 
-        tardiness_difference_faculty = (datetime.combine(datetime.today(), office_in) - datetime.combine(datetime.today(), faculty_official_office_in)) + (datetime.combine(datetime.today(), faculty_official_office_out) - office_out)
+        tardiness_difference_faculty = (datetime.combine(datetime.today(), office_in) - datetime.combine(datetime.today(), faculty_official_office_in)) + (datetime.combine(datetime.today(), faculty_official_office_out) - datetime.combine(datetime.today(), office_out) )
         tardiness_difference_hours_faculty = tardiness_difference_faculty.total_seconds() // 3600
         tardiness_difference_minutes_faculty = (tardiness_difference_faculty.total_seconds() % 3600) // 60
         tardiness_difference_seconds_faculty = tardiness_difference_faculty.total_seconds() % 60
@@ -1342,26 +1342,63 @@ def official_time_view(request):
     employee_id = request.GET.get('employee_id')
     formset = None
     success_message = None
-
+    first_name = None
+    last_name = None
+    employee_id1 = None
     if employee_id:
-        # Get all records for the given employee_id
         queryset = OfficialTime.objects.filter(employee_id=employee_id)
-
-        # Create a formset factory for the OfficialTime model
-        OfficialTimeFormSet = modelformset_factory(OfficialTime, fields='__all__', extra=0)
-
+        OfficialTimeFormSet = modelformset_factory(
+            OfficialTime,
+            form=OfficialTimeForm,
+            extra=0,
+        )
+        employee = get_object_or_404(Employee, employee_id=employee_id)
+        first_name = employee.first_name
+        last_name = employee.surname
+        employee_id1 = employee.employee_id
         if request.method == 'POST':
             formset = OfficialTimeFormSet(request.POST, queryset=queryset)
             if formset.is_valid():
-                formset.save()
+                instances = formset.save(commit=True)
+                for instance in instances:
+                    instance.employee_id = employee_id
+                    instance.day = queryset.first().day  # Assuming day is the same for all instances
+                OfficialTime.objects.bulk_update(instances, ['employee_id', 'day'])
                 success_message = "Records updated successfully."
-                # Reload the page with the same query
-                formset = OfficialTimeFormSet(queryset=queryset)
         else:
             formset = OfficialTimeFormSet(queryset=queryset)
 
     context = {
         'formset': formset,
         'success_message': success_message,
+        'first_name': first_name,
+        'last_name': last_name,
+        'employee_id1': employee_id1,
+        
     }
     return render(request, 'hris/search_and_update.html', context)
+
+
+
+
+
+
+def edit_logs(request):
+    logs = EditLogs.objects.all()
+
+    # Search functionality
+    query = request.GET.get('q')
+    if query:
+        logs = logs.filter(logged_data__icontains=query)
+
+    # Pagination
+    paginator = Paginator(logs, 10)  # Show 10 logs per page
+    page = request.GET.get('page')
+    try:
+        logs = paginator.page(page)
+    except PageNotAnInteger:
+        logs = paginator.page(1)
+    except EmptyPage:
+        logs = paginator.page(paginator.num_pages)
+
+    return render(request, 'hris/edit_logs.html', {'logs': logs, 'query': query})
