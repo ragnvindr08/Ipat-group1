@@ -60,6 +60,12 @@ class AttendanceSearchForm(forms.Form):
     end_date = forms.DateField(required=False)
 
 class AttendanceRecordForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AttendanceRecordForm, self).__init__(*args, **kwargs)
+        # Disable employee_id and date fields
+        self.fields['employee_id'].disabled = True
+        self.fields['date'].disabled = True
+
     class Meta:
         model = AttendanceRecord
         fields = ['employee_id', 'date', 'time_in', 'break_in', 'break_out', 'time_out', 'surplusHour_time_in', 'surplusHour_time_out']

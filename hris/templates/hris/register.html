@@ -5,9 +5,9 @@
 <style>
     body {
         /* Gradient background */
-        background: linear-gradient(to bottom, #fffec3, #750000);
+
         /* Fallback color if gradients are not supported */
-        background-color: #ffffff; /* Old browsers */
+        background-color: maroon; /* Old browsers */
         /* Ensures the gradient stretches to fill the entire body */
         height: 100vh;
         margin: 0;
@@ -20,13 +20,14 @@
 
 <div class="register-box">
   <div class="register-logo">
-    <a href="" style="color: #5c0000; text-decoration: none; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); font-size: 54px;"><b>EARIST</b> HRIS</a>
+    <a href="{% url 'home' %}" style="color: #ffffff; text-decoration: none; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); font-size: 54px;"><b>EARIST</b> HRIS</a>
 
   </div>
 
   <div class="card">
     <div class="card-body register-card-body">
-      <p class="login-box-msg">Register a new employee</p>
+        <a href="" style="color: maroon; text-decoration: none; text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5); font-size: 30px; display: block; margin: 0 auto; width: fit-content; text-align: center;"><b>Register a new employee </b></a><br>
+            
 
       <form action="" method="POST">
         {% csrf_token %}
@@ -82,8 +83,8 @@
         </div>
         <div class="row">
             <!-- /.col -->
-            <div class="col-4">
-                <button type="submit" class="btn btn-primary btn-block float-left">Register</button>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Register</button>
             </div>
             <!-- /.col -->
         </div>

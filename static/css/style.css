@@ -143,7 +143,7 @@ a.sidebar-link {
   margin: 0 auto;
   border-radius: 50%;
   transition: all .25s ease-in-out;
-  align
+
 }
 
 .center-block {
@@ -161,9 +161,7 @@ a.sidebar-link {
 }
 
 
-#logo{
 
-}
 #body{
   background-color: #ebeff5;
 }
@@ -268,4 +266,10 @@ opacity: 0;
 .dropdown-item:hover{
   background-color: maroon !important; 
   color: yellow !important;
+}
+
+.footer {
+
+  color: #000000;
+  height: 100px;
 }

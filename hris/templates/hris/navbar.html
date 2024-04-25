@@ -59,7 +59,7 @@
                     </a>
                     <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
-                            <a href="{% url 'search_records' %}" class="sidebar-link">Attendance CHeck</a>
+                            <a href="{% url 'search_records' %}" class="sidebar-link">Attendance Check</a>
                         </li>
                         <li class="sidebar-item">
                             <a href="{% url 'search_attendance' %}" class="sidebar-link">Print DTR</a>
@@ -79,12 +79,12 @@
             
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                        data-bs-target="#auth" aria-expanded="false" aria-controls="auth">
+                        data-bs-target="#eprof" aria-expanded="false" aria-controls="eprof">
                         <i class="fa fa-users" aria-hidden="true"></i>
                         </i>
                         <span>Employee Profile</span>
                     </a>
-                    <ul id="auth" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                    <ul id="eprof" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                         <li class="sidebar-item">
                             <a href="{% url 'register' %}" class="sidebar-link">Register User</a>
                         </li>
@@ -128,18 +128,34 @@
                         <span>Update Profile</span>
                     </a>
                 </li>
+
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                        data-bs-target="#sout" aria-expanded="false" aria-controls="sout">
+
+                        <i class="lni lni-exit"></i>
+                        <span>Log out</span>
+                    </a>
+                    <ul id="sout" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                        <li class="sidebar-item">
+                            <a href="{% url 'logout' %}" class="sidebar-link">
+                               Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+
+
+
+
             </ul>
          
            
 
             <div class="sidebar-footer">
 
-                <li class="sidebar-item">
-                    <a href="{% url 'logout' %}" class="sidebar-link">
-                        <i class="lni lni-exit"></i>
-                        <span>Logout</span>
-                    </a>
-                </li>
+              
               
             </div>
         </aside>

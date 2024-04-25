@@ -1,52 +1,52 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Attendance Records</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
+{%  extends 'hris/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block content %}
+    <div class="wrapper">
+        {% include 'hris/navbar.html' %}      
+        <div class="main p-3">
+            <div class="text-center">
+                <div class="row col-md-8 mx-auto">
 
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+                    <p href="" style="color: maroon; text-decoration: none; text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.5); font-size: 34px;"><b>Showing records from {{ start_date }} to {{ end_date }}</b></p>
+ 
+                    <div>
+                    <table class="table">
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Date</th>
+                            <th>Time In</th>
+                            <th>Break In</th>
+                            <th>Break Out</th>
+                            <th>Time Out</th>
+                            <th>Surplus Hour Time In</th>
+                            <th>Surplus Hour Time Out</th>
+                            <th>Actions</th>
+                        </tr>
+                        {% for record in records %}
+                        <tr>
+                            <td>{{ record.employee_id }}</td>
+                            <td>{{ record.date }}</td>
+                            <td>{{ record.time_in |blank_if_midnight }}</td>
+                            <td>{{ record.break_in |blank_if_midnight}}</td>
+                            <td>{{ record.break_out|blank_if_midnight }}</td>
+                            <td>{{ record.time_out |blank_if_midnight}}</td>
+                            <td>{{ record.surplusHour_time_in|blank_if_midnight }}</td>
+                            <td>{{ record.surplusHour_time_out |blank_if_midnight}}</td>
+                            <td><a class="btn btn-primary btn-lg btn-block" href="{% url 'edit_attendance_record' record.id %}?start_date={{ start_date }}&end_date={{ end_date }}">Edit</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
 
-        tr:hover {
-            background-color: #f5f5f5;
-        }
-    </style>
-</head>
-<body>
-    <h1>Attendance Records</h1>
-    <p>Showing records from {{ start_date }} to {{ end_date }}</p>
-    <table>
-        <tr>
-            <th>Employee ID</th>
-            <th>Date</th>
-            <th>Time In</th>
-            <th>Break In</th>
-            <th>Break Out</th>
-            <th>Time Out</th>
-            <th>Surplus Hour Time In</th>
-            <th>Surplus Hour Time Out</th>
-            <th>Actions</th>
-        </tr>
-        {% for record in records %}
-        <tr>
-            <td>{{ record.employee_id }}</td>
-            <td>{{ record.date }}</td>
-            <td>{{ record.time_in }}</td>
-            <td>{{ record.break_in }}</td>
-            <td>{{ record.break_out }}</td>
-            <td>{{ record.time_out }}</td>
-            <td>{{ record.surplusHour_time_in }}</td>
-            <td>{{ record.surplusHour_time_out }}</td>
-            <td><a href="{% url 'edit_attendance_record' record.id %}?start_date={{ start_date }}&end_date={{ end_date }}">Edit</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+                </div>
+   
+            </div>
+            {% include 'hris/footer.html' %}  
+          </div>
+          
+        </div>
+    </div>
+    {% endblock content %}
+
+    
