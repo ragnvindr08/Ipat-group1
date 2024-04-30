@@ -20,30 +20,32 @@ class ReadOnlyField(forms.CharField):
 class OfficialTimeForm(forms.ModelForm):
     class Meta:
         model = OfficialTime
-        fields = ['official_office_in', 'official_office_out', 'official_honorarium_time_in', 'official_honorarium_time_out', 'official_servicecredit_time_in', 'official_servicecredit_time_out', 'official_overtime_time_in', 'official_overtime_time_out']
-
-
-class CustomOfficialTimeFormSet(BaseModelFormSet):
+        fields = ['day','official_office_in', 'official_office_out', 'official_honorarium_time_in', 'official_honorarium_time_out', 'official_servicecredit_time_in', 'official_servicecredit_time_out', 'official_overtime_time_in', 'official_overtime_time_out']
     def __init__(self, *args, **kwargs):
-        queryset = kwargs.pop('queryset', None)
         super().__init__(*args, **kwargs)
-        for form in self.forms:
-            form.fields['employee_id'].widget.attrs['readonly'] = True
-            form.fields['day'].widget.attrs['readonly'] = True
-        self.queryset = queryset
+        self.fields['day'].widget.attrs['readonly'] = True
 
-    model = OfficialTime
-    form = OfficialTimeForm
-    fields = '__all__'
-    extra = 0
-    min_num = 0
-    max_num = 0
-    renderer = get_default_renderer()
-    can_order = False  # Add this line to set can_order to False
-# class SearchForm(forms.Form):
-#     employee_id = forms.CharField(max_length=100)
-#     start_date = forms.DateField()
-#     end_date = forms.DateField()
+# class CustomOfficialTimeFormSet(BaseModelFormSet):
+#     def __init__(self, *args, **kwargs):
+#         queryset = kwargs.pop('queryset', None)
+#         super().__init__(*args, **kwargs)
+#         for form in self.forms:
+#             form.fields['employee_id'].widget.attrs['readonly'] = True
+#             form.fields['day'].widget.attrs['readonly'] = True
+#         self.queryset = queryset
+
+#     model = OfficialTime
+#     form = OfficialTimeForm
+#     fields = '__all__'
+#     extra = 0
+#     min_num = 0
+#     max_num = 0
+#     renderer = get_default_renderer()
+#     can_order = False  # Add this line to set can_order to False
+# # class SearchForm(forms.Form):
+# #     employee_id = forms.CharField(max_length=100)
+# #     start_date = forms.DateField()
+# #     end_date = forms.DateField()
 
 class AttendanceRecordForm(forms.ModelForm):
     class Meta:

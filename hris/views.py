@@ -1283,7 +1283,7 @@ def edit_attendance_record(request, record_id, start_date=None, end_date=None):
         if form.is_valid():
             edited_record = form.save()
             # Save log entry
-            log_data = f"Employee ID: {edited_record.employee_id}\n"
+            log_data = f"Employee ID: {edited_record.employee_id}\n "
             log_data += f"Date: {edited_record.date}\n"
             log_data += f"Time In: {old_time_in} -> {edited_record.time_in}\n"
             log_data += f"Break In: {old_break_in} -> {edited_record.break_in}\n"
@@ -1338,6 +1338,51 @@ def view_attendance_records(request):
 
 
 
+# def official_time_view(request):
+#     employee_id = request.GET.get('employee_id')
+#     formset = None
+#     success_message = None
+#     first_name = None
+#     last_name = None
+#     employee_id1 = None
+#     if employee_id:
+#         queryset = OfficialTime.objects.filter(employee_id=employee_id)
+
+#         OfficialTimeFormSet = modelformset_factory(
+#             OfficialTime,
+#             form=OfficialTimeForm,
+#             extra=0,
+#         )
+#         employee = get_object_or_404(Employee, employee_id=employee_id)
+#         first_name = employee.first_name
+#         last_name = employee.surname
+#         employee_id1 = employee.employee_id
+#         if request.method == 'POST':
+#             formset = OfficialTimeFormSet(request.POST, queryset=queryset)
+#             if formset.is_valid():
+#                 instances = formset.save(commit=True)
+#                 for instance in instances:
+#                     instance.employee_id = employee_id
+#                     instance.day = queryset.first().day  # Assuming day is the same for all instances
+#                 OfficialTime.objects.bulk_update(instances, ['employee_id', 'day'])
+#                 success_message = "Records updated successfully."
+#         else:
+#             formset = OfficialTimeFormSet(queryset=queryset)
+
+#     context = {
+#         'formset': formset,
+#         'success_message': success_message,
+#         'first_name': first_name,
+#         'last_name': last_name,
+#         'official_times': queryset,
+#         'employee_id1': employee_id1,
+        
+#     }
+#     return render(request, 'hris/search_and_update.html', context)
+import logging
+
+logger = logging.getLogger(__name__)
+
 def official_time_view(request):
     employee_id = request.GET.get('employee_id')
     formset = None
@@ -1345,26 +1390,34 @@ def official_time_view(request):
     first_name = None
     last_name = None
     employee_id1 = None
+
     if employee_id:
         queryset = OfficialTime.objects.filter(employee_id=employee_id)
+        logger.info(f"employee_id: {employee_id}")
+        logger.info(f"queryset: {queryset}")
+
         OfficialTimeFormSet = modelformset_factory(
-            OfficialTime,
-            form=OfficialTimeForm,
-            extra=0,
+            OfficialTime, form=OfficialTimeForm, extra=0,
         )
         employee = get_object_or_404(Employee, employee_id=employee_id)
         first_name = employee.first_name
         last_name = employee.surname
         employee_id1 = employee.employee_id
+
         if request.method == 'POST':
             formset = OfficialTimeFormSet(request.POST, queryset=queryset)
             if formset.is_valid():
+                logger.info("Form data is valid")
                 instances = formset.save(commit=True)
                 for instance in instances:
+                    logger.info(f"Instance before saving: {instance}")
                     instance.employee_id = employee_id
-                    instance.day = queryset.first().day  # Assuming day is the same for all instances
-                OfficialTime.objects.bulk_update(instances, ['employee_id', 'day'])
+                    instance.save()  # Save each instance individually
+                logger.info("Instances saved successfully")
                 success_message = "Records updated successfully."
+            else:
+                logger.warning("Form data is invalid")
+                logger.warning(formset.errors)
         else:
             formset = OfficialTimeFormSet(queryset=queryset)
 
@@ -1374,13 +1427,8 @@ def official_time_view(request):
         'first_name': first_name,
         'last_name': last_name,
         'employee_id1': employee_id1,
-        
     }
     return render(request, 'hris/search_and_update.html', context)
-
-
-
-
 
 
 def edit_logs(request):

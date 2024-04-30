@@ -23,6 +23,7 @@
                             </div>
                         </div>
                     </form>
+                    <div class="contaier" style="width: 80%;">
                     <table class="table">
                         <thead>
                             <tr>
@@ -35,14 +36,15 @@
                         <tbody>
                             {% for log in logs %}
                             <tr>
-                                <td>{{ log.attendance_record }}</td>
+                                <td>{{ log.attendance_record  }}</td>
                                 <td>{{ log.edited_by }}</td>
-                                <td>{{ log.logged_data }}</td>
+                                <td>{{ log.logged_data |linebreaksbr }}</td>
                                 <td>{{ log.timestamp }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
+                </div>
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center">
                             {% if logs.has_previous %}
