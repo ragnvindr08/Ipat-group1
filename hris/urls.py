@@ -21,7 +21,7 @@ urlpatterns = [
         path('attendance_records/', views.view_attendance_records, name='attendance_records'),
         path('official_time/', views.official_time_view, name='official_time'),
         path('edit-logs/', views.edit_logs, name='edit_logs'),
-
+        path('pds1/', views.pds1, name='pds1'),
 ]
 # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
   

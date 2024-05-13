@@ -21,7 +21,13 @@ from django.forms import modelformset_factory
 from django.forms import formset_factory
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
-# Create your views here.
+
+def pds1(request):
+    employee = Employee.objects.get(user=request.user)
+
+    # Render the employee data using a template
+    return render(request, 'hris/pds1.html', {'employee': employee})
+
 
 #UPLOAD DTR .DAT FILE
 def upload_file(request):
